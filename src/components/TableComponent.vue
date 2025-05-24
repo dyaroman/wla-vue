@@ -18,7 +18,7 @@ const websitesStore = useWebsitesStore()
       </thead>
 
       <tbody>
-        <tr v-for="item in websitesStore.websites" :key="item.website">
+        <tr v-for="item in websitesStore.items" :key="item.website">
           <td v-for="column in columnsStore.visibleOrdered" :key="column">
             {{ item[column] }}
           </td>

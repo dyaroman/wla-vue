@@ -17,7 +17,7 @@ export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
       ).then((res) => res.json())
 
       if (data.websites) {
-        websitesStore.setWebsites(data.websites)
+        websitesStore.setItems(data.websites)
       }
 
       if (data.columns) {
