@@ -20,7 +20,7 @@ const websitesStore = useWebsitesStore()
       <tbody>
         <tr v-for="item in websitesStore.websites" :key="item.website">
           <td v-for="column in columnsStore.visibleOrdered" :key="column">
-            {{ item[column] }}
+            {{ item[column as keyof typeof item] }}
           </td>
         </tr>
       </tbody>
