@@ -49,14 +49,14 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
   }
 
   return {
-    config,
-    visible,
+    // config,
+    // visible,
     visibleOrdered,
 
-    defaultVisible,
-    displayable,
+    // defaultVisible,
+    // displayable,
 
     setConfig,
-    toggleVisible,
+    // toggleVisible,
   }
 })
