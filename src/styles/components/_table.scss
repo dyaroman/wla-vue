@@ -1,0 +1,198 @@
+@use '../misc/breakpoints';
+@use '../misc/mixins';
+
+.table {
+  margin: var(--gap);
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    max-height: calc(100vh - var(--header-height) - 44px - 3 * var(--gap));
+
+    border: var(--border-width) solid var(--border-color);
+    overflow: auto;
+  }
+}
+
+.narrow {
+  width: 10px;
+}
+
+table {
+  display: block;
+
+  border-spacing: 0;
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    display: table;
+    width: 100%;
+  }
+}
+
+table ul {
+  margin: 0;
+  padding-left: 20px;
+
+  line-height: 1.2;
+}
+
+thead {
+  display: none;
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    display: table-header-group;
+  }
+}
+
+thead th {
+  &[data-sort-column] {
+    user-select: none;
+
+    @include mixins.hover() {
+      cursor: pointer;
+    }
+  }
+
+  &[data-sort-direction]::after {
+    padding-left: 3px;
+
+    font-size: 0.7em;
+    line-height: 0.7em;
+  }
+
+  &[data-sort-direction='asc']::after {
+    content: '▲';
+  }
+
+  &[data-sort-direction='desc']::after {
+    content: '▼';
+  }
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    position: sticky;
+    top: 0;
+    left: calc(-1 * var(--border-width));
+    z-index: 2;
+
+    color: var(--color);
+
+    border-bottom: var(--border-width) solid var(--border-color);
+    background-color: var(--bg);
+  }
+}
+
+tbody {
+  display: grid;
+  gap: var(--gap);
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    display: table-row-group;
+  }
+}
+
+tbody td[data-qa='website'] {
+  @include breakpoints.media-breakpoint-up(sm) {
+    position: sticky;
+    left: calc(-1 * var(--border-width));
+    z-index: 1;
+
+    transition: none;
+    background-color: inherit;
+
+    &::after {
+      content: '';
+
+      position: absolute;
+      top: 0;
+      right: calc(-1 * var(--border-width));
+      bottom: 0;
+
+      display: block;
+      width: var(--border-width);
+
+      background-color: var(--border-color);
+    }
+  }
+}
+
+tr {
+  display: block;
+
+  border: var(--border-width) solid var(--border-color);
+  background-color: var(--table-striped-bg);
+  transition: 0.3s;
+
+  &:nth-child(even) {
+    background-color: var(--body-bg);
+  }
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    display: table-row;
+
+    border: none;
+  }
+
+  @include mixins.hover() {
+    color: var(--body-color);
+
+    background-color: var(--row-bg--hover);
+  }
+}
+
+tr + tr {
+  td,
+  th {
+    @include breakpoints.media-breakpoint-up(sm) {
+      border-top: var(--border-width) solid var(--border-color);
+    }
+  }
+}
+
+th,
+td {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap);
+  padding: var(--gap);
+
+  text-align: left;
+  word-break: break-word;
+
+  transition: background-color 0.3s;
+
+  &::before {
+    content: attr(data-title);
+
+    font-weight: 700;
+  }
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    display: table-cell;
+    gap: 0;
+
+    white-space: pre;
+    border-bottom: none;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+td + td,
+th + th,
+td + th,
+th + td {
+  border-top: var(--border-width) solid var(--border-color);
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    border-top: none;
+  }
+}
+
+td + td,
+th + th {
+  @include breakpoints.media-breakpoint-up(sm) {
+    border-left: var(--border-width) solid var(--border-color);
+  }
+}

@@ -8,8 +8,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="app-loader" :class="{ 'app-loader--fixed': fixed }">
-    <div class="app-loader__spinner">
+  <div class="loader" :class="{ 'loader--fixed': fixed }">
+    <div class="loader__spinner">
       <div />
       <div />
       <div />
