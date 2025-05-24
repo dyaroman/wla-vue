@@ -9,44 +9,11 @@ export interface WebsitesData {
   websites: Website[]
 }
 
-export interface Website {
-  address1: string | 'no_data'
-  address2: string | 'no_data'
-  altForm: string | 'no_data'
-  altFormLeadType: number | string | 'no_data'
-  altFormPrimaryColor: string | 'no_data'
-  altFormTheme: string | 'no_data'
-  campaignId: number | 'no_data'
-  campaignUid: string | 'no_data'
-  checkbox: string | 'no_data' // todo: why is returns?
-  companyName: string | 'no_data'
-  effectiveDate: string | 'no_data'
-  email: string | 'no_data'
-  emailInfo: string | 'no_data'
-  emailLegal: string | 'no_data'
-  facebookVerification: string | 'no_data'
-  favicon: string | 'no_data'
-  forms: { [key: string]: Pages }
-  gtmKey: string | 'no_data'
-  host: string | 'no_data'
-  index: string | 'no_data' // todo why is returns?
-  lastModifiedTermsOfUse: string | 'no_data'
-  mainForm: string | 'no_data'
-  mainFormEs: string | 'no_data'
-  mainFormEsLeadType: number | 'no_data'
-  mainFormEsPrimaryColor: string | 'no_data'
-  mainFormEsTheme: string | 'no_data'
-  mainFormLeadType: number | 'no_data'
-  mainFormPrimaryColor: string | 'no_data'
-  mainFormTheme: string | 'no_data'
-  ogImage: string[]
-  owner: string | 'no_data'
-  pages: string[]
-  phoneNumber: string | 'no_data'
-  rootRedirect: string | 'no_data'
-  template: string | 'no_data'
-  vmGroup: string | 'no_data'
+type WebsiteColumnValue = string | number | 'no_data' | string[]
+
+export interface Website extends Omit<Record<keyof ColumnsConfig, WebsiteColumnValue>, 'forms'> {
   website: string
+  forms: { [key: string]: Pages }
 }
 
 export interface Pages {
