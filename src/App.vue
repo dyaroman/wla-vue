@@ -1,47 +1,22 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { onMounted, ref } from 'vue'
+
+import LoaderComponent from '@/components/LoaderComponent.vue'
+import TableComponent from '@/components/TableComponent.vue'
+import { useMainStore } from '@/stores/main.store.ts'
+
+const appInit = ref(false)
+const mainStore = useMainStore()
+
+onMounted(async () => {
+  await mainStore.loadCombinedData()
+  appInit.value = true
+})
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <template v-if="appInit">
+    <TableComponent />
+  </template>
+  <LoaderComponent v-else fixed />
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
