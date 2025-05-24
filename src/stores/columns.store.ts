@@ -1,10 +1,12 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import type { ColumnName, ColumnsConfig } from '@/types/columns.types.ts'
+import { STORE_NAMES } from '@/constants/stores.constants.ts'
+import { COLUMNS_CONSTANTS } from '@/constants/columns.constants.ts'
 import { getQueryParamValue } from '@/misc/helpers.ts'
+import type { ColumnName, ColumnsConfig } from '@/types/columns.types.ts'
 
-export const useColumnsStore = defineStore('columns', () => {
+export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
   const config = ref<ColumnsConfig | null>(null)
   const visible = ref<Set<ColumnName>>(new Set())
   const visibleOrdered = computed(() => {
@@ -37,10 +39,11 @@ export const useColumnsStore = defineStore('columns', () => {
   }
 
   function _initializeVisible() {
-    const visibleColumns = getQueryParamValue('visibleColumns')
+    const visibleColumns = getQueryParamValue(COLUMNS_CONSTANTS.QUERY_PARAMS.VISIBLE_COLUMNS)
 
-    if (visibleColumns === 'none') visible.value = new Set()
-    else if (visibleColumns === 'all') visible.value = new Set(displayable.value)
+    if (visibleColumns === COLUMNS_CONSTANTS.PRESETS.NONE) visible.value = new Set()
+    else if (visibleColumns === COLUMNS_CONSTANTS.PRESETS.ALL)
+      visible.value = new Set(displayable.value)
     else if (visibleColumns) visible.value = new Set(visibleColumns.split(',')) as Set<ColumnName>
     else visible.value = new Set(defaultVisible.value)
   }

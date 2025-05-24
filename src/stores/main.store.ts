@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 
+import { STORE_NAMES } from '@/constants/stores.constants.ts'
+import { WEBSITES_DATA_FILENAME } from '@/constants/misc.constants.ts'
 import { useWebsitesStore } from '@/stores/websites.store.ts'
 import { useColumnsStore } from '@/stores/columns.store.ts'
-import { WEBSITES_DATA_FILENAME } from '@/misc/misc.constants.ts'
 import type { WebsitesData } from '@/types/websites.types.ts'
 
-export const useMainStore = defineStore('main', () => {
+export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
   const websitesStore = useWebsitesStore()
   const columnsStore = useColumnsStore()
 
