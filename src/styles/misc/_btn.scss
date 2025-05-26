@@ -1,0 +1,73 @@
+@use '../misc/mixins';
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  padding: 12px 22px;
+  min-width: 220px;
+
+  font-size: inherit;
+  color: var(--btn-text-color);
+  text-decoration: none;
+  user-select: none;
+
+  border: 2px solid var(--btn-border-color);
+  background-color: var(--btn-bg-color);
+  transition: 0.3s ease;
+
+  @include mixins.hover() {
+    color: var(--btn-text-color--hover);
+
+    background-color: var(--btn-bg-color--hover);
+    border-color: var(--btn-border-color--hover);
+    cursor: pointer;
+  }
+
+  &--danger {
+    --btn-text-color: var(--danger);
+    --btn-border-color: var(--danger);
+
+    --btn-bg-color--hover: #bb2d3b;
+    --btn-border-color--hover: #b02a37;
+  }
+
+  &--small {
+    min-width: unset;
+    width: 44px;
+  }
+
+  &--with-icon {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  &--icon {
+    padding: 0;
+    min-width: unset;
+
+    border: none;
+
+    svg {
+      transition: 0.3s ease;
+    }
+
+    @include mixins.hover() {
+      color: var(--btn-text-color);
+
+      background: none;
+
+      svg {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &[disabled] {
+    color: var(--border-color);
+
+    border-color: var(--border-color);
+    pointer-events: none;
+  }
+}

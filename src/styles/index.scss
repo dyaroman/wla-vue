@@ -1,7 +1,16 @@
 @use '@/styles/misc/var';
 @use '@/styles/misc/breakpoints';
 @use '@/styles/misc/mixins';
+
 @use '@/styles/misc/common';
+@use '@/styles/misc/btn';
+@use '@/styles/misc/burger';
+@use '@/styles/misc/controls';
 
 @use '@/styles/components/loader';
+@use '@/styles/components/header';
+@use '@/styles/components/logo';
+@use '@/styles/components/counter';
 @use '@/styles/components/table';
+@use '@/styles/components/drawer';
+@use '@/styles/components/filter';

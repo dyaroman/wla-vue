@@ -3,34 +3,45 @@ import { defineStore } from 'pinia'
 
 import { STORE_NAMES } from '@/constants/stores.constants.ts'
 import { COLUMNS_CONSTANTS } from '@/constants/columns.constants.ts'
+import { useFiltersStore } from '@/stores/filters.store.ts'
 import { getQueryParamValue } from '@/misc/helpers.ts'
-import type { ColumnName, ColumnsConfig } from '@/types/columns.types.ts'
+import type { ColumnConfig, ColumnName, ColumnsConfig } from '@/types/columns.types.ts'
 
 export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
+  const filtersStore = useFiltersStore()
+
   const config = ref<ColumnsConfig | null>(null)
   const visible = ref<Set<ColumnName>>(new Set())
-  const visibleOrdered = computed(() => {
+  const visibleOrdered = computed<ColumnName[]>(() => {
     if (!config.value) return []
-    return Object.keys(config.value).filter((columnName) =>
-      visible.value.has(columnName as ColumnName),
-    ) as ColumnName[]
+    return Object.keys(config.value).filter((columnName: ColumnName) =>
+      visible.value.has(columnName),
+    )
   })
-  const defaultVisible = computed(
-    () =>
-      Object.entries(config.value ?? {})
-        .filter(([, config]) => config.showColumn)
-        .map(([name]) => name) as ColumnName[],
+  const defaultVisible = computed<ColumnName[]>(() =>
+    Object.entries(config.value)
+      .filter(([, config]: [ColumnName, ColumnConfig]) => config.showColumn)
+      .map(([name]) => name),
   )
-  const displayable = computed(
-    () =>
-      Object.entries(config.value ?? {})
-        .filter(([, config]) => config.renderColumn)
-        .map(([name]) => name) as ColumnName[],
+  const displayable = computed<ColumnName[]>(() =>
+    Object.entries(config.value)
+      .filter(
+        ([name, config]: [ColumnName, ColumnConfig]) => name !== 'tags' && config.renderColumn,
+      )
+      .map(([name]) => name),
+  )
+  const filterable = computed<ColumnName[]>(() =>
+    Object.entries(config.value)
+      .filter(
+        ([name, config]: [ColumnName, ColumnConfig]) => name !== 'tags' && config.renderFilter,
+      )
+      .map(([name]) => name),
   )
 
   function setConfig(c: ColumnsConfig) {
     config.value = c
     _initializeVisible()
+    filtersStore.initializeValues()
   }
 
   function toggleVisible(name: ColumnName) {
@@ -54,7 +65,8 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
     visibleOrdered,
 
     // defaultVisible,
-    // displayable,
+    displayable,
+    filterable,
 
     setConfig,
     // toggleVisible,

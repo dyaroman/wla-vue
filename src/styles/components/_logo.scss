@@ -1,0 +1,17 @@
+.logo {
+  padding: 0;
+
+  font-size: 40px;
+  color: var(--btn-text-color);
+  user-select: none;
+
+  cursor: pointer;
+  border: none;
+  background: none;
+
+  &--fallback span {
+    display: inline-block;
+
+    transform: rotate(180deg);
+  }
+}

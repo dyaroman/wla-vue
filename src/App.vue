@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-import LoaderComponent from '@/components/LoaderComponent.vue'
+import HeaderComponent from '@/components/HeaderComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
+import LoaderComponent from '@/components/LoaderComponent.vue'
 import { useMainStore } from '@/stores/main.store.ts'
 
 const appInit = ref(false)
@@ -15,8 +16,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <template v-if="appInit">
+  <section v-if="appInit" data-qa="app" class="app">
+    <HeaderComponent />
     <TableComponent />
-  </template>
+  </section>
   <LoaderComponent v-else fixed />
 </template>

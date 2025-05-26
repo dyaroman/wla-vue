@@ -1,0 +1,133 @@
+@use '../misc/mixins';
+
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--backdrop);
+}
+
+.drawer {
+  position: fixed;
+  z-index: 100;
+
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  width: 100%;
+  min-height: 300px;
+  height: 100%;
+
+  background-color: var(--bg);
+  box-shadow: var(--shadow);
+
+  @include mixins.focus;
+
+  &--top {
+    top: 0;
+    left: 0;
+
+    border-bottom: var(--border-width) solid var(--border-color);
+  }
+
+  &--right {
+    top: 0;
+    right: 0;
+
+    border-left: var(--border-width) solid var(--border-color);
+  }
+
+  &--bottom {
+    bottom: 0;
+    left: 0;
+
+    border-top: var(--border-width) solid var(--border-color);
+  }
+
+  &--left {
+    top: 0;
+    left: 0;
+
+    border-right: var(--border-width) solid var(--border-color);
+  }
+}
+
+.drawer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--header-height);
+  padding: var(--gap) calc(2 * var(--gap));
+
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.drawer__title {
+  margin: 0;
+}
+
+.drawer__close {
+  padding: 4px 8px;
+
+  font-size: 22px;
+  color: inherit;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.drawer__content {
+  flex: 1;
+  padding: calc(2 * var(--gap));
+
+  overflow-y: auto;
+}
+
+// Transitions
+.drawer-fade-enter-active,
+.drawer-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.drawer-fade-enter-from,
+.drawer-fade-leave-to {
+  opacity: 0;
+}
+
+// Slide transitions
+.drawer-slide-left-enter-active,
+.drawer-slide-left-leave-active,
+.drawer-slide-right-enter-active,
+.drawer-slide-right-leave-active,
+.drawer-slide-top-enter-active,
+.drawer-slide-top-leave-active,
+.drawer-slide-bottom-enter-active,
+.drawer-slide-bottom-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.drawer-slide-left-enter-from,
+.drawer-slide-left-leave-to {
+  transform: translateX(-100%);
+}
+
+.drawer-slide-right-enter-from,
+.drawer-slide-right-leave-to {
+  transform: translateX(100%);
+}
+
+.drawer-slide-top-enter-from,
+.drawer-slide-top-leave-to {
+  transform: translateY(-100%);
+}
+
+.drawer-slide-bottom-enter-from,
+.drawer-slide-bottom-leave-to {
+  transform: translateY(100%);
+}
