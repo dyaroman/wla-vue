@@ -37,7 +37,10 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
     (newFilters) => {
       if (isUpdatingFromUrl.value) return
 
-      const params = _filtersToString(newFilters)
+      const currentParams = new URLSearchParams(window.location.search)
+      // remove old filters from URL
+      Object.keys(values.value).forEach((key) => currentParams.delete(key))
+      const params = _filtersToString(newFilters, currentParams)
       const newUrl = params ? `${window.location.pathname}?${params}` : window.location.pathname
 
       window.history.replaceState(null, '', newUrl)
@@ -48,9 +51,7 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
     },
   )
 
-  function _filtersToString(filters) {
-    const params = new URLSearchParams()
-
+  function _filtersToString(filters, params: URLSearchParams) {
     for (const filter in filters) {
       if (filters[filter] !== '') params.set(filter, filters[filter])
     }
