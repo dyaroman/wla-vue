@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useColumnsStore } from '@/stores/columns.store.ts'
+import { useFiltersStore } from '@/stores/filters.store.ts'
 import FilterComponent from '@/components/FilterComponent.vue'
 
 const columnsStore = useColumnsStore()
+const filtersStore = useFiltersStore()
 
 function resetFilters() {
-  // todo: reset filters
+  filtersStore.resetAll()
 }
 </script>
 
@@ -15,7 +17,6 @@ function resetFilters() {
       <button class="btn btn--danger" data-qa="resetFilters" @click="resetFilters">
         reset filters
       </button>
-      {{ columnsStore.filterable.length }}
       <FilterComponent
         v-for="filter in columnsStore.filterable"
         :key="filter"

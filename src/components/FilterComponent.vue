@@ -24,8 +24,12 @@ const filtersStore = useFiltersStore()
       />
       <!--      todo: autocomplete-list-->
     </label>
-    <!--    todo: @click="resetFilter"-->
-    <!--    todo: disabled="!filters[name]"-->
-    <button class="btn btn--danger">x</button>
+    <button
+      class="btn btn--danger"
+      @click="filtersStore.values[name] = ''"
+      :disabled="!filtersStore.values[name]"
+    >
+      x
+    </button>
   </div>
 </template>

@@ -121,7 +121,7 @@ tr {
   transition: 0.3s;
 
   &:nth-child(even) {
-    background-color: var(--body-bg);
+    background-color: var(--bg);
   }
 
   @include breakpoints.media-breakpoint-up(sm) {
@@ -131,7 +131,7 @@ tr {
   }
 
   @include mixins.hover() {
-    color: var(--body-color);
+    color: var(--color);
 
     background-color: var(--row-bg--hover);
   }

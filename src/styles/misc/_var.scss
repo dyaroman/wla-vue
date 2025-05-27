@@ -19,13 +19,13 @@
   --table-striped-bg: #f2f2f2;
   --row-bg--hover: #fff3cd;
 
-  --btn-text-color: var(--body-color);
-  --btn-border-color: var(--body-color);
-  --btn-bg-color: var(--body-bg);
+  --btn-text-color: var(--color);
+  --btn-border-color: var(--color);
+  --btn-bg-color: var(--bg);
 
-  --btn-text-color--hover: var(--body-bg);
-  --btn-border-color--hover: var(--body-color);
-  --btn-bg-color--hover: var(--body-color);
+  --btn-text-color--hover: var(--bg);
+  --btn-border-color--hover: var(--color);
+  --btn-bg-color--hover: var(--color);
 
   --shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   --backdrop: rgba(0, 0, 0, 0.5);
@@ -40,13 +40,13 @@
   --table-striped-bg: #2c3034;
   --row-bg--hover: #000032;
 
-  --btn-text-color: var(--body-color);
-  --btn-border-color: var(--body-color);
-  --btn-bg-color: var(--body-bg);
+  --btn-text-color: var(--color);
+  --btn-border-color: var(--color);
+  --btn-bg-color: var(--bg);
 
-  --btn-text-color--hover: var(--body-bg);
-  --btn-border-color--hover: var(--body-color);
-  --btn-bg-color--hover: var(--body-color);
+  --btn-text-color--hover: var(--bg);
+  --btn-border-color--hover: var(--color);
+  --btn-bg-color--hover: var(--color);
 
   --shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 3px rgba(255, 255, 255, 0.1);
   --backdrop: rgba(0, 0, 0, 0.7);
