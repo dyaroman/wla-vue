@@ -9,7 +9,7 @@ export interface WebsitesData {
   websites: Website[]
 }
 
-type WebsiteColumnValue = string | number | 'no_data' | string[]
+type WebsiteColumnValue = string | string[] | number | 'no_data'
 
 export interface Website extends Omit<Record<keyof ColumnsConfig, WebsiteColumnValue>, 'forms'> {
   website: string

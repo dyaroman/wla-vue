@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import { STORE_NAMES } from '@/constants/stores.constants.ts'
 import { useColumnsStore } from '@/stores/columns.store.ts'
 import { getQueryParamValue } from '@/misc/helpers.ts'
+import type { ColumnName } from '@/types/columns.types.ts'
 
 export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
   const columnsStore = useColumnsStore()
