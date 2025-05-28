@@ -1,0 +1,115 @@
+@use '../misc/mixins';
+
+.three-state-checkbox {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  vertical-align: middle;
+
+  transition: 0.3s;
+
+  @include mixins.hover() {
+    cursor: pointer;
+  }
+
+  &.disabled {
+    opacity: 0.2;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.three-state-checkbox.three-state-checkbox--include {
+  &,
+  .three-state-checkbox__icon {
+    border-color: var(--success);
+  }
+  .three-state-checkbox__icon::before,
+  .three-state-checkbox__icon::after {
+    background-color: var(--success);
+    opacity: 1;
+  }
+  .three-state-checkbox__label {
+    color: var(--success);
+  }
+}
+
+.three-state-checkbox.three-state-checkbox--exclude {
+  &,
+  .three-state-checkbox__icon {
+    border-color: var(--danger);
+  }
+  .three-state-checkbox__icon::after {
+    background-color: var(--danger);
+    opacity: 1;
+  }
+  .three-state-checkbox__label {
+    color: var(--danger);
+  }
+}
+
+.three-state-checkbox__input {
+  @include mixins.visually-hidden();
+
+  &:focus ~ .three-state-checkbox__icon {
+    @include mixins.focus-styles();
+  }
+
+  &:focus:not(:focus-visible) ~ .three-state-checkbox__icon {
+    @include mixins.focus-styles($revert: true);
+  }
+
+  &:focus-visible ~ .three-state-checkbox__icon {
+    @include mixins.focus-styles();
+  }
+}
+
+.three-state-checkbox__icon {
+  position: relative;
+
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+
+  border: var(--border-width) solid var(--color);
+  background-color: var(--bg);
+
+  &::before,
+  &::after {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: block;
+
+    opacity: 0;
+    background-color: var(--color);
+    transition: opacity 0.15s;
+    transform: translate(-50%, -50%);
+  }
+
+  &::before {
+    width: var(--border-width);
+    height: 70%;
+  }
+
+  &::after {
+    width: 70%;
+    height: var(--border-width);
+  }
+}
+
+.three-state-checkbox__label {
+  font-size: 16px;
+}
+
+.table .tags-list .three-state-checkbox {
+  padding: 3px;
+
+  border: var(--border-width) solid var(--color);
+}

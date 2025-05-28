@@ -19,3 +19,11 @@ export function search(where, what) {
     return where.includes(what)
   }
 }
+
+export function getUniqueTags(websites) {
+  const uniqueTags = websites.reduce((acc, website) => {
+    website.tags.forEach((tag) => acc.add(tag))
+    return acc
+  }, new Set())
+  return [...uniqueTags].sort()
+}

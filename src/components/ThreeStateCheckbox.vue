@@ -1,0 +1,37 @@
+<script setup lang="ts">
+import { CHECKBOX_STATES } from '@/constants/checkbox.constants.ts'
+import { useTagsStore } from '@/stores/tags.store.ts'
+import { computed } from 'vue'
+
+const { name } = defineProps<{
+  name: string
+}>()
+
+const tagsStore = useTagsStore()
+
+const disabled = computed(
+  () =>
+    !tagsStore.available.includes(name) &&
+    tagsStore.getState(name) !== CHECKBOX_STATES.INCLUDE &&
+    tagsStore.getState(name) !== CHECKBOX_STATES.EXCLUDE,
+)
+</script>
+
+<template>
+  <label
+    class="three-state-checkbox"
+    :class="[`three-state-checkbox--${tagsStore.getState(name)}`, { disabled }]"
+    :data-qa="name"
+  >
+    <input
+      type="checkbox"
+      class="three-state-checkbox__input"
+      @click="tagsStore.toggleState(name)"
+      :checked="tagsStore.getState(name) !== CHECKBOX_STATES.IGNORE"
+      :name
+      :tabindex="disabled ? -1 : null"
+    />
+    <span class="three-state-checkbox__icon" />
+    <span class="three-state-checkbox__label">{{ name }}</span>
+  </label>
+</template>

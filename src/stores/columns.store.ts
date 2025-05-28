@@ -19,19 +19,19 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
     )
   })
   const defaultVisible = computed<ColumnName[]>(() =>
-    Object.entries(config.value)
+    Object.entries(config.value ?? {})
       .filter(([, config]: [ColumnName, ColumnConfig]) => config.showColumn)
       .map(([name]) => name),
   )
   const displayable = computed<ColumnName[]>(() =>
-    Object.entries(config.value)
+    Object.entries(config.value ?? {})
       .filter(
         ([name, config]: [ColumnName, ColumnConfig]) => name !== 'tags' && config.renderColumn,
       )
       .map(([name]) => name),
   )
   const filterable = computed<ColumnName[]>(() =>
-    Object.entries(config.value)
+    Object.entries(config.value ?? {})
       .filter(
         ([name, config]: [ColumnName, ColumnConfig]) => name !== 'tags' && config.renderFilter,
       )

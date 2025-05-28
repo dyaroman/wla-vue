@@ -9,9 +9,9 @@ import type { Website } from '@/types/websites.types.ts'
 export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
   const filtersStore = useFiltersStore()
 
-  const items = ref<Website[] | null>(null)
+  const initialItems = ref<Website[] | null>(null)
   const filteredItems = computed<Website[]>(() =>
-    items.value.filter<Website>((website) => {
+    initialItems.value.filter<Website>((website) => {
       for (const filter in filtersStore.values) {
         if (['', '=', '==', '!', '!='].includes(filtersStore.values[filter])) continue
         switch (filter) {
@@ -27,13 +27,13 @@ export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
     }),
   )
 
-  function setItems(w: Website[]) {
-    items.value = w
+  function setInitialItems(w: Website[]) {
+    initialItems.value = w
   }
 
   return {
-    items,
+    initialItems,
     filteredItems,
-    setItems,
+    setInitialItems,
   }
 })

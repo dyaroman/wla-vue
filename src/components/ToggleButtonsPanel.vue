@@ -4,6 +4,7 @@ import IconTags from '@/components/icons/IconTags.vue'
 import IconColumns from '@/components/icons/IconColumns.vue'
 import DrawerComponent from '@/components/DrawerComponent.vue'
 import FiltersComponent from '@/components/FiltersComponent.vue'
+import TagsComponent from '@/components/TagsComponent.vue'
 import { DRAWER_ID } from '@/constants/drawers.constants.ts'
 import { useDrawerStore } from '@/stores/drawer.store.ts'
 
@@ -50,8 +51,7 @@ const drawerStore = useDrawerStore()
         <IconTags />
       </button>
       <DrawerComponent :id="DRAWER_ID.TAGS" position="right" max-size="320px" title="Tags">
-        <!--      todo:   TagsComponent-->
-        tags
+        <TagsComponent />
       </DrawerComponent>
 
       <button

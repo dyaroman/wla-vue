@@ -1,0 +1,10 @@
+.tags {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+
+  .tags-list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+}
