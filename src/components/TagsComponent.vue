@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TagsList from '@/components/TagsList.vue'
-import { useTagsStore } from '@/stores/tags.store.ts'
+import { useTagsStore } from '@/stores/tags.store'
 
 const tagsStore = useTagsStore()
 </script>

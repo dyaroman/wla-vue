@@ -6,7 +6,4 @@ export const COLUMNS_CONSTANTS = {
     ALL: 'all',
     NONE: 'none',
   },
-} as const
-
-export type ColumnPreset =
-  (typeof COLUMNS_CONSTANTS.PRESETS)[keyof typeof COLUMNS_CONSTANTS.PRESETS]
+}

@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue'
-import { useMainStore } from '@/stores/main.store.ts'
+import { useMainStore } from '@/stores/main.store'
 
 const appInit = ref(false)
 const mainStore = useMainStore()

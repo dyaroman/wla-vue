@@ -5,12 +5,16 @@ import IconColumns from '@/components/icons/IconColumns.vue'
 import DrawerComponent from '@/components/DrawerComponent.vue'
 import FiltersComponent from '@/components/FiltersComponent.vue'
 import TagsComponent from '@/components/TagsComponent.vue'
-import { DRAWER_ID } from '@/constants/drawers.constants.ts'
-import { useDrawerStore } from '@/stores/drawer.store.ts'
+import { DRAWER_ID } from '@/constants/drawers.constants'
+import { useDrawerStore } from '@/stores/drawer.store'
 
-defineProps<{
-  position: 'left' | 'right'
-}>()
+defineProps({
+  position: {
+    type: String,
+    required: true,
+    validator: (value) => ['left', 'right'].includes(value),
+  },
+})
 
 const drawerStore = useDrawerStore()
 </script>

@@ -3,4 +3,4 @@ export const DRAWER_ID = {
   FILTERS: 'filters',
   TAGS: 'tags',
   CUSTOMIZE_COLUMNS: 'customizeColumns',
-} as const
+}

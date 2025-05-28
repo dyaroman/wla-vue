@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch, nextTick, type Ref, computed } from 'vue'
 
-import { useDrawerStore } from '@/stores/drawer.store.ts'
+import { useDrawerStore } from '@/stores/drawer.store'
 
 type DrawerPosition = 'left' | 'right' | 'top' | 'bottom'
 
@@ -94,7 +94,7 @@ const handleKeyDown = (event: KeyboardEvent): void => {
 // Watch for drawer open/close
 watch(
   () => isOpen.value,
-  (isOpen: boolean) => {
+  (isOpen) => {
     if (isOpen) {
       // Store the currently focused element to restore focus later
       previouslyFocusedElement.value = document.activeElement

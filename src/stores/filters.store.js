@@ -1,15 +1,14 @@
 import { ref, watch, nextTick } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants.ts'
-import { useColumnsStore } from '@/stores/columns.store.ts'
-import { getQueryParamValue } from '@/misc/helpers.ts'
-import type { ColumnName } from '@/types/columns.types.ts'
+import { STORE_NAMES } from '@/constants/stores.constants'
+import { useColumnsStore } from '@/stores/columns.store'
+import { getQueryParamValue } from '@/misc/helpers'
 
 export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
   const columnsStore = useColumnsStore()
 
-  const values = ref<{ [key: ColumnName]: string }>({})
+  const values = ref({})
   const isUpdatingFromUrl = ref(false)
 
   function initializeValues() {
@@ -52,7 +51,7 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
     },
   )
 
-  function _filtersToString(filters, params: URLSearchParams) {
+  function _filtersToString(filters, params) {
     for (const filter in filters) {
       if (filters[filter] !== '') params.set(filter, filters[filter])
     }

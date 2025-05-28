@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { CHECKBOX_STATES } from '@/constants/checkbox.constants.ts'
-import { useTagsStore } from '@/stores/tags.store.ts'
+import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
+import { useTagsStore } from '@/stores/tags.store'
 import { computed } from 'vue'
 
-const { name } = defineProps<{
-  name: string
-}>()
+const { name } = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+})
 
 const tagsStore = useTagsStore()
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useColumnsStore } from '@/stores/columns.store.ts'
-import { useFiltersStore } from '@/stores/filters.store.ts'
+import { useColumnsStore } from '@/stores/columns.store'
+import { useFiltersStore } from '@/stores/filters.store'
 import FilterComponent from '@/components/FilterComponent.vue'
 
 const columnsStore = useColumnsStore()

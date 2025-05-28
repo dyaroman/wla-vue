@@ -5,4 +5,4 @@ export const STORE_NAMES = {
   MAIN: 'main',
   TAGS: 'tags',
   WEBSITES: 'websites',
-} as const
+}

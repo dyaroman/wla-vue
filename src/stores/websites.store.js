@@ -1,34 +1,26 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants.ts'
-import { useFiltersStore } from '@/stores/filters.store.ts'
-import { useTagsStore } from '@/stores/tags.store.ts'
-import { search } from '@/misc/helpers.ts'
-import type { Website } from '@/types/websites.types.ts'
-
-interface FiltersValues {
-  [key: string]: string
-}
+import { STORE_NAMES } from '@/constants/stores.constants'
+import { useFiltersStore } from '@/stores/filters.store'
+import { useTagsStore } from '@/stores/tags.store'
+import { search } from '@/misc/helpers'
 
 export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
-  const filtersStore = useFiltersStore() as { values: FiltersValues }
+  const filtersStore = useFiltersStore()
   const tagsStore = useTagsStore()
 
-  const initialItems = ref<Website[] | null>(null)
-  const filteredItems = computed<Website[]>(
+  const initialItems = ref(null)
+  const filteredItems = computed(
     () =>
-      initialItems.value?.filter((website: Website): boolean => {
+      initialItems.value?.filter((website) => {
         for (const filter in filtersStore.values) {
           if (['', '=', '==', '!', '!='].includes(filtersStore.values[filter])) continue
           switch (filter) {
             case 'pages':
               break
             default:
-              if (
-                !website[filter as keyof Website] ||
-                !search(website[filter as keyof Website], filtersStore.values[filter])
-              )
+              if (!website[filter] || !search(website[filter], filtersStore.values[filter]))
                 return false
           }
         }
@@ -46,7 +38,7 @@ export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
       [],
   )
 
-  function setInitialItems(w: Website[]) {
+  function setInitialItems(w) {
     initialItems.value = w
   }
 

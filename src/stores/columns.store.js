@@ -1,0 +1,67 @@
+import { computed, ref } from 'vue'
+import { defineStore } from 'pinia'
+
+import { STORE_NAMES } from '@/constants/stores.constants'
+import { COLUMNS_CONSTANTS } from '@/constants/columns.constants'
+import { useFiltersStore } from '@/stores/filters.store'
+import { getQueryParamValue } from '@/misc/helpers'
+
+export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
+  const filtersStore = useFiltersStore()
+
+  const config = ref(null)
+  const visible = ref(new Set())
+  const visibleOrdered = computed(() => {
+    if (!config.value) return []
+    return Object.keys(config.value).filter((columnName) => visible.value.has(columnName))
+  })
+  const defaultVisible = computed(() =>
+    Object.entries(config.value ?? {})
+      .filter(([, config]) => config.showColumn)
+      .map(([name]) => name),
+  )
+  const displayable = computed(() =>
+    Object.entries(config.value ?? {})
+      .filter(([name, config]) => name !== 'tags' && config.renderColumn)
+      .map(([name]) => name),
+  )
+  const filterable = computed(() =>
+    Object.entries(config.value ?? {})
+      .filter(([name, config]) => name !== 'tags' && config.renderFilter)
+      .map(([name]) => name),
+  )
+
+  function setConfig(c) {
+    config.value = c
+    _initializeVisible()
+    filtersStore.initializeValues()
+  }
+
+  function toggleVisible(name) {
+    if (visible.value.has(name)) visible.value.delete(name)
+    else visible.value.add(name)
+  }
+
+  function _initializeVisible() {
+    const visibleColumns = getQueryParamValue(COLUMNS_CONSTANTS.QUERY_PARAMS.VISIBLE_COLUMNS)
+
+    if (visibleColumns === COLUMNS_CONSTANTS.PRESETS.NONE) visible.value = new Set()
+    else if (visibleColumns === COLUMNS_CONSTANTS.PRESETS.ALL)
+      visible.value = new Set(displayable.value)
+    else if (visibleColumns) visible.value = new Set(visibleColumns.split(','))
+    else visible.value = new Set(defaultVisible.value)
+  }
+
+  return {
+    // config,
+    // visible,
+    visibleOrdered,
+
+    // defaultVisible,
+    displayable,
+    filterable,
+
+    setConfig,
+    toggleVisible,
+  }
+})

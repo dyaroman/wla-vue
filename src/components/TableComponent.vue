@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
 
-import { useColumnsStore } from '@/stores/columns.store.ts'
-import { useWebsitesStore } from '@/stores/websites.store.ts'
-import { useFiltersStore } from '@/stores/filters.store.ts'
+import { useColumnsStore } from '@/stores/columns.store'
+import { useWebsitesStore } from '@/stores/websites.store'
+import { useFiltersStore } from '@/stores/filters.store'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()

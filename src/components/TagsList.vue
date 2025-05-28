@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import ThreeStateCheckbox from '@/components/ThreeStateCheckbox.vue'
-import { useTagsStore } from '@/stores/tags.store.ts'
 
-defineProps<{
-  items: string[]
-}>()
-
-const tagsStore = useTagsStore()
+defineProps({
+  items: {
+    type: Array,
+    required: true,
+  },
+})
 </script>
 
 <template>

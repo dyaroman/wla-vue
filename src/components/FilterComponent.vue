@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useFiltersStore } from '@/stores/filters.store.ts'
+import { useFiltersStore } from '@/stores/filters.store'
 
-defineProps<{
-  name: string
-  placeholder: string
-}>()
+defineProps({
+  name: String,
+  placeholder: String,
+})
 
 const filtersStore = useFiltersStore()
 </script>

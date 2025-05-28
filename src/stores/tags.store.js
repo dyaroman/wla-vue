@@ -1,27 +1,26 @@
 import { computed, ref, readonly } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants.ts'
-import { CHECKBOX_STATES } from '@/constants/checkbox.constants.ts'
-import { useWebsitesStore } from '@/stores/websites.store.ts'
-import { getUniqueTags } from '@/misc/helpers.ts'
-import type { ThreeStateCheckbox } from '@/types/checkbox.types.ts'
+import { STORE_NAMES } from '@/constants/stores.constants'
+import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
+import { useWebsitesStore } from '@/stores/websites.store'
+import { getUniqueTags } from '@/misc/helpers'
 
 export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
   const websitesStore = useWebsitesStore()
 
-  const all = computed<string[]>(() => getUniqueTags(websitesStore.initialItems))
-  const available = computed<string[]>(() => getUniqueTags(websitesStore.filteredItems))
-  const included = ref(new Set<string>())
-  const excluded = ref(new Set<string>())
+  const all = computed(() => getUniqueTags(websitesStore.initialItems))
+  const available = computed(() => getUniqueTags(websitesStore.filteredItems))
+  const included = ref(new Set())
+  const excluded = ref(new Set())
 
-  function getState(id: string): ThreeStateCheckbox {
+  function getState(id) {
     if (included.value.has(id)) return CHECKBOX_STATES.INCLUDE
     if (excluded.value.has(id)) return CHECKBOX_STATES.EXCLUDE
     return CHECKBOX_STATES.IGNORE
   }
 
-  function toggleState(id: string) {
+  function toggleState(id) {
     const currentState = getState(id)
 
     included.value.delete(id)
@@ -39,7 +38,7 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     }
   }
 
-  function setState(id: string, state: ThreeStateCheckbox) {
+  function setState(id, state) {
     included.value.delete(id)
     excluded.value.delete(id)
 

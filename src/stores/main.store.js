@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants.ts'
-import { WEBSITES_DATA_FILENAME } from '@/constants/misc.constants.ts'
-import { useWebsitesStore } from '@/stores/websites.store.ts'
-import { useColumnsStore } from '@/stores/columns.store.ts'
-import type { WebsitesData } from '@/types/websites.types.ts'
+import { STORE_NAMES } from '@/constants/stores.constants'
+import { WEBSITES_DATA_FILENAME } from '@/constants/misc.constants'
+import { useWebsitesStore } from '@/stores/websites.store'
+import { useColumnsStore } from '@/stores/columns.store'
 
 export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
   const websitesStore = useWebsitesStore()
@@ -12,7 +11,7 @@ export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
 
   async function loadCombinedData() {
     try {
-      const data: WebsitesData = await fetch(
+      const data = await fetch(
         `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`,
       ).then((res) => res.json())
 
