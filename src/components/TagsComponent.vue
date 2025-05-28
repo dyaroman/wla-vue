@@ -7,8 +7,9 @@ const tagsStore = useTagsStore()
 
 <template>
   <div class="tags">
-    <!--  todo @click=resetTags-->
-    <button class="btn btn--danger" data-qa="resetTags">reset tags</button>
+    <button class="btn btn--danger" data-qa="resetTags" @click="tagsStore.resetAll()">
+      reset tags
+    </button>
 
     <TagsList :items="tagsStore.all" />
   </div>

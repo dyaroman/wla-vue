@@ -23,12 +23,14 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
       const params = new URLSearchParams(window.location.search)
       params.delete('tags')
 
-      params.set(
-        'tags',
-        [...newIncluded, ...newExcluded]
-          .map((tag) => (excluded.value.has(tag) ? `!${tag}` : tag))
-          .join(','),
-      )
+      if (newIncluded.size > 0 || newExcluded.size > 0)
+        params.set(
+          'tags',
+          [...newIncluded, ...newExcluded]
+            .map((tag) => (excluded.value.has(tag) ? `!${tag}` : tag))
+            .join(','),
+        )
+
       const newUrl = `${window.location.pathname}?${params}`
       window.history.replaceState(null, '', newUrl)
     },
@@ -77,19 +79,9 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     }
   }
 
-  function _handlePopState() {
-    isUpdatingFromUrl.value = true
-
-    initializeValues()
-
-    // reset flag after next tick
-    nextTick(() => {
-      isUpdatingFromUrl.value = false
-    })
-  }
-
-  function cleanup() {
-    if (typeof window !== 'undefined') window.removeEventListener('popstate', _handlePopState)
+  function resetAll() {
+    included.value = new Set()
+    excluded.value = new Set()
   }
 
   function setState(id, state) {
@@ -102,6 +94,21 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
 
   if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
 
+  function cleanup() {
+    if (typeof window !== 'undefined') window.removeEventListener('popstate', _handlePopState)
+  }
+
+  function _handlePopState() {
+    isUpdatingFromUrl.value = true
+
+    initializeValues()
+
+    // reset flag after next tick
+    nextTick(() => {
+      isUpdatingFromUrl.value = false
+    })
+  }
+
   return {
     all,
     available,
@@ -110,6 +117,7 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     getState,
     included: readonly(included),
     initializeValues,
+    resetAll,
     setState,
     toggleState,
   }
