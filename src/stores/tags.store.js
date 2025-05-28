@@ -1,18 +1,57 @@
-import { computed, ref, readonly } from 'vue'
+import { computed, ref, readonly, nextTick, watch } from 'vue'
 import { defineStore } from 'pinia'
 
 import { STORE_NAMES } from '@/constants/stores.constants'
 import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
 import { useWebsitesStore } from '@/stores/websites.store'
-import { getUniqueTags } from '@/misc/helpers'
+import { getQueryParamValue, getUniqueTags } from '@/misc/helpers'
 
 export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
   const websitesStore = useWebsitesStore()
 
+  const isUpdatingFromUrl = ref(false)
   const all = computed(() => getUniqueTags(websitesStore.initialItems))
   const available = computed(() => getUniqueTags(websitesStore.filteredItems))
   const included = ref(new Set())
   const excluded = ref(new Set())
+
+  watch(
+    [included, excluded],
+    ([newIncluded, newExcluded]) => {
+      if (isUpdatingFromUrl.value) return
+
+      const params = new URLSearchParams(window.location.search)
+      params.delete('tags')
+
+      params.set(
+        'tags',
+        [...newIncluded, ...newExcluded]
+          .map((tag) => (excluded.value.has(tag) ? `!${tag}` : tag))
+          .join(','),
+      )
+      const newUrl = `${window.location.pathname}?${params}`
+      window.history.replaceState(null, '', newUrl)
+    },
+    {
+      deep: true,
+      flush: 'post',
+    },
+  )
+
+  function initializeValues() {
+    const tagsFromUrl = getQueryParamValue('tags')
+    if (!tagsFromUrl) return
+
+    const newIncluded = new Set()
+    const newExcluded = new Set()
+    tagsFromUrl.split(',').forEach((tag) => {
+      if (tag.startsWith('!')) newExcluded.add(tag.slice(1))
+      else newIncluded.add(tag)
+    })
+
+    if (newIncluded.size > 0) included.value = newIncluded
+    if (newExcluded.size > 0) excluded.value = newExcluded
+  }
 
   function getState(id) {
     if (included.value.has(id)) return CHECKBOX_STATES.INCLUDE
@@ -38,6 +77,21 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     }
   }
 
+  function _handlePopState() {
+    isUpdatingFromUrl.value = true
+
+    initializeValues()
+
+    // reset flag after next tick
+    nextTick(() => {
+      isUpdatingFromUrl.value = false
+    })
+  }
+
+  function cleanup() {
+    if (typeof window !== 'undefined') window.removeEventListener('popstate', _handlePopState)
+  }
+
   function setState(id, state) {
     included.value.delete(id)
     excluded.value.delete(id)
@@ -46,12 +100,16 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     else if (state === CHECKBOX_STATES.EXCLUDE) excluded.value.add(id)
   }
 
+  if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
+
   return {
     all,
     available,
+    cleanup,
     excluded: readonly(excluded),
     getState,
     included: readonly(included),
+    initializeValues,
     setState,
     toggleState,
   }

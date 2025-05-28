@@ -4,10 +4,12 @@ import { defineStore } from 'pinia'
 import { STORE_NAMES } from '@/constants/stores.constants'
 import { COLUMNS_CONSTANTS } from '@/constants/columns.constants'
 import { useFiltersStore } from '@/stores/filters.store'
+import { useTagsStore } from '@/stores/tags.store.js'
 import { getQueryParamValue } from '@/misc/helpers'
 
 export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
   const filtersStore = useFiltersStore()
+  const tagsStore = useTagsStore()
 
   const config = ref(null)
   const visible = ref(new Set())
@@ -35,6 +37,7 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
     config.value = c
     _initializeVisible()
     filtersStore.initializeValues()
+    tagsStore.initializeValues()
   }
 
   function toggleVisible(name) {

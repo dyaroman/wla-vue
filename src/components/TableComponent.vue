@@ -4,12 +4,17 @@ import { onUnmounted } from 'vue'
 import { useColumnsStore } from '@/stores/columns.store'
 import { useWebsitesStore } from '@/stores/websites.store'
 import { useFiltersStore } from '@/stores/filters.store'
+import { useTagsStore } from '@/stores/tags.store'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
 const filtersStore = useFiltersStore()
+const tagsStore = useTagsStore()
 
-onUnmounted(() => filtersStore.cleanup())
+onUnmounted(() => {
+  filtersStore.cleanup()
+  tagsStore.cleanup()
+})
 </script>
 
 <template>
