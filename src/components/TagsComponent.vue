@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import TagsList from '@/components/TagsList.vue'
 import { useTagsStore } from '@/stores/tags.store'
 

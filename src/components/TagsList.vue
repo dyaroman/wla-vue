@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import ThreeStateCheckbox from '@/components/ThreeStateCheckbox.vue'
 
 defineProps({

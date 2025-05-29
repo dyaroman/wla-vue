@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import LogoComponent from '@/components/LogoComponent.vue'
 import CounterComponent from '@/components/CounterComponent.vue'
 import ToggleButtonsPanel from '@/components/ToggleButtonsPanel.vue'

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { onBeforeUnmount, ref, watch, nextTick, type Ref, computed } from 'vue'
 
 import { useDrawerStore } from '@/stores/drawer.store'

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 defineProps({
   fixed: {
     type: Boolean,

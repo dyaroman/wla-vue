@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 function onClick() {
   document.querySelector('.table')?.scrollTo({
     top: 0,

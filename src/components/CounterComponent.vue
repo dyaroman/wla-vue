@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useWebsitesStore } from '@/stores/websites.store'
 
 const websiteStore = useWebsitesStore()

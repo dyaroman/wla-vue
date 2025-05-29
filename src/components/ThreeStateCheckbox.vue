@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
 import { useTagsStore } from '@/stores/tags.store'
 import { computed } from 'vue'

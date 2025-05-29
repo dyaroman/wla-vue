@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useFiltersStore } from '@/stores/filters.store'
 
 defineProps({

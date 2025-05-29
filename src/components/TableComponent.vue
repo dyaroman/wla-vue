@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { onUnmounted } from 'vue'
 
 import { useColumnsStore } from '@/stores/columns.store'
@@ -18,6 +18,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!--  todo: PaginationComponent position=above-->
   <section class="table">
     <table>
       <thead>
@@ -37,4 +38,5 @@ onUnmounted(() => {
       </tbody>
     </table>
   </section>
+  <!--  todo: PaginationComponent position=below-->
 </template>

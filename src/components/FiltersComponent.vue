@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useColumnsStore } from '@/stores/columns.store'
 import { useFiltersStore } from '@/stores/filters.store'
 import FilterComponent from '@/components/FilterComponent.vue'

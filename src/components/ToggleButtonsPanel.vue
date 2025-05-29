@@ -1,10 +1,11 @@
-<script setup lang="ts">
+<script setup>
 import IconFilters from '@/components/icons/IconFilters.vue'
 import IconTags from '@/components/icons/IconTags.vue'
 import IconColumns from '@/components/icons/IconColumns.vue'
 import DrawerComponent from '@/components/DrawerComponent.vue'
 import FiltersComponent from '@/components/FiltersComponent.vue'
 import TagsComponent from '@/components/TagsComponent.vue'
+import ColumnSettings from '@/components/ColumnSettings.vue'
 import { DRAWER_ID } from '@/constants/drawers.constants'
 import { useDrawerStore } from '@/stores/drawer.store'
 
@@ -72,8 +73,7 @@ const drawerStore = useDrawerStore()
         max-size="320px"
         title="Customize columns"
       >
-        <!--      todo:   TableControls-->
-        table controls
+        <ColumnSettings />
       </DrawerComponent>
     </template>
   </div>
