@@ -1,40 +1,51 @@
 <script setup>
-import { onBeforeUnmount, ref, watch, nextTick, type Ref, computed } from 'vue'
+import { onBeforeUnmount, ref, watch, nextTick, computed } from 'vue'
 
 import { useDrawerStore } from '@/stores/drawer.store'
 
-type DrawerPosition = 'left' | 'right' | 'top' | 'bottom'
-
-interface DrawerProps {
-  id: string
-  position?: DrawerPosition
-  maxSize?: string
-  title?: string
-  showHeader?: boolean
-  closeOnBackdropClick?: boolean
-  closeOnEsc?: boolean
-}
-
-// Props with TypeScript
-const props = withDefaults(defineProps<DrawerProps>(), {
-  position: 'right',
-  title: '',
-  showHeader: true,
-  closeOnBackdropClick: true,
-  closeOnEsc: true,
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+  position: {
+    type: String,
+    default: 'right',
+    validator: (value) => ['left', 'right', 'top', 'bottom'].includes(value),
+  },
+  maxSize: {
+    type: String,
+    default: null,
+  },
+  title: {
+    type: String,
+    default: '',
+  },
+  showHeader: {
+    type: Boolean,
+    default: true,
+  },
+  closeOnBackdropClick: {
+    type: Boolean,
+    default: true,
+  },
+  closeOnEsc: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 // Refs with proper typing
-const drawerRef: Ref<HTMLElement | null> = ref(null)
-const previouslyFocusedElement: Ref<Element | null> = ref(null)
-const scrollPosition: Ref<number> = ref(0)
+const drawerRef = ref(null)
+const previouslyFocusedElement = ref(null)
+const scrollPosition = ref(0)
 
 const drawerStore = useDrawerStore()
 
 const isOpen = computed(() => drawerStore.openDrawerId === props.id)
 
 // Function to prevent body scrolling
-const preventBodyScroll = (): void => {
+const preventBodyScroll = () => {
   // Store current scroll position
   scrollPosition.value = window.pageYOffset
 
@@ -46,7 +57,7 @@ const preventBodyScroll = (): void => {
 }
 
 // Function to restore body scrolling
-const restoreBodyScroll = (): void => {
+const restoreBodyScroll = () => {
   // Remove the styles preventing scroll
   document.body.style.overflow = ''
   document.body.style.position = ''
@@ -58,10 +69,10 @@ const restoreBodyScroll = (): void => {
 }
 
 // Function to handle Tab key and trap focus
-const handleTabKey = (event: KeyboardEvent): void => {
+const handleTabKey = (event) => {
   if (!isOpen.value || !drawerRef.value) return
 
-  const focusableElements = drawerRef.value.querySelectorAll<HTMLElement>(
+  const focusableElements = drawerRef.value.querySelectorAll(
     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
   )
 
@@ -81,7 +92,7 @@ const handleTabKey = (event: KeyboardEvent): void => {
 }
 
 // Enhanced ESC key handler
-const handleKeyDown = (event: KeyboardEvent): void => {
+const handleKeyDown = (event) => {
   if (event.key === 'Escape' && props.closeOnEsc && isOpen.value) {
     event.preventDefault()
     event.stopPropagation()
@@ -119,7 +130,7 @@ watch(
       // Return focus to the element that opened the drawer
       if (previouslyFocusedElement.value && 'focus' in previouslyFocusedElement.value) {
         nextTick(() => {
-          ;(previouslyFocusedElement.value as HTMLElement).focus()
+          previouslyFocusedElement.value.focus()
         })
       }
     }
@@ -151,8 +162,8 @@ onBeforeUnmount(() => {
         class="drawer"
         :class="`drawer--${position}`"
         :style="{
-          maxHeight: position === 'top' || position === 'bottom' ? (maxSize ?? '50vh') : undefined,
-          maxWidth: position === 'right' || position === 'left' ? (maxSize ?? '50vw') : undefined,
+          maxHeight: position === 'top' || position === 'bottom' ? (maxSize ?? '50vh') : null,
+          maxWidth: position === 'right' || position === 'left' ? (maxSize ?? '50vw') : null,
         }"
         ref="drawerRef"
         tabindex="-1"
