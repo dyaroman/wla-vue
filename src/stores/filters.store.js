@@ -47,7 +47,6 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
     },
     {
       deep: true,
-      flush: 'post',
     },
   )
 

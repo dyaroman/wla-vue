@@ -1,0 +1,75 @@
+@use '../misc/mixins';
+
+.checkbox {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  vertical-align: middle;
+
+  transition: 0.3s;
+
+  @include mixins.hover() {
+    cursor: pointer;
+  }
+
+  &.disabled {
+    opacity: 0.2;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.checkbox__input {
+  @include mixins.visually-hidden();
+
+  &:checked ~ .checkbox__icon::before {
+    opacity: 1;
+  }
+
+  &:focus ~ .checkbox__icon {
+    @include mixins.focus-styles();
+  }
+
+  &:focus:not(:focus-visible) ~ .checkbox__icon {
+    @include mixins.focus-styles($revert: true);
+  }
+
+  &:focus-visible ~ .checkbox__icon {
+    @include mixins.focus-styles();
+  }
+}
+
+.checkbox__icon {
+  position: relative;
+
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+
+  border: var(--border-width) solid var(--color);
+  background-color: var(--bg);
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: block;
+    width: 70%;
+    height: 70%;
+
+    opacity: 0;
+    background-color: var(--color);
+    transition: opacity 0.15s;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.checkbox__label {
+  font-size: 16px;
+}

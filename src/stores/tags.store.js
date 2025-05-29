@@ -36,7 +36,6 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     },
     {
       deep: true,
-      flush: 'post',
     },
   )
 

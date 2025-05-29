@@ -14,6 +14,7 @@ const tagsStore = useTagsStore()
 onUnmounted(() => {
   filtersStore.cleanup()
   tagsStore.cleanup()
+  columnsStore.cleanup()
 })
 </script>
 

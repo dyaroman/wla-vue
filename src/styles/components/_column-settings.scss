@@ -1,0 +1,10 @@
+.column-settings {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--gap) / 2);
+  padding: 0;
+  margin-top: var(--gap);
+  margin-bottom: var(--gap);
+
+  list-style: none;
+}

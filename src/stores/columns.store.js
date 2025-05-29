@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 
 import { STORE_NAMES } from '@/constants/stores.constants'
@@ -11,6 +11,7 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
   const filtersStore = useFiltersStore()
   const tagsStore = useTagsStore()
 
+  const isUpdatingFromUrl = ref(false)
   const config = ref(null)
   const visible = ref(new Set())
   const visibleOrdered = computed(() => {
@@ -19,25 +20,49 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
   })
   const defaultVisible = computed(() =>
     Object.entries(config.value ?? {})
-      .filter(([, config]) => config.showColumn)
+      .filter(([, config]) => config['showColumn'])
       .map(([name]) => name),
   )
   const displayable = computed(() =>
     Object.entries(config.value ?? {})
-      .filter(([name, config]) => name !== 'tags' && config.renderColumn)
+      .filter(([name, config]) => name !== 'tags' && config['renderColumn'])
       .map(([name]) => name),
   )
   const filterable = computed(() =>
     Object.entries(config.value ?? {})
-      .filter(([name, config]) => name !== 'tags' && config.renderFilter)
+      .filter(([name, config]) => name !== 'tags' && config['renderFilter'])
       .map(([name]) => name),
   )
+
+  watch(visibleOrdered, (newVisible) => {
+    if (isUpdatingFromUrl.value) return
+
+    const params = new URLSearchParams(window.location.search)
+    params.delete(COLUMNS_CONSTANTS.QUERY_PARAMS.VISIBLE_COLUMNS)
+
+    let value
+    if (JSON.stringify(newVisible) === JSON.stringify(displayable.value))
+      value = COLUMNS_CONSTANTS.PRESETS.ALL
+    else if (newVisible.length === 0) value = COLUMNS_CONSTANTS.PRESETS.NONE
+    else if (JSON.stringify(newVisible) !== JSON.stringify(defaultVisible.value))
+      value = newVisible.join(',')
+
+    if (value) params.set(COLUMNS_CONSTANTS.QUERY_PARAMS.VISIBLE_COLUMNS, value)
+
+    // todo: implement to other places
+    if (params.toString() === '') window.history.replaceState(null, '', '/')
+    else window.history.replaceState(null, '', `?${params}`)
+  })
 
   function setConfig(c) {
     config.value = c
     _initializeVisible()
     filtersStore.initializeValues()
     tagsStore.initializeValues()
+  }
+
+  function getState(name) {
+    return visible.value.has(name)
   }
 
   function toggleVisible(name) {
@@ -55,16 +80,31 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
     else visible.value = new Set(defaultVisible.value)
   }
 
-  return {
-    // config,
-    // visible,
-    visibleOrdered,
+  if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
 
-    // defaultVisible,
+  function cleanup() {
+    if (typeof window !== 'undefined') window.removeEventListener('popstate', _handlePopState)
+  }
+
+  function _handlePopState() {
+    isUpdatingFromUrl.value = true
+
+    _initializeVisible()
+
+    // reset flag after next tick
+    nextTick(() => {
+      isUpdatingFromUrl.value = false
+    })
+  }
+
+  return {
+    cleanup,
     displayable,
     filterable,
-
+    getState,
     setConfig,
     toggleVisible,
+    visible,
+    visibleOrdered,
   }
 })
