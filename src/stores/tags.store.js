@@ -14,6 +14,7 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
   const available = computed(() => getUniqueTags(websitesStore.filteredItems))
   const included = ref(new Set())
   const excluded = ref(new Set())
+  const isPristine = computed(() => included.value.size === 0 && excluded.value.size === 0)
 
   watch(
     [included, excluded],
@@ -116,6 +117,7 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
     getState,
     included: readonly(included),
     initializeValues,
+    isPristine,
     resetAll,
     setState,
     toggleState,

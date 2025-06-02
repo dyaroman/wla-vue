@@ -7,7 +7,12 @@ const tagsStore = useTagsStore()
 
 <template>
   <div class="tags">
-    <button class="btn btn--danger" data-qa="resetTags" @click="tagsStore.resetAll()">
+    <button
+      class="btn btn--danger"
+      data-qa="resetTags"
+      @click="tagsStore.resetAll()"
+      :disabled="tagsStore.isPristine"
+    >
       reset tags
     </button>
 

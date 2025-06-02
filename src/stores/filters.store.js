@@ -1,4 +1,4 @@
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import { STORE_NAMES } from '@/constants/stores.constants'
@@ -10,6 +10,9 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
 
   const values = ref({})
   const isUpdatingFromUrl = ref(false)
+  const isPristine = computed(
+    () => Object.values(values.value).filter((i) => i !== '').length === 0,
+  )
 
   function initializeValues() {
     const initialValues = {}
@@ -67,5 +70,11 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
 
   if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
 
-  return { values, initializeValues, cleanup, resetAll }
+  return {
+    cleanup,
+    initializeValues,
+    isPristine,
+    resetAll,
+    values,
+  }
 })

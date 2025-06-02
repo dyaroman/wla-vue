@@ -14,7 +14,12 @@ function resetFilters() {
 <template>
   <div class="filters">
     <div class="flex-column">
-      <button class="btn btn--danger" data-qa="resetFilters" @click="resetFilters">
+      <button
+        class="btn btn--danger"
+        data-qa="resetFilters"
+        @click="resetFilters"
+        :disabled="filtersStore.isPristine"
+      >
         reset filters
       </button>
       <FilterComponent
