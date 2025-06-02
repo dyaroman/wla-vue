@@ -8,10 +8,17 @@ const columnsStore = useColumnsStore()
 <template>
   <section>
     <div class="flex-column">
+      <button class="btn" @click="columnsStore.visible = new Set(columnsStore.displayable)">
+        show all
+      </button>
+      <button class="btn" @click="columnsStore.visible = new Set()">hide all</button>
+      <button
+        class="btn btn--danger"
+        @click="columnsStore.visible = new Set(columnsStore.defaultVisible)"
+      >
+        restore default
+      </button>
       <!--      todo: implement @click-->
-      <button class="btn">show all</button>
-      <button class="btn">hide all</button>
-      <button class="btn btn--danger">restore default</button>
       <button class="btn btn--danger">reset sort</button>
     </div>
     <ul class="column-settings">

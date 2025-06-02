@@ -99,6 +99,7 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
   return {
     cleanup,
     displayable,
+    defaultVisible,
     filterable,
     getState,
     setConfig,
