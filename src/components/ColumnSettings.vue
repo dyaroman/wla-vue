@@ -15,10 +15,15 @@ const columnsStore = useColumnsStore()
       <button
         class="btn btn--danger"
         @click="columnsStore.visible = new Set(columnsStore.defaultVisible)"
+        :disabled="
+          JSON.stringify(columnsStore.visibleOrdered) ===
+          JSON.stringify(columnsStore.defaultVisible)
+        "
       >
         restore default
       </button>
       <!--      todo: implement @click-->
+      <!--      todo: implement :disabled when no sort used-->
       <button class="btn btn--danger">reset sort</button>
     </div>
     <ul class="column-settings">
