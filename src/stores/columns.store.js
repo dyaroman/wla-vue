@@ -49,9 +49,8 @@ export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
 
     if (value) params.set(COLUMNS_CONSTANTS.QUERY_PARAMS.VISIBLE_COLUMNS, value)
 
-    // todo: implement to other places
-    if (params.toString() === '') window.history.replaceState(null, '', '/')
-    else window.history.replaceState(null, '', `?${params}`)
+    if (params.size === 0) window.history.replaceState(null, '', '/')
+    else window.history.replaceState(null, '', `?${decodeURIComponent(params.toString())}`)
   })
 
   function setConfig(c) {

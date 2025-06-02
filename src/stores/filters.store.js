@@ -37,26 +37,22 @@ export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
     (newFilters) => {
       if (isUpdatingFromUrl.value) return
 
-      const currentParams = new URLSearchParams(window.location.search)
+      const params = new URLSearchParams(window.location.search)
       // remove old filters from URL
-      Object.keys(values.value).forEach((key) => currentParams.delete(key))
-      const params = _filtersToString(newFilters, currentParams)
-      const newUrl = params ? `${window.location.pathname}?${params}` : window.location.pathname
+      Object.keys(values.value).forEach((key) => params.delete(key))
 
-      window.history.replaceState(null, '', newUrl)
+      // set new filters to URL
+      for (const filter in newFilters) {
+        if (newFilters[filter] !== '') params.set(filter, newFilters[filter])
+      }
+
+      if (params.size === 0) window.history.replaceState(null, '', '/')
+      else window.history.replaceState(null, '', `?${decodeURIComponent(params.toString())}`)
     },
     {
       deep: true,
     },
   )
-
-  function _filtersToString(filters, params) {
-    for (const filter in filters) {
-      if (filters[filter] !== '') params.set(filter, filters[filter])
-    }
-
-    return params.toString()
-  }
 
   function _handlePopState() {
     isUpdatingFromUrl.value = true

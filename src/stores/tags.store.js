@@ -31,8 +31,8 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
             .join(','),
         )
 
-      const newUrl = `${window.location.pathname}?${params}`
-      window.history.replaceState(null, '', newUrl)
+      if (params.size === 0) window.history.replaceState(null, '', '/')
+      else window.history.replaceState(null, '', `?${decodeURIComponent(params.toString())}`)
     },
     {
       deep: true,
