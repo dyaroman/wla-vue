@@ -4,10 +4,15 @@ import { onMounted, ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue'
+import EmptyState from '@/components/EmptyState.vue'
 import { useMainStore } from '@/stores/main.store'
+import { useColumnsStore } from '@/stores/columns.store.js'
+import { useWebsitesStore } from '@/stores/websites.store.js'
 
 const appInit = ref(false)
 const mainStore = useMainStore()
+const columnsStore = useColumnsStore()
+const websitesStore = useWebsitesStore()
 
 onMounted(async () => {
   await mainStore.loadCombinedData()
@@ -18,7 +23,15 @@ onMounted(async () => {
 <template>
   <section v-if="appInit" data-qa="app" class="app">
     <HeaderComponent />
-    <TableComponent />
+    <TableComponent
+      v-if="websitesStore.filteredItems.length > 0 && columnsStore.visibleOrdered.length > 0"
+    />
+    <EmptyState v-else-if="websitesStore.filteredItems.length === 0">
+      No results match your filters or selected tags. Try adjusting them.
+    </EmptyState>
+    <EmptyState v-else-if="columnsStore.visibleOrdered.length === 0">
+      No columns are currently visible. Please select at least one column to display the table.
+    </EmptyState>
     <!--    todo: add copyright component-->
   </section>
   <LoaderComponent v-else fixed />
