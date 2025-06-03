@@ -19,7 +19,6 @@ const appVersion = __APP_VERSION__
       <dd>
         <a
           :href="`https://github.com/dyaroman/wla-vue/commit/${mainStore.commit}`"
-          class="external-link"
           target="_blank"
           rel="noreferrer"
           >{{ mainStore.commit.substring(0, 8) }}</a
@@ -43,7 +42,7 @@ const appVersion = __APP_VERSION__
 
     <dt data-qa="version">Version</dt>
     <dd>
-      <a href="./CHANGELOG.md" target="_blank" class="external-link">{{ appVersion }}</a>
+      <a href="./CHANGELOG.md" target="_blank">{{ appVersion }}</a>
     </dd>
   </dl>
 

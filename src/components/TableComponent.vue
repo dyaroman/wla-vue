@@ -8,12 +8,21 @@ import { useTagsStore } from '@/stores/tags.store'
 import { useCheckboxesStore } from '@/stores/checkboxes.store.js'
 import { camelCaseToTitleCase } from '@/misc/helpers.js'
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
+import FormsCell from '@/components/FormsCell.vue'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
 const filtersStore = useFiltersStore()
 const tagsStore = useTagsStore()
 const checkboxesStore = useCheckboxesStore()
+
+function getGlobalIndex(item) {
+  return websitesStore.filteredItems.indexOf(item) + 1
+}
+
+function isChecked(item) {
+  return checkboxesStore.all || checkboxesStore.values.has(getGlobalIndex(item))
+}
 
 onUnmounted(() => {
   filtersStore.cleanup()
@@ -49,17 +58,14 @@ onUnmounted(() => {
         <tr v-for="item in websitesStore.filteredItems" :key="item.website">
           <td v-for="column in columnsStore.visibleOrdered" :key="column">
             <template v-if="column === 'index'">
-              {{ websitesStore.filteredItems.indexOf(item) + 1 }}
+              {{ getGlobalIndex(item) }}
             </template>
-            <template v-else-if="column === 'checkbox'">
-              <CheckboxComponent
-                :checked="
-                  checkboxesStore.all ||
-                  checkboxesStore.values.has(websitesStore.filteredItems.indexOf(item) + 1)
-                "
-                @change="checkboxesStore.toggle(websitesStore.filteredItems.indexOf(item) + 1)"
-              />
-            </template>
+            <CheckboxComponent
+              v-else-if="column === 'checkbox'"
+              :checked="isChecked(item)"
+              @change="checkboxesStore.toggle(getGlobalIndex(item))"
+            />
+            <FormsCell v-else-if="column === 'forms'" :item />
             <template v-else>{{ item[column] }}</template>
           </td>
         </tr>
