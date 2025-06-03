@@ -6,6 +6,7 @@
 @use '@/styles/misc/btn';
 @use '@/styles/misc/burger';
 @use '@/styles/misc/controls';
+@use '@/styles/misc/external-link';
 
 @use '@/styles/components/loader';
 @use '@/styles/components/header';
@@ -19,3 +20,4 @@
 @use '@/styles/components/three-state-checkbox';
 @use '@/styles/components/column-settings';
 @use '@/styles/components/checkbox';
+@use '@/styles/components/info';

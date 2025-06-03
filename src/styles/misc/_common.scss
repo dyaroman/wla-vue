@@ -1,3 +1,5 @@
+@use '../misc/mixins';
+
 body {
   margin: 0;
 
@@ -34,4 +36,12 @@ body {
   flex-direction: row;
   align-items: center;
   gap: var(--gap);
+}
+
+a {
+  color: var(--link-color);
+
+  @include mixins.hover() {
+    text-decoration: none;
+  }
 }

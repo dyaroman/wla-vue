@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { STORE_NAMES } from '@/constants/stores.constants'
@@ -8,19 +9,28 @@ import { useColumnsStore } from '@/stores/columns.store'
 export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
   const websitesStore = useWebsitesStore()
   const columnsStore = useColumnsStore()
+  const env = ref('')
+  const commit = ref('')
+  const timestamp = ref('')
 
   async function loadCombinedData() {
     try {
-      const data = await fetch(
+      const { websites, columns, ...misc } = await fetch(
         `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`,
       ).then((res) => res.json())
 
-      if (data.websites) {
-        websitesStore.setInitialItems(data.websites)
+      if (websites) {
+        websitesStore.setInitialItems(websites)
       }
 
-      if (data.columns) {
-        columnsStore.setConfig(data.columns)
+      if (columns) {
+        columnsStore.setConfig(columns)
+      }
+
+      if (misc) {
+        env.value = misc.env
+        commit.value = misc.commit
+        timestamp.value = misc.timestamp
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -31,5 +41,10 @@ export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
     }
   }
 
-  return { loadCombinedData }
+  return {
+    commit,
+    env,
+    loadCombinedData,
+    timestamp,
+  }
 })

@@ -8,6 +8,7 @@ import TagsComponent from '@/components/TagsComponent.vue'
 import ColumnSettings from '@/components/ColumnSettings.vue'
 import { DRAWER_ID } from '@/constants/drawers.constants'
 import { useDrawerStore } from '@/stores/drawer.store'
+import InfoComponent from '@/components/InfoComponent.vue'
 
 defineProps({
   position: {
@@ -27,10 +28,7 @@ const drawerStore = useDrawerStore()
         <span /><span /><span />
       </button>
       <DrawerComponent :id="DRAWER_ID.SIDEBAR" position="left" max-size="320px" title="Sidebar">
-        <!--      todo:   TableInfo-->
-        table info
-        <!--      todo:   ResultsControl-->
-        results control
+        <InfoComponent />
       </DrawerComponent>
 
       <button

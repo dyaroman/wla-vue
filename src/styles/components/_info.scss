@@ -1,0 +1,14 @@
+.info {
+  display: grid;
+  gap: var(--gap) calc(var(--gap) * 2);
+  grid-template-columns: max-content 1fr;
+  margin: 0;
+
+  dt {
+    font-weight: 700;
+  }
+
+  dd {
+    margin: 0;
+  }
+}

@@ -19,6 +19,7 @@ onMounted(async () => {
   <section v-if="appInit" data-qa="app" class="app">
     <HeaderComponent />
     <TableComponent />
+    <!--    todo: add copyright component-->
   </section>
   <LoaderComponent v-else fixed />
 </template>
