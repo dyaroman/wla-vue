@@ -9,6 +9,7 @@ import { useCheckboxesStore } from '@/stores/checkboxes.store.js'
 import { camelCaseToTitleCase } from '@/misc/helpers.js'
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
 import FormsCell from '@/components/FormsCell.vue'
+import WebsiteLink from '@/components/WebsiteLink.vue'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
@@ -65,6 +66,7 @@ onUnmounted(() => {
               :checked="isChecked(item)"
               @change="checkboxesStore.toggle(getGlobalIndex(item))"
             />
+            <WebsiteLink v-else-if="column === 'website'" :item />
             <FormsCell v-else-if="column === 'forms'" :item />
             <template v-else>{{ item[column] }}</template>
           </td>
