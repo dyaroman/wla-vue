@@ -12,6 +12,7 @@ import FormsCell from '@/components/FormsCell.vue'
 import WebsiteLink from '@/components/WebsiteLink.vue'
 import PagesCell from '@/components/PagesCell.vue'
 import ColorCell from '@/components/ColorCell.vue'
+import ImageWithLoader from '@/components/ImageWithLoader.vue'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
@@ -88,6 +89,19 @@ onUnmounted(() => {
                 item[column].replace('https://', '').replace('/', '')
               }}</a>
             </template>
+            <ImageWithLoader
+              v-else-if="column === 'favicon'"
+              :src="`https://${item.host}/${item[column]}`"
+              max-height="30px"
+            />
+            <div class="og-images" v-else-if="column === 'ogImage'">
+              <ImageWithLoader
+                v-for="img in item[column]"
+                :key="img"
+                :src="`https://${item.host}/${img}`"
+                max-height="100px"
+              />
+            </div>
             <template v-else>{{ item[column] }}</template>
           </td>
         </tr>

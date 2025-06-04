@@ -1,0 +1,17 @@
+.image-with-loader {
+  position: relative;
+
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  .img {
+    vertical-align: middle;
+    transition: opacity 0.3s ease-in-out;
+  }
+}
