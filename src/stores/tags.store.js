@@ -1,12 +1,11 @@
 import { computed, ref, readonly, nextTick, watch } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants'
 import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
 import { useWebsitesStore } from '@/stores/websites.store'
 import { getQueryParamValue, getUniqueTags } from '@/misc/helpers'
 
-export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
+export const useTagsStore = defineStore('tags', () => {
   const websitesStore = useWebsitesStore()
 
   const isUpdatingFromUrl = ref(false)

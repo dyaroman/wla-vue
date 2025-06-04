@@ -1,12 +1,11 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants'
 import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store'
 import { search } from '@/misc/helpers'
 
-export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
+export const useWebsitesStore = defineStore('websites', () => {
   const filtersStore = useFiltersStore()
   const tagsStore = useTagsStore()
 

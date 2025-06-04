@@ -1,12 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants'
 import { WEBSITES_DATA_FILENAME } from '@/constants/misc.constants'
 import { useWebsitesStore } from '@/stores/websites.store'
 import { useColumnsStore } from '@/stores/columns.store'
 
-export const useMainStore = defineStore(STORE_NAMES.MAIN, () => {
+export const useMainStore = defineStore('main', () => {
   const websitesStore = useWebsitesStore()
   const columnsStore = useColumnsStore()
   const env = ref('')

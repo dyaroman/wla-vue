@@ -1,9 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants'
-
-export const useCheckboxesStore = defineStore(STORE_NAMES.CHECKBOXES, () => {
+export const useCheckboxesStore = defineStore('checkboxes', () => {
   const all = ref(false)
   const values = ref(new Set())
 

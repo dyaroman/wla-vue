@@ -1,11 +1,10 @@
 import { ref, watch, nextTick, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants'
 import { useColumnsStore } from '@/stores/columns.store'
 import { getQueryParamValue } from '@/misc/helpers'
 
-export const useFiltersStore = defineStore(STORE_NAMES.FILTERS, () => {
+export const useFiltersStore = defineStore('filters', () => {
   const columnsStore = useColumnsStore()
 
   const values = ref({})

@@ -1,13 +1,12 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 
-import { STORE_NAMES } from '@/constants/stores.constants'
 import { COLUMNS_CONSTANTS } from '@/constants/columns.constants'
 import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store.js'
 import { getQueryParamValue } from '@/misc/helpers'
 
-export const useColumnsStore = defineStore(STORE_NAMES.COLUMNS, () => {
+export const useColumnsStore = defineStore('columns', () => {
   const filtersStore = useFiltersStore()
   const tagsStore = useTagsStore()
 
