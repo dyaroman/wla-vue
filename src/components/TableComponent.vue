@@ -83,6 +83,11 @@ onUnmounted(() => {
             <FormsCell v-else-if="column === 'forms'" :item />
             <PagesCell v-else-if="column === 'pages'" :item />
             <ColorCell v-else-if="column.includes('Theme')" :item :column />
+            <template v-else-if="column.includes('Redirect') && item[column] !== 'no_data'">
+              <a :href="item[column]" target="_blank" rel="noreferrer">{{
+                item[column].replace('https://', '').replace('/', '')
+              }}</a>
+            </template>
             <template v-else>{{ item[column] }}</template>
           </td>
         </tr>
