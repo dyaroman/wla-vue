@@ -11,6 +11,7 @@ import CheckboxComponent from '@/components/CheckboxComponent.vue'
 import FormsCell from '@/components/FormsCell.vue'
 import WebsiteLink from '@/components/WebsiteLink.vue'
 import PagesCell from '@/components/PagesCell.vue'
+import ColorCell from '@/components/ColorCell.vue'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
@@ -58,7 +59,18 @@ onUnmounted(() => {
 
       <tbody>
         <tr v-for="item in websitesStore.filteredItems" :key="item.website">
-          <td v-for="column in columnsStore.visibleOrdered" :key="column">
+          <td
+            v-for="column in columnsStore.visibleOrdered"
+            :key="column"
+            :style="
+              column.includes('Theme')
+                ? {
+                    position: 'relative',
+                    'z-index': 0,
+                  }
+                : null
+            "
+          >
             <template v-if="column === 'index'">
               {{ getGlobalIndex(item) }}
             </template>
@@ -70,6 +82,7 @@ onUnmounted(() => {
             <WebsiteLink v-else-if="column === 'website'" :item />
             <FormsCell v-else-if="column === 'forms'" :item />
             <PagesCell v-else-if="column === 'pages'" :item />
+            <ColorCell v-else-if="column.includes('Theme')" :item :column />
             <template v-else>{{ item[column] }}</template>
           </td>
         </tr>
