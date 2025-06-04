@@ -1,5 +1,6 @@
 <script setup>
 import { useFiltersStore } from '@/stores/filters.store'
+import { camelCaseToKebabCase } from '@/misc/helpers.js'
 
 defineProps({
   name: String,
@@ -17,7 +18,7 @@ const filtersStore = useFiltersStore()
         type="text"
         class="input"
         :name
-        :data-qa="name"
+        :data-qa="camelCaseToKebabCase(name)"
         :class="{ 'input--filled': filtersStore.values[name] }"
         :placeholder
         v-model="filtersStore.values[name]"

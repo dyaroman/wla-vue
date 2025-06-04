@@ -60,7 +60,7 @@ const drawerStore = useDrawerStore()
       <button
         class="btn btn--icon"
         aria-label="customize columns"
-        data-qa="customizeColumns"
+        data-qa="customize-columns"
         @click="drawerStore.openDrawerId = DRAWER_ID.CUSTOMIZE_COLUMNS"
       >
         <IconColumns />

@@ -41,6 +41,10 @@ export function camelCaseToTitleCase(camelCaseString) {
   return result.charAt(0).toUpperCase() + result.slice(1).trim()
 }
 
+export function camelCaseToKebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
 function hex2rgb(hex) {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
   hex = hex.replace(shorthandRegex, function (m, r, g, b) {

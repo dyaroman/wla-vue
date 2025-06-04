@@ -9,7 +9,7 @@ const tagsStore = useTagsStore()
   <div class="tags">
     <button
       class="btn btn--danger"
-      data-qa="resetTags"
+      data-qa="reset-tags"
       @click="tagsStore.resetAll()"
       :disabled="tagsStore.isPristine"
     >

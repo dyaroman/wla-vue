@@ -2,6 +2,7 @@
 import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
 import { useTagsStore } from '@/stores/tags.store'
 import { computed } from 'vue'
+import { camelCaseToKebabCase } from '@/misc/helpers.js'
 
 const { name } = defineProps({
   name: {
@@ -24,7 +25,7 @@ const disabled = computed(
   <label
     class="three-state-checkbox"
     :class="[`three-state-checkbox--${tagsStore.getState(name)}`, { disabled }]"
-    :data-qa="name"
+    :data-qa="camelCaseToKebabCase(name).replace('(f) ', '').replaceAll(' ', '-')"
   >
     <input
       type="checkbox"

@@ -16,7 +16,7 @@ function resetFilters() {
     <div class="flex-column">
       <button
         class="btn btn--danger"
-        data-qa="resetFilters"
+        data-qa="reset-filters"
         @click="resetFilters"
         :disabled="filtersStore.isPristine"
       >
