@@ -24,9 +24,9 @@ onMounted(async () => {
   <section v-if="appInit" data-qa="app" class="app">
     <HeaderComponent />
     <TableComponent
-      v-if="websitesStore.filteredItems.length > 0 && columnsStore.visibleOrdered.length > 0"
+      v-if="websitesStore.visibleItems.length > 0 && columnsStore.visibleOrdered.length > 0"
     />
-    <EmptyState v-else-if="websitesStore.filteredItems.length === 0">
+    <EmptyState v-else-if="websitesStore.visibleItems.length === 0">
       No results match your filters or selected tags. Try adjusting them.
     </EmptyState>
     <EmptyState v-else-if="columnsStore.visibleOrdered.length === 0">

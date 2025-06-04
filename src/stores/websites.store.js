@@ -11,7 +11,7 @@ export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
   const tagsStore = useTagsStore()
 
   const initialItems = ref(null)
-  const filteredItems = computed(
+  const visibleItems = computed(
     () =>
       initialItems.value?.filter((website) => {
         for (const filter in filtersStore.values) {
@@ -44,7 +44,7 @@ export const useWebsitesStore = defineStore(STORE_NAMES.WEBSITES, () => {
 
   return {
     initialItems,
-    filteredItems,
+    visibleItems,
     setInitialItems,
   }
 })

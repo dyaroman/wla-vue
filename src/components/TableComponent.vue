@@ -21,7 +21,7 @@ const tagsStore = useTagsStore()
 const checkboxesStore = useCheckboxesStore()
 
 function getGlobalIndex(item) {
-  return websitesStore.filteredItems.indexOf(item) + 1
+  return websitesStore.visibleItems.indexOf(item) + 1
 }
 
 function isChecked(item) {
@@ -59,7 +59,7 @@ onUnmounted(() => {
       </thead>
 
       <tbody>
-        <tr v-for="item in websitesStore.filteredItems" :key="item.website">
+        <tr v-for="item in websitesStore.visibleItems" :key="item.website">
           <td
             v-for="column in columnsStore.visibleOrdered"
             :key="column"

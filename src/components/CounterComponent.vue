@@ -6,6 +6,6 @@ const websiteStore = useWebsitesStore()
 
 <template>
   <div class="counter" data-qa="counter">
-    {{ websiteStore.filteredItems.length }}/{{ websiteStore.initialItems?.length }}
+    {{ websiteStore.visibleItems.length }}/{{ websiteStore.initialItems?.length }}
   </div>
 </template>

@@ -11,7 +11,7 @@ export const useTagsStore = defineStore(STORE_NAMES.TAGS, () => {
 
   const isUpdatingFromUrl = ref(false)
   const all = computed(() => getUniqueTags(websitesStore.initialItems))
-  const available = computed(() => getUniqueTags(websitesStore.filteredItems))
+  const available = computed(() => getUniqueTags(websitesStore.visibleItems))
   const included = ref(new Set())
   const excluded = ref(new Set())
   const isPristine = computed(() => included.value.size === 0 && excluded.value.size === 0)
