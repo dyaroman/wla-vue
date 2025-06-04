@@ -1,6 +1,7 @@
 <script setup>
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
 import { useColumnsStore } from '@/stores/columns.store.js'
+import { camelCaseToTitleCase } from '@/misc/helpers.js'
 
 const columnsStore = useColumnsStore()
 </script>
@@ -30,7 +31,7 @@ const columnsStore = useColumnsStore()
       <li v-for="column in columnsStore.displayable" :key="column">
         <CheckboxComponent
           :name="column"
-          :label="column"
+          :label="camelCaseToTitleCase(column)"
           :checked="columnsStore.getState(column)"
           @change="columnsStore.toggleVisible(column)"
         />
