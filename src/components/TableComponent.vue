@@ -10,6 +10,7 @@ import { camelCaseToTitleCase } from '@/misc/helpers.js'
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
 import FormsCell from '@/components/FormsCell.vue'
 import WebsiteLink from '@/components/WebsiteLink.vue'
+import PagesCell from '@/components/PagesCell.vue'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
@@ -68,6 +69,7 @@ onUnmounted(() => {
             />
             <WebsiteLink v-else-if="column === 'website'" :item />
             <FormsCell v-else-if="column === 'forms'" :item />
+            <PagesCell v-else-if="column === 'pages'" :item />
             <template v-else>{{ item[column] }}</template>
           </td>
         </tr>
