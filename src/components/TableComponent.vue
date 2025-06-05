@@ -63,14 +63,7 @@ onUnmounted(() => {
           <td
             v-for="column in columnsStore.visibleOrdered"
             :key="column"
-            :style="
-              column.includes('Theme')
-                ? {
-                    position: 'relative',
-                    'z-index': 0,
-                  }
-                : null
-            "
+            :class="{ 'color-cell': column.includes('Theme') }"
           >
             <template v-if="column === 'index'">
               {{ getGlobalIndex(item) }}

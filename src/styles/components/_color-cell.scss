@@ -1,4 +1,9 @@
 .color-cell {
+  position: relative;
+  z-index: 0;
+}
+
+.color-cell__bg {
   position: absolute;
   top: 0;
   left: 0;

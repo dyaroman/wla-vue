@@ -13,7 +13,7 @@ const bgColor = computed(() => props.item[props.column.replace('Theme', 'Primary
 
 <template>
   <div
-    class="color-cell"
+    class="color-cell__bg"
     :style="{
       'background-color': bgColor !== 'no_data' ? bgColor : null,
       color: bgColor !== 'no_data' ? getContrastColor(bgColor) : null,
