@@ -49,6 +49,7 @@ onUnmounted(() => {
             <template v-if="column === 'index'">#</template>
             <template v-else-if="column === 'checkbox'">
               <CheckboxComponent
+                name="checkbox-all"
                 :checked="checkboxesStore.all"
                 @change="checkboxesStore.toggleAll(!checkboxesStore.all)"
               />
@@ -70,6 +71,7 @@ onUnmounted(() => {
             </template>
             <CheckboxComponent
               v-else-if="column === 'checkbox'"
+              name="checkbox-item"
               :checked="isChecked(item)"
               @change="checkboxesStore.toggle(getGlobalIndex(item))"
             />

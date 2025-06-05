@@ -42,7 +42,7 @@ export function camelCaseToTitleCase(camelCaseString) {
 }
 
 export function camelCaseToKebabCase(str) {
-  return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+  return str?.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() ?? ''
 }
 
 function hex2rgb(hex) {

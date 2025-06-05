@@ -2,7 +2,10 @@
 import { camelCaseToKebabCase } from '@/misc/helpers.js'
 
 defineProps({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+  },
   label: String,
   checked: Boolean,
 })
