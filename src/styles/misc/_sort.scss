@@ -9,7 +9,6 @@
     display: inline-block;
     width: 10px;
     height: 10px;
-    // todo: replace --gap with --gap-2 or --gap-x2 and add new --gap = --gap-2 / 2 to rid of calc(--gap / 2)
     margin-left: var(--gap);
 
     background-color: currentColor;

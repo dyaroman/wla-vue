@@ -1,7 +1,7 @@
 .tags-list {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--gap) / 2) var(--gap);
+  gap: var(--gap-half) var(--gap);
   margin: 0;
   padding: 0;
 
