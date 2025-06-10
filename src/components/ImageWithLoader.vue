@@ -21,6 +21,7 @@ defineProps({
 })
 
 const isLoading = ref(false)
+const isError = ref(false)
 
 onMounted(() => {
   isLoading.value = true
@@ -39,7 +40,7 @@ onMounted(() => {
 
     <img
       :src
-      :alt
+      :alt="isError ? 'failed' : null"
       :style="{
         opacity: isLoading ? 0 : 1,
         'max-width': maxWidth ? maxWidth : null,
@@ -48,7 +49,7 @@ onMounted(() => {
       class="img"
       loading="lazy"
       @load="isLoading = false"
-      @error="isLoading = false"
+      @error="((isLoading = false), (isError = true))"
     />
   </div>
 </template>

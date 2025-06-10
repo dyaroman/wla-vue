@@ -1,0 +1,26 @@
+@use '../misc/mixins';
+
+[data-order] {
+  user-select: none;
+
+  &::after {
+    content: '';
+
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    // todo: replace --gap with --gap-2 or --gap-x2 and add new --gap = --gap-2 / 2 to rid of calc(--gap / 2)
+    margin-left: var(--gap);
+
+    background-color: currentColor;
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="black" d="M21.283 18.331a1.97 1.97 0 0 1-1.413-.586l-8-8-8 8a1.998 1.998 0 0 1-2.86-1.599 2 2 0 0 1 .273-1.228l9.333-9.333a2 2 0 0 1 2.827 0l9.333 9.333a2 2 0 0 1 0 2.827 1.974 1.974 0 0 1-1.493.586Z"/></svg>');
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    transition: rotate 0.3s ease;
+  }
+}
+
+[data-order='desc']::after {
+  rotate: 180deg;
+}

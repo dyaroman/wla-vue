@@ -3,15 +3,17 @@ import { defineStore } from 'pinia'
 
 import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store'
-import { search } from '@/misc/helpers'
+import { useSortStore } from '@/stores/sort.store.js'
+import { search, sort } from '@/misc/helpers'
 
 export const useWebsitesStore = defineStore('websites', () => {
   const filtersStore = useFiltersStore()
   const tagsStore = useTagsStore()
+  const sortStore = useSortStore()
 
   const initialItems = ref(null)
-  const visibleItems = computed(
-    () =>
+  const visibleItems = computed(() => {
+    const filteredItems =
       initialItems.value?.filter((website) => {
         for (const filter in filtersStore.values) {
           if (['', '=', '==', '!', '!='].includes(filtersStore.values[filter])) continue
@@ -34,8 +36,14 @@ export const useWebsitesStore = defineStore('websites', () => {
         )
       }) ??
       initialItems.value ??
-      [],
-  )
+      []
+
+    const sortedItems = sort(filteredItems, sortStore.sort)
+
+    if (sortStore.order === 'desc') sortedItems.reverse()
+
+    return sortedItems
+  })
 
   function setInitialItems(w) {
     initialItems.value = w

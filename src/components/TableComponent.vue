@@ -6,7 +6,9 @@ import { useWebsitesStore } from '@/stores/websites.store'
 import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store'
 import { useCheckboxesStore } from '@/stores/checkboxes.store.js'
+import { useSortStore } from '@/stores/sort.store.js'
 import { camelCaseToTitleCase } from '@/misc/helpers.js'
+import { NO_DATA } from '@/constants/misc.constants.js'
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
 import FormsCell from '@/components/FormsCell.vue'
 import WebsiteLink from '@/components/WebsiteLink.vue'
@@ -19,6 +21,7 @@ const websitesStore = useWebsitesStore()
 const filtersStore = useFiltersStore()
 const tagsStore = useTagsStore()
 const checkboxesStore = useCheckboxesStore()
+const sortStore = useSortStore()
 
 function getGlobalIndex(item) {
   return websitesStore.visibleItems.indexOf(item) + 1
@@ -32,6 +35,7 @@ onUnmounted(() => {
   filtersStore.cleanup()
   tagsStore.cleanup()
   columnsStore.cleanup()
+  sortStore.cleanup()
 })
 </script>
 
@@ -45,6 +49,11 @@ onUnmounted(() => {
             v-for="column in columnsStore.visibleOrdered"
             :key="column"
             :style="{ width: ['index', 'checkbox'].includes(column) ? 0 : null }"
+            :data-sort="columnsStore.sortable.includes(column) ? column : null"
+            :data-order="
+              column === sortStore.sort && !sortStore.isPristine ? sortStore.order : null
+            "
+            @click="columnsStore.sortable.includes(column) ? sortStore.change(column) : null"
           >
             <template v-if="column === 'index'">#</template>
             <template v-else-if="column === 'checkbox'">
@@ -79,24 +88,30 @@ onUnmounted(() => {
             <FormsCell v-else-if="column === 'forms'" :item />
             <PagesCell v-else-if="column === 'pages'" :item />
             <ColorCell v-else-if="column.includes('Theme')" :item :column />
-            <template v-else-if="column.includes('Redirect') && item[column] !== 'no_data'">
+            <template v-else-if="column.includes('Redirect') && item[column] !== NO_DATA">
               <a :href="item[column]" target="_blank" rel="noreferrer">{{
                 item[column].replace('https://', '').replace('/', '')
               }}</a>
             </template>
-            <ImageWithLoader
-              v-else-if="column === 'favicon'"
-              :src="`https://${item.host}/${item[column]}`"
-              max-height="30px"
-            />
-            <div class="og-images" v-else-if="column === 'ogImage'">
+            <template v-else-if="column === 'favicon'">
+              <template v-if="item[column] === NO_DATA">{{ NO_DATA }}</template>
               <ImageWithLoader
-                v-for="img in item[column]"
-                :key="img"
-                :src="`https://${item.host}/${img}`"
-                max-height="100px"
+                v-else
+                :src="`https://${item.host}/${item[column]}`"
+                max-height="30px"
               />
-            </div>
+            </template>
+            <template v-else-if="column === 'ogImage'">
+              <div class="og-images" v-if="item[column]?.length > 0">
+                <ImageWithLoader
+                  v-for="img in item[column]"
+                  :key="img"
+                  :src="`https://${item.host}/${img}`"
+                  max-height="100px"
+                />
+              </div>
+              <template v-else>{{ NO_DATA }}</template>
+            </template>
             <template v-else>{{ item[column] }}</template>
           </td>
         </tr>

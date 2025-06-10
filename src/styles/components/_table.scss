@@ -43,27 +43,10 @@ thead {
 }
 
 thead th {
-  &[data-sort-column] {
-    user-select: none;
-
+  &[data-sort] {
     @include mixins.hover() {
       cursor: pointer;
     }
-  }
-
-  &[data-sort-direction]::after {
-    padding-left: 3px;
-
-    font-size: 0.7em;
-    line-height: 0.7em;
-  }
-
-  &[data-sort-direction='asc']::after {
-    content: '▲';
-  }
-
-  &[data-sort-direction='desc']::after {
-    content: '▼';
   }
 
   @include breakpoints.media-breakpoint-up(sm) {

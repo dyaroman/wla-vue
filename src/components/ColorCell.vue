@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import { getContrastColor } from '@/misc/helpers.js'
+import { NO_DATA } from '@/constants/misc.constants.js'
 
 const props = defineProps({
   item: Object,
@@ -15,8 +16,8 @@ const bgColor = computed(() => props.item[props.column.replace('Theme', 'Primary
   <div
     class="color-cell__bg"
     :style="{
-      'background-color': bgColor !== 'no_data' ? bgColor : null,
-      color: bgColor !== 'no_data' ? getContrastColor(bgColor) : null,
+      color: bgColor === NO_DATA ? null : getContrastColor(bgColor),
+      'background-color': bgColor === NO_DATA ? null : bgColor,
     }"
   >
     {{ item[column] }}

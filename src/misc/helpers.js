@@ -1,3 +1,5 @@
+import { NO_DATA } from '@/constants/misc.constants.js'
+
 export function getQueryParamValue(targetKey) {
   const params = new URLSearchParams(window.location.search)
   for (const [key, value] of params) {
@@ -5,6 +7,14 @@ export function getQueryParamValue(targetKey) {
       return value
     }
   }
+}
+
+export function deleteQueryParam(key) {
+  const params = new URLSearchParams(window.location.search)
+  params.delete(key)
+
+  if (params.size === 0) window.history.replaceState(null, '', '/')
+  else window.history.replaceState(null, '', `?${decodeURIComponent(params.toString())}`)
 }
 
 export function search(where, what) {
@@ -18,6 +28,34 @@ export function search(where, what) {
   } else {
     return where.includes(what)
   }
+}
+
+export function sort(array, column) {
+  const noDataItems = []
+  const sortedArray = [...array]
+    .filter((item) => {
+      if (item[column] === NO_DATA) {
+        noDataItems.push(item)
+        return false
+      } else {
+        return true
+      }
+    })
+    .sort((a, b) => {
+      switch (column) {
+        case 'campaignId':
+          return Number(a[column]) > Number(b[column]) ? 1 : -1
+
+        case 'effectiveDate':
+        case 'lastModifiedTermsOfUse':
+          return new Date(a[column]) - new Date(b[column])
+
+        default:
+          return String(a[column]).toLowerCase() > String(b[column]).toLowerCase() ? 1 : -1
+      }
+    })
+
+  return [...sortedArray, ...noDataItems]
 }
 
 export function getUniqueTags(websites) {

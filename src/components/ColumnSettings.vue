@@ -1,9 +1,11 @@
 <script setup>
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
 import { useColumnsStore } from '@/stores/columns.store.js'
+import { useSortStore } from '@/stores/sort.store.js'
 import { camelCaseToTitleCase } from '@/misc/helpers.js'
 
 const columnsStore = useColumnsStore()
+const sortStore = useSortStore()
 </script>
 
 <template>
@@ -23,9 +25,9 @@ const columnsStore = useColumnsStore()
       >
         restore default
       </button>
-      <!--      todo: implement @click-->
-      <!--      todo: implement :disabled when no sort used-->
-      <button class="btn btn--danger">reset sort</button>
+      <button class="btn btn--danger" @click="sortStore.reset()" :disabled="sortStore.isPristine">
+        reset sort
+      </button>
     </div>
     <ul class="column-settings">
       <li v-for="column in columnsStore.displayable" :key="column">
