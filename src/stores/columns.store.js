@@ -4,12 +4,14 @@ import { defineStore } from 'pinia'
 import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store.js'
 import { useSortStore } from '@/stores/sort.store.js'
+import { usePaginationStore } from '@/stores/pagination.store.js'
 import { getQueryParamValue } from '@/misc/helpers'
 
 export const useColumnsStore = defineStore('columns', () => {
   const filtersStore = useFiltersStore()
   const tagsStore = useTagsStore()
   const sortsStore = useSortStore()
+  const paginationStore = usePaginationStore()
 
   const isUpdatingFromUrl = ref(false)
   const config = ref(null)
@@ -67,6 +69,7 @@ export const useColumnsStore = defineStore('columns', () => {
     filtersStore.initializeValues()
     tagsStore.initializeValues()
     sortsStore.initializeValues()
+    paginationStore.initializeValues()
   }
 
   function getState(name) {
@@ -106,8 +109,8 @@ export const useColumnsStore = defineStore('columns', () => {
 
   return {
     cleanup,
-    displayable,
     defaultVisible,
+    displayable,
     filterable,
     getState,
     setConfig,

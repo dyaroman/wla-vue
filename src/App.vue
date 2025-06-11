@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 
 import HeaderComponent from '@/components/HeaderComponent.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue'
 import EmptyState from '@/components/EmptyState.vue'
@@ -24,6 +25,7 @@ onMounted(async () => {
 <template>
   <section v-if="appInit" data-qa="app" class="app">
     <HeaderComponent />
+    <PaginationComponent />
     <TableComponent
       v-if="websitesStore.visibleItems.length > 0 && columnsStore.visibleOrdered.length > 0"
     />

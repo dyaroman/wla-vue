@@ -1,11 +1,11 @@
 <script setup>
 import { useWebsitesStore } from '@/stores/websites.store'
 
-const websiteStore = useWebsitesStore()
+const websitesStore = useWebsitesStore()
 </script>
 
 <template>
   <div class="counter" data-qa="counter">
-    {{ websiteStore.visibleItems.length }}/{{ websiteStore.initialItems?.length }}
+    {{ websitesStore.visibleItems.length }}/{{ websitesStore.initialItems?.length }}
   </div>
 </template>

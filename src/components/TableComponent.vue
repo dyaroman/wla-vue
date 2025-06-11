@@ -7,6 +7,7 @@ import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store'
 import { useCheckboxesStore } from '@/stores/checkboxes.store.js'
 import { useSortStore } from '@/stores/sort.store.js'
+import { usePaginationStore } from '@/stores/pagination.store.js'
 import { camelCaseToTitleCase } from '@/misc/helpers.js'
 import { NO_DATA } from '@/constants/misc.constants.js'
 import CheckboxComponent from '@/components/CheckboxComponent.vue'
@@ -22,6 +23,7 @@ const filtersStore = useFiltersStore()
 const tagsStore = useTagsStore()
 const checkboxesStore = useCheckboxesStore()
 const sortStore = useSortStore()
+const paginationStore = usePaginationStore()
 
 function getGlobalIndex(item) {
   return websitesStore.visibleItems.indexOf(item) + 1
@@ -36,11 +38,11 @@ onUnmounted(() => {
   tagsStore.cleanup()
   columnsStore.cleanup()
   sortStore.cleanup()
+  paginationStore.cleanup()
 })
 </script>
 
 <template>
-  <!--  todo: PaginationComponent position=above-->
   <section class="table">
     <table>
       <thead>
@@ -69,7 +71,7 @@ onUnmounted(() => {
       </thead>
 
       <tbody>
-        <tr v-for="item in websitesStore.visibleItems" :key="item.website">
+        <tr v-for="item in paginationStore.currentItems" :key="item.website">
           <td
             v-for="column in columnsStore.visibleOrdered"
             :key="column"
@@ -118,5 +120,4 @@ onUnmounted(() => {
       </tbody>
     </table>
   </section>
-  <!--  todo: PaginationComponent position=below-->
 </template>

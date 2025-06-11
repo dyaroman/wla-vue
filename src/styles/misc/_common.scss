@@ -1,3 +1,7 @@
+@use 'mixins';
+
+@include mixins.focus;
+
 body {
   margin: 0;
 
@@ -18,8 +22,16 @@ body {
   box-sizing: border-box;
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: var(--gap);
+}
+
 .container {
   max-width: 960px;
+  width: 100%;
   margin-inline: auto;
 }
 

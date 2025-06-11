@@ -3,7 +3,7 @@ import { useMainStore } from '@/stores/main.store.js'
 import { useWebsitesStore } from '@/stores/websites.store.js'
 
 const mainStore = useMainStore()
-const websiteStore = useWebsitesStore()
+const websitesStore = useWebsitesStore()
 const appVersion = __APP_VERSION__
 </script>
 
@@ -31,9 +31,9 @@ const appVersion = __APP_VERSION__
       <div>{{ mainStore.timestamp }}</div>
     </div>
 
-    <div class="info__row" v-if="websiteStore.initialItems">
+    <div class="info__row" v-if="websitesStore.initialItems">
       <div class="info__key" data-qa="websites-number">Websites:</div>
-      <div>{{ websiteStore.initialItems.length }}</div>
+      <div>{{ websitesStore.initialItems.length }}</div>
     </div>
 
     <div class="info__row">
