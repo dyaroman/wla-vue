@@ -5,6 +5,7 @@ import HeaderComponent from '@/components/HeaderComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue'
 import EmptyState from '@/components/EmptyState.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 import { useMainStore } from '@/stores/main.store'
 import { useColumnsStore } from '@/stores/columns.store.js'
 import { useWebsitesStore } from '@/stores/websites.store.js'
@@ -32,7 +33,7 @@ onMounted(async () => {
     <EmptyState v-else-if="columnsStore.visibleOrdered.length === 0">
       No columns are currently visible. Please select at least one column to display the table.
     </EmptyState>
-    <!--    todo: add copyright component-->
+    <FooterComponent />
   </section>
   <LoaderComponent v-else fixed />
 </template>
