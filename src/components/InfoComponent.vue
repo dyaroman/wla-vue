@@ -8,43 +8,41 @@ const appVersion = __APP_VERSION__
 </script>
 
 <template>
-  <dl class="info">
-    <template v-if="mainStore.env">
-      <dt data-qa="env">Environment</dt>
-      <dd>{{ mainStore.env }}</dd>
-    </template>
+  <div class="info">
+    <div class="info__row" v-if="mainStore.env">
+      <div class="info__key" data-qa="env">Environment:</div>
+      <div>{{ mainStore.env }}</div>
+    </div>
 
-    <template v-if="mainStore.commit">
-      <dt data-qa="commit">Commit</dt>
-      <dd>
+    <div class="info__row" v-if="mainStore.commit">
+      <div class="info__key" data-qa="commit">Commit:</div>
+      <div>
         <a
           :href="`https://github.com/dyaroman/wla-vue/commit/${mainStore.commit}`"
           target="_blank"
           rel="noreferrer"
           >{{ mainStore.commit.substring(0, 8) }}</a
         >
-      </dd>
-    </template>
+      </div>
+    </div>
 
-    <template v-if="mainStore.timestamp">
-      <dt data-qa="timestamp">Last updated</dt>
-      <dd>
-        {{ mainStore.timestamp.split(' ')[0] }} <br />{{
-          mainStore.timestamp.split(' ').slice(1).join(' ')
-        }}
-      </dd>
-    </template>
+    <div class="info__row" v-if="mainStore.timestamp">
+      <div class="info__key" data-qa="timestamp">Last updated:</div>
+      <div>{{ mainStore.timestamp }}</div>
+    </div>
 
-    <template v-if="websiteStore.initialItems">
-      <dt data-qa="websites-number">Websites</dt>
-      <dd>{{ websiteStore.initialItems.length }}</dd>
-    </template>
+    <div class="info__row" v-if="websiteStore.initialItems">
+      <div class="info__key" data-qa="websites-number">Websites:</div>
+      <div>{{ websiteStore.initialItems.length }}</div>
+    </div>
 
-    <dt data-qa="version">Version</dt>
-    <dd>
-      <a href="./CHANGELOG.md" target="_blank">{{ appVersion }}</a>
-    </dd>
-  </dl>
+    <div class="info__row">
+      <div class="info__key" data-qa="version">Version:</div>
+      <div>
+        <a href="./CHANGELOG.md" target="_blank">{{ appVersion }}</a>
+      </div>
+    </div>
+  </div>
 
   <!--  todo: where place copy buttons?-->
 </template>

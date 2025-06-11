@@ -27,7 +27,7 @@ const drawerStore = useDrawerStore()
       <button class="burger" data-qa="burger" @click="drawerStore.openDrawerId = DRAWER_ID.SIDEBAR">
         <span /><span /><span />
       </button>
-      <DrawerComponent :id="DRAWER_ID.SIDEBAR" position="left" max-size="320px" title="Sidebar">
+      <DrawerComponent :id="DRAWER_ID.SIDEBAR" position="left" max-size="380px" title="Sidebar">
         <InfoComponent />
       </DrawerComponent>
 
