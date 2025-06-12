@@ -8,6 +8,7 @@ export const useFiltersStore = defineStore('filters', () => {
   const columnsStore = useColumnsStore()
 
   const values = ref({})
+  const autocompleteLists = ref({})
   const isUpdatingFromUrl = ref(false)
   const isPristine = computed(
     () => Object.values(values.value).filter((i) => i !== '').length === 0,
@@ -70,6 +71,7 @@ export const useFiltersStore = defineStore('filters', () => {
   if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
 
   return {
+    autocompleteLists,
     cleanup,
     initializeValues,
     isPristine,

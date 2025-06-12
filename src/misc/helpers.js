@@ -67,6 +67,34 @@ export function getUniqueTags(websites) {
   return [...uniqueTags].sort()
 }
 
+export function getUniqueValues(arr, propertyName) {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return []
+  }
+
+  if (typeof propertyName !== 'string' || propertyName === '') {
+    console.error('Property name must be a non-empty string.')
+    return []
+  }
+
+  const uniqueValues = new Set()
+
+  for (const obj of arr) {
+    if (obj && obj.hasOwnProperty(propertyName)) {
+      const propertyValue = obj[propertyName]
+      if (Array.isArray(propertyValue)) {
+        for (const value of propertyValue) {
+          uniqueValues.add(value)
+        }
+      } else {
+        uniqueValues.add(propertyValue)
+      }
+    }
+  }
+
+  return Array.from(uniqueValues)
+}
+
 export function camelCaseToTitleCase(camelCaseString) {
   if (typeof camelCaseString !== 'string' || camelCaseString.length === 0) {
     return ''

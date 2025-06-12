@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { useFiltersStore } from '@/stores/filters.store'
 import { useTagsStore } from '@/stores/tags.store'
 import { useSortStore } from '@/stores/sort.store.js'
-import { search, sort } from '@/misc/helpers'
+import { getUniqueValues, search, sort } from '@/misc/helpers'
 
 export const useWebsitesStore = defineStore('websites', () => {
   const filtersStore = useFiltersStore()
@@ -37,6 +37,10 @@ export const useWebsitesStore = defineStore('websites', () => {
       }) ??
       initialItems.value ??
       []
+
+    for (const filter in filtersStore.values) {
+      filtersStore.autocompleteLists[filter] = getUniqueValues(filteredItems, filter).sort()
+    }
 
     const sortedItems = sort(filteredItems, sortStore.sort)
 
