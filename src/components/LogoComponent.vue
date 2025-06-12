@@ -1,5 +1,9 @@
 <script setup>
-function onClick() {
+import { useMainStore } from '@/stores/main.store'
+
+const mainStore = useMainStore()
+
+function scrollToTop() {
   document.querySelector('.table')?.scrollTo({
     top: 0,
     left: 0,
@@ -9,6 +13,12 @@ function onClick() {
 </script>
 
 <template>
-  <!--  todo: if data source 'file' add 'logo-fallback' class-->
-  <button class="logo" aria-label="scroll table to top" @click="onClick">WL<span>A</span></button>
+  <button
+    class="logo"
+    :class="{ 'logo--fallback': mainStore.dataSource === 'fallback' }"
+    aria-label="scroll table to top"
+    @click="scrollToTop"
+  >
+    WL<span>A</span>
+  </button>
 </template>
