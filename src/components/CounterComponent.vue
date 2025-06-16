@@ -6,6 +6,11 @@ const websitesStore = useWebsitesStore()
 
 <template>
   <div class="counter" data-qa="counter">
-    {{ websitesStore.visibleItems.length }}/{{ websitesStore.initialItems?.length }}
+    <template v-if="websitesStore.visibleItems.length < websitesStore.initialItems.length">
+      {{ websitesStore.visibleItems.length }}/{{ websitesStore.initialItems.length }}
+    </template>
+    <template v-else>
+      {{ websitesStore.initialItems.length }}
+    </template>
   </div>
 </template>

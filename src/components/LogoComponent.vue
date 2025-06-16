@@ -14,6 +14,7 @@ function scrollToTop() {
 
 <template>
   <button
+    type="button"
     class="logo"
     :class="{ 'logo--fallback': mainStore.dataSource === 'fallback' }"
     aria-label="scroll table to top"

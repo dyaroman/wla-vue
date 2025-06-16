@@ -76,6 +76,7 @@ onUnmounted(() => {
             v-for="column in columnsStore.visibleOrdered"
             :key="column"
             :class="{ 'color-cell': column.includes('Theme') }"
+            :data-title="camelCaseToTitleCase(column)"
           >
             <template v-if="column === 'index'">
               {{ getGlobalIndex(item) }}

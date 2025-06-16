@@ -3,6 +3,7 @@
 @include mixins.focus;
 
 body {
+  min-width: 320px;
   margin: 0;
 
   font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
