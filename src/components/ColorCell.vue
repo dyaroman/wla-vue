@@ -3,6 +3,8 @@ import { computed } from 'vue'
 
 import { getContrastColor } from '@/misc/helpers.js'
 import { NO_DATA } from '@/constants/misc.constants.js'
+import { useFiltersStore } from '@/stores/filters.store.js'
+import HighlightComponent from '@/components/HighlightComponent.vue'
 
 const props = defineProps({
   item: Object,
@@ -10,6 +12,8 @@ const props = defineProps({
 })
 
 const bgColor = computed(() => props.item[props.column.replace('Theme', 'PrimaryColor')])
+
+const filtersStore = useFiltersStore()
 </script>
 
 <template>
@@ -20,6 +24,6 @@ const bgColor = computed(() => props.item[props.column.replace('Theme', 'Primary
       'background-color': bgColor === NO_DATA ? null : bgColor,
     }"
   >
-    {{ item[column] }}
+    <HighlightComponent :highlight="filtersStore.values[column]" :text="item[column]" />
   </div>
 </template>

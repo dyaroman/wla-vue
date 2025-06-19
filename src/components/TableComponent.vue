@@ -16,6 +16,7 @@ import WebsiteLink from '@/components/WebsiteLink.vue'
 import PagesCell from '@/components/PagesCell.vue'
 import ColorCell from '@/components/ColorCell.vue'
 import ImageWithLoader from '@/components/ImageWithLoader.vue'
+import HighlightComponent from '@/components/HighlightComponent.vue'
 
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
@@ -115,7 +116,11 @@ onUnmounted(() => {
               </div>
               <template v-else>{{ NO_DATA }}</template>
             </template>
-            <template v-else>{{ item[column] }}</template>
+            <HighlightComponent
+              v-else
+              :highlight="filtersStore.values[column]"
+              :text="String(item[column])"
+            />
           </td>
         </tr>
       </tbody>
