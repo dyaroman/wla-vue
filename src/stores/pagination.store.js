@@ -39,7 +39,7 @@ export const usePaginationStore = defineStore('pagination', () => {
   })
 
   watch(totalPages, (newTotalPages) => {
-    if (currentPage.value > newTotalPages) currentPage.value = newTotalPages
+    if (newTotalPages > 0 && currentPage.value > newTotalPages) currentPage.value = newTotalPages
   })
 
   function _handlePopState() {
