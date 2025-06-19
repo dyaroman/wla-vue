@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import { useFiltersStore } from '@/stores/filters.store'
-import { camelCaseToKebabCase } from '@/misc/helpers.js'
+import { camelCaseToKebabCase, camelCaseToTitleCase } from '@/misc/helpers.js'
 
 const props = defineProps({
   name: String,
@@ -23,7 +23,7 @@ const showAutocompleteList = computed(
 <template>
   <div class="filter">
     <label class="filter__title">
-      <span class="filter__title-text">{{ placeholder }}</span>
+      <span class="filter__title-text">{{ camelCaseToTitleCase(placeholder) }}</span>
       <input
         type="text"
         class="input"
@@ -31,7 +31,7 @@ const showAutocompleteList = computed(
         :list="showAutocompleteList ? autocompleteListName : null"
         :data-qa="camelCaseToKebabCase(name)"
         :class="{ 'input--filled': filtersStore.values[name] }"
-        :placeholder
+        :placeholder="camelCaseToTitleCase(placeholder)"
         v-model="filtersStore.values[name]"
       />
       <datalist v-if="showAutocompleteList" :id="autocompleteListName">

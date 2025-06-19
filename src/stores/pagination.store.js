@@ -5,7 +5,7 @@ import { deleteQueryParam, getQueryParamValue } from '@/misc/helpers.js'
 import { PER_PAGE_VALUES } from '@/constants/misc.constants.js'
 
 const defaultCurrentPage = 1
-const defaultPerPage = 25
+const defaultPerPage = 50
 
 export const usePaginationStore = defineStore('pagination', () => {
   const websitesStore = useWebsitesStore()
