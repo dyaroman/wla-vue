@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
@@ -16,6 +16,10 @@ const mainStore = useMainStore()
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
 
+const showTable = computed(
+  () => websitesStore.visibleItems.length > 0 && columnsStore.visibleOrdered.length > 0,
+)
+
 onMounted(async () => {
   await mainStore.loadCombinedData()
   appInit.value = true
@@ -25,10 +29,8 @@ onMounted(async () => {
 <template>
   <section v-if="appInit" data-qa="app" class="app">
     <HeaderComponent />
-    <PaginationComponent />
-    <TableComponent
-      v-if="websitesStore.visibleItems.length > 0 && columnsStore.visibleOrdered.length > 0"
-    />
+    <PaginationComponent v-if="showTable" />
+    <TableComponent v-if="showTable" />
     <EmptyState v-else-if="websitesStore.visibleItems.length === 0">
       No results match your filters or selected tags. Try adjusting them.
     </EmptyState>
