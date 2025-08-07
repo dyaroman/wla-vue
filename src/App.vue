@@ -41,3 +41,5 @@ onMounted(async () => {
   </section>
   <LoaderComponent v-else fixed />
 </template>
+
+<!--todo: do i need GA or some alternative?-->
