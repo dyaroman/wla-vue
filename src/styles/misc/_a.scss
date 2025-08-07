@@ -2,6 +2,9 @@
 
 a {
   color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.15em;
 
   &[target='_blank'] {
     &::after {
