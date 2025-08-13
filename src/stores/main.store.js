@@ -9,6 +9,7 @@ import { getQueryParamValue } from '@/misc/helpers'
 export const useMainStore = defineStore('main', () => {
   const websitesStore = useWebsitesStore()
   const columnsStore = useColumnsStore()
+  const appState = ref('loading')
   const env = ref('')
   const commit = ref('')
   const timestamp = ref('')
@@ -57,24 +58,32 @@ export const useMainStore = defineStore('main', () => {
   }
 
   async function loadCombinedData() {
-    const { websites, columns, ...misc } = await _loadData()
+    try {
+      const { websites, columns, ...misc } = await _loadData()
 
-    if (websites) {
-      websitesStore.setInitialItems(websites)
-    }
+      if (websites) {
+        websitesStore.setInitialItems(websites)
+      }
 
-    if (columns) {
-      columnsStore.setConfig(columns)
-    }
+      if (columns) {
+        columnsStore.setConfig(columns)
+      }
 
-    if (misc) {
-      env.value = misc.env ?? hostEnv
-      commit.value = misc.commit
-      timestamp.value = misc.timestamp
+      if (misc) {
+        env.value = misc.env ?? hostEnv
+        commit.value = misc.commit
+        timestamp.value = misc.timestamp
+      }
+
+      appState.value = 'success'
+    } catch (e) {
+      console.warn(e?.message ?? e)
+      appState.value = 'error'
     }
   }
 
   return {
+    appState,
     commit,
     dataSource,
     env,

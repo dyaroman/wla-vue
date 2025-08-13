@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
@@ -11,7 +11,6 @@ import { useMainStore } from '@/stores/main.store'
 import { useColumnsStore } from '@/stores/columns.store.js'
 import { useWebsitesStore } from '@/stores/websites.store.js'
 
-const appInit = ref(false)
 const mainStore = useMainStore()
 const columnsStore = useColumnsStore()
 const websitesStore = useWebsitesStore()
@@ -22,12 +21,12 @@ const showTable = computed(
 
 onMounted(async () => {
   await mainStore.loadCombinedData()
-  appInit.value = true
 })
 </script>
 
 <template>
-  <section v-if="appInit" data-qa="app" class="app">
+  <LoaderComponent fixed v-if="mainStore.appState === 'loading'" />
+  <section v-else-if="mainStore.appState === 'success'" data-qa="app" class="app">
     <HeaderComponent />
     <PaginationComponent v-if="showTable" />
     <TableComponent v-if="showTable" />
@@ -39,5 +38,10 @@ onMounted(async () => {
     </EmptyState>
     <FooterComponent />
   </section>
-  <LoaderComponent v-else fixed />
+  <template v-else-if="mainStore.appState === 'error'">
+    <EmptyState>Failed to load required data. Please try again later.</EmptyState>
+  </template>
+  <template v-else>
+    <EmptyState>Fail to init app: unknown state</EmptyState>
+  </template>
 </template>
