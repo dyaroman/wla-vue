@@ -2,10 +2,12 @@ import { ref, watch, nextTick, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import { useColumnsStore } from '@/stores/columns.store'
-import { getQueryParamValue } from '@/misc/helpers'
+import { useWebsitesStore } from '@/stores/websites.store.js'
+import { getQueryParamValue, getUniqueValues } from '@/misc/helpers'
 
 export const useFiltersStore = defineStore('filters', () => {
   const columnsStore = useColumnsStore()
+  const websitesStore = useWebsitesStore()
 
   const values = ref({})
   const autocompleteLists = ref({})
@@ -20,6 +22,10 @@ export const useFiltersStore = defineStore('filters', () => {
       initialValues[filter] = getQueryParamValue(filter) ?? ''
     })
     values.value = initialValues
+
+    for (const filter in initialValues) {
+      autocompleteLists.value[filter] = getUniqueValues(websitesStore.initialItems, filter).sort()
+    }
   }
 
   function resetAll() {
