@@ -10,6 +10,10 @@ function scrollToTop() {
     behavior: 'smooth',
   })
 }
+
+function hardReset() {
+  window.location.href = '/'
+}
 </script>
 
 <template>
@@ -19,6 +23,7 @@ function scrollToTop() {
     :class="{ 'logo--fallback': mainStore.dataSource === 'fallback' }"
     aria-label="scroll table to top"
     @click="scrollToTop"
+    @dblclick="hardReset"
   >
     WL<span>A</span>
   </button>
