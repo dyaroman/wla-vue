@@ -52,7 +52,7 @@ export const useMainStore = defineStore('main', () => {
         dataSource.value = 'fallback'
         return await response.json()
       } catch (fallbackError) {
-        throw new Error('Failed to load combined data: ', fallbackError?.message ?? fallbackError)
+        throw new Error('Failed to load combined data: ' + fallbackError?.message ?? fallbackError)
       }
     }
   }
