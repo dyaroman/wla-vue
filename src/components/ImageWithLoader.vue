@@ -23,6 +23,11 @@ defineProps({
 const isLoading = ref(false)
 const isError = ref(false)
 
+function onError() {
+  isLoading.value = false
+  isError.value = true
+}
+
 onMounted(() => {
   isLoading.value = true
 })
@@ -49,7 +54,7 @@ onMounted(() => {
       class="img"
       loading="lazy"
       @load="isLoading = false"
-      @error="((isLoading = false), (isError = true))"
+      @error="onError"
     />
   </div>
 </template>
