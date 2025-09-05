@@ -1,6 +1,6 @@
 ## v3.0.0
 
-- rewrite from react to vue
+- rewrite from React to Vue
 
 ## v2.2.2 (03.06.2025)
 
@@ -183,7 +183,7 @@
 
 ## v1.3.0 (14.05.2024)
 
-- make URL search parameters case insensitive
+- make URL search parameters case-insensitive
 - reorganize sidebar
 
 ## v1.2.1 (06.05.2024)
@@ -221,7 +221,7 @@
 
 - add:
   - CHANGELOG.md
-  - new column "checkbox", it can be used as a check list
+  - new column "checkbox", it can be used as a checklist
   - shortcut `Cmd + Shift + E` or `Ctrl + Shift + E` to clear filters and sort
   - missing 'data-qa' attributes
   - app version in browser console
