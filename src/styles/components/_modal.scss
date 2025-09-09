@@ -1,0 +1,129 @@
+@use '../misc/breakpoints';
+@use '../misc/mixins';
+
+.modal-wrapper {
+  display: flex;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--gap);
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    align-items: center;
+    padding: var(--gap-double);
+  }
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 95vh;
+  overflow: hidden;
+  background-color: var(--bg);
+  box-shadow: var(--shadow);
+
+  @include mixins.focus;
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    width: auto;
+    max-height: 90vh;
+  }
+
+  &--sm {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &--md {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  &--lg {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  &--xl {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  &--full {
+    width: 100vw;
+    max-width: none;
+    height: 100vh;
+    max-height: none;
+
+    @include breakpoints.media-breakpoint-up(sm) {
+      width: 95vw;
+      height: 95vh;
+    }
+  }
+}
+
+.modal__header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--header-height);
+  padding: var(--gap) var(--gap-double);
+
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.modal__title {
+  margin: 0;
+}
+
+.modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 4px 8px;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal__content {
+  flex: 1;
+  padding: var(--gap-double);
+  overflow-y: auto;
+}
+
+.modal--persistent {
+  border: var(--border-width) solid var(--color);
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+.modal-scale-enter-active,
+.modal-scale-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-scale-enter-from,
+.modal-scale-leave-to {
+  transform: scale(0.95) translateY(-1rem);
+  opacity: 0;
+}
