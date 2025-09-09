@@ -128,7 +128,10 @@ watch(
       document.removeEventListener('keydown', handleKeyDown)
 
       // Return focus to the element that opened the drawer
-      if (previouslyFocusedElement.value && 'focus' in previouslyFocusedElement.value) {
+      if (
+        previouslyFocusedElement.value &&
+        'focus' in previouslyFocusedElement.value
+      ) {
         nextTick(() => {
           previouslyFocusedElement.value.focus()
         })
@@ -152,7 +155,7 @@ onBeforeUnmount(() => {
     <Transition name="drawer-fade">
       <div
         v-if="isOpen"
-        class="drawer-backdrop"
+        class="backdrop"
         @click="closeOnBackdropClick && (drawerStore.openDrawerId = null)"
       ></div>
     </Transition>
@@ -162,8 +165,14 @@ onBeforeUnmount(() => {
         class="drawer"
         :class="`drawer--${position}`"
         :style="{
-          maxHeight: position === 'top' || position === 'bottom' ? (maxSize ?? '50vh') : null,
-          maxWidth: position === 'right' || position === 'left' ? (maxSize ?? '50vw') : null,
+          maxHeight:
+            position === 'top' || position === 'bottom'
+              ? (maxSize ?? '50vh')
+              : null,
+          maxWidth:
+            position === 'right' || position === 'left'
+              ? (maxSize ?? '50vw')
+              : null,
         }"
         ref="drawerRef"
         tabindex="-1"
@@ -172,7 +181,11 @@ onBeforeUnmount(() => {
       >
         <div v-if="showHeader" class="drawer__header">
           <h3 class="drawer__title" id="drawer-title">{{ title }}</h3>
-          <button class="drawer__close" @click="drawerStore.openDrawerId = null" aria-label="Close">
+          <button
+            class="drawer__close"
+            @click="drawerStore.openDrawerId = null"
+            aria-label="Close"
+          >
             &times;
           </button>
         </div>
