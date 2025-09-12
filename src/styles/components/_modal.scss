@@ -66,6 +66,14 @@
       height: 95vh;
     }
   }
+
+  &--top {
+    margin-top: 10vh;
+  }
+}
+
+.modal-wrapper:has(.modal--top) {
+  align-items: flex-start;
 }
 
 .modal__header {

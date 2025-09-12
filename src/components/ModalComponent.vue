@@ -41,7 +41,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  position: {
+    type: String,
+    default: 'center',
+    validator: (value) => ['center', 'top'].includes(value),
+  },
 })
+
+const emit = defineEmits(['afterOpen'])
 
 // Refs with proper typing
 const modalRef = ref(null)
@@ -136,6 +143,7 @@ watch(
       // Focus the modal after it's fully rendered
       nextTick(() => {
         modalRef.value?.focus()
+        emit('afterOpen')
       })
 
       // Add keyboard event listener for focus trapping
@@ -179,7 +187,11 @@ onBeforeUnmount(() => {
       <div v-if="isOpen" class="modal-wrapper" @click="handleBackdropClick">
         <div
           class="modal"
-          :class="[`modal--${size}`, { 'modal--persistent': persistent }]"
+          :class="[
+            `modal--${size}`,
+            `modal--${position}`,
+            { 'modal--persistent': persistent },
+          ]"
           :style="{
             maxWidth: maxWidth,
             maxHeight: maxHeight,

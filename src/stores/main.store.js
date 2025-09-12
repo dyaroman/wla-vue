@@ -15,69 +15,72 @@ export const useMainStore = defineStore('main', () => {
   const timestamp = ref('')
   const dataSource = ref('')
 
-  let hostEnv = null
-  const subdomain = window.location.hostname.split('.')[0]
-  if (['localhost', 'rc', 'dev', 'prod'].includes(subdomain)) {
-    hostEnv = subdomain === 'prod' ? 'prod' : 'dev'
+  const getHostEnv = () => {
+    const subdomain = window.location.hostname.split('.')[0]
+    if (['localhost', 'rc', 'dev', 'prod'].includes(subdomain)) {
+      return subdomain === 'prod' ? 'prod' : 'dev'
+    }
+    return null
+  }
+
+  const hostEnv = getHostEnv()
+
+  async function _fetchData(url, sourceName, isFallback = false) {
+    try {
+      const response = await fetch(url)
+      if (response.ok) {
+        dataSource.value = sourceName
+        return await response.json()
+      }
+
+      const logFn = isFallback ? console.error : console.warn
+      logFn(`${sourceName} endpoint failed:`, response.status)
+    } catch (error) {
+      console.error(`${sourceName} fetch error:`, error)
+    }
+    return null
   }
 
   async function _loadData() {
-    const primaryEndpoint = `${import.meta.env.VITE_WLA_BACKEND_URL}/combined?env=${hostEnv}`
-    const fallbackEndpoint = `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`
+    const isOverrideSet = getQueryParamValue('ds') === 'file'
+    const useFallbackFirst = isOverrideSet || !hostEnv
 
-    try {
-      if (getQueryParamValue('ds') === 'file') throw new Error('Forced to use fallback endpoint')
-      if (!hostEnv) throw new Error('Host environment not found')
+    const primaryUrl = `${import.meta.env.VITE_WLA_BACKEND_URL}/combined?env=${hostEnv}`
+    const fallbackUrl = `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`
 
-      const response = await fetch(primaryEndpoint)
-      if (!response.ok) {
-        throw new Error(
-          'Failed to fetch combined data from primary endpoint, status code: ' + response.status,
-        )
-      }
-      dataSource.value = 'primary'
-      return await response.json()
-    } catch (error) {
-      console.warn(
-        'Failed to load combined data from primary endpoint, trying fallback:',
-        error?.message ?? error,
-      )
-      try {
-        const response = await fetch(fallbackEndpoint)
-        if (!response.ok) {
-          throw new Error(
-            'Failed to fetch combined data from fallback endpoint, status code: ' + response.status,
-          )
-        }
-        dataSource.value = 'fallback'
-        return await response.json()
-      } catch (fallbackError) {
-        throw new Error('Failed to load combined data: ' + fallbackError?.message ?? fallbackError)
-      }
+    if (!useFallbackFirst) {
+      const data = await _fetchData(primaryUrl, 'primary')
+      if (data) return data
+    } else {
+      const reason = isOverrideSet ? 'query param override' : 'missing hostEnv'
+      console.warn('Using fallback due to', reason)
     }
+
+    return await _fetchData(fallbackUrl, 'fallback', true)
   }
 
   async function loadCombinedData() {
     try {
-      const { websites, columns, ...misc } = await _loadData()
+      const data = await _loadData()
 
-      if (websites) {
-        websitesStore.setInitialItems(websites)
+      if (!data) {
+        throw new Error('Failed to load combined data from all sources')
       }
 
-      if (columns) {
-        columnsStore.setConfig(columns)
-      }
+      const { websites, columns, ...misc } = data
+
+      if (websites) websitesStore.setInitialItems(websites)
+      if (columns) columnsStore.setConfig(columns)
 
       if (misc) {
         env.value = misc.env ?? hostEnv
-        commit.value = misc.commit
-        timestamp.value = misc.timestamp
+        commit.value = misc.commit ?? ''
+        timestamp.value = misc.timestamp ?? ''
       }
 
       appState.value = 'success'
-    } catch (e) {
-      console.warn(e?.message ?? e)
+    } catch (error) {
+      console.error('Initialization failed:', error.message || error)
       appState.value = 'error'
     }
   }
