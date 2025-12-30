@@ -1,4 +1,5 @@
 <script setup>
+import CounterComponent from '@/components/CounterComponent.vue'
 import { usePaginationStore } from '@/stores/pagination.store.js'
 import { PER_PAGE_VALUES } from '@/constants/misc.constants.js'
 
@@ -23,7 +24,14 @@ const paginationStore = usePaginationStore()
           </select>
         </div>
       </div>
-      <div class="pagination__buttons" role="navigation" aria-label="pagination">
+
+      <CounterComponent />
+
+      <div
+        class="pagination__buttons"
+        role="navigation"
+        aria-label="pagination"
+      >
         <button
           class="btn btn--small"
           aria-label="first page"
@@ -39,13 +47,20 @@ const paginationStore = usePaginationStore()
           aria-label="previous page"
           data-qa="prev-page"
           :disabled="paginationStore.currentPage === 1"
-          @click="paginationStore.currentPage = Math.max(paginationStore.currentPage - 1, 1)"
+          @click="
+            paginationStore.currentPage = Math.max(
+              paginationStore.currentPage - 1,
+              1,
+            )
+          "
         >
           <
         </button>
 
         <span aria-live="polite" aria-atomic="true" data-qa="current-page"
-          >{{ paginationStore.currentPage }}/{{ paginationStore.totalPages }}</span
+          >{{ paginationStore.currentPage }}/{{
+            paginationStore.totalPages
+          }}</span
         >
 
         <button

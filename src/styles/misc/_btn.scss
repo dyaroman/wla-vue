@@ -4,24 +4,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gap);
-  padding: 12px 22px;
   min-width: 220px;
-
-  font-size: inherit;
-  color: var(--btn-text-color);
-  text-decoration: none;
-  user-select: none;
+  padding: 10px 18px;
+  gap: var(--gap);
 
   border: 2px solid var(--btn-border-color);
   background-color: var(--btn-bg-color);
+  color: var(--btn-text-color);
+
+  font-size: inherit;
+  text-decoration: none;
   transition: 0.3s ease;
+  user-select: none;
 
   @include mixins.hover() {
-    color: var(--btn-text-color--hover);
+    border-color: var(--btn-border-color--hover);
 
     background-color: var(--btn-bg-color--hover);
-    border-color: var(--btn-border-color--hover);
+    color: var(--btn-text-color--hover);
     cursor: pointer;
   }
 
@@ -34,8 +34,8 @@
   }
 
   &--small {
+    width: 40px;
     min-width: unset;
-    width: 44px;
   }
 
   &--with-icon {
@@ -44,8 +44,8 @@
   }
 
   &--icon {
-    padding: 0;
     min-width: unset;
+    padding: 0;
 
     border: none;
 
@@ -54,9 +54,8 @@
     }
 
     @include mixins.hover() {
-      color: var(--btn-text-color);
-
       background: none;
+      color: var(--btn-text-color);
 
       svg {
         transform: scale(1.1);
@@ -65,9 +64,8 @@
   }
 
   &[disabled] {
-    color: var(--border-color);
-
     border-color: var(--border-color);
+    color: var(--border-color);
     pointer-events: none;
   }
 }

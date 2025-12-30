@@ -1,6 +1,5 @@
 <script setup>
 import LogoComponent from '@/components/LogoComponent.vue'
-import CounterComponent from '@/components/CounterComponent.vue'
 import ToggleButtonsPanel from '@/components/ToggleButtonsPanel.vue'
 </script>
 
@@ -11,7 +10,6 @@ import ToggleButtonsPanel from '@/components/ToggleButtonsPanel.vue'
         <ToggleButtonsPanel position="left" />
         <div class="flex-row">
           <LogoComponent />
-          <CounterComponent />
         </div>
         <ToggleButtonsPanel position="right" />
       </div>

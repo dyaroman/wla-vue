@@ -1,18 +1,15 @@
+@use '../misc/breakpoints';
+
 .counter {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  min-height: 40px;
-  padding: 0 var(--gap);
+  order: -1;
 
   text-align: center;
   user-select: none;
 
-  border-radius: 50px;
-  border: var(--border-width) solid var(--color);
-
-  @media (min-width: 375px) {
-    display: flex;
+  @include breakpoints.media-breakpoint-up(sm) {
+    order: unset;
   }
 }

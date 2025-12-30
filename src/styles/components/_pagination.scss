@@ -3,8 +3,8 @@
 .pagination {
   display: flex;
   flex-direction: column;
-  gap: var(--gap);
   margin-inline: var(--gap);
+  gap: var(--gap);
 
   user-select: none;
 
@@ -13,16 +13,21 @@
   }
 
   @include breakpoints.media-breakpoint-up(sm) {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
     justify-content: space-between;
   }
 }
 
 .pagination__per-page {
   display: flex;
-  gap: var(--gap);
   align-items: center;
   justify-content: center;
+  gap: var(--gap);
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    justify-content: start;
+  }
 }
 
 .pagination__buttons {
@@ -30,4 +35,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--gap);
+
+  @include breakpoints.media-breakpoint-up(sm) {
+    justify-content: end;
+  }
 }
