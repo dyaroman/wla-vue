@@ -43,6 +43,4 @@ const appVersion = __APP_VERSION__
       </div>
     </div>
   </div>
-
-  <!--  todo: where place copy buttons? they should be in command palette -->
 </template>

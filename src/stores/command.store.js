@@ -7,42 +7,6 @@ export const useCommandStore = defineStore('command', () => {
   const websitesStore = useWebsitesStore()
 
   const commands = ref([
-    // {
-    //   name: 'foo',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'bar',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'baz',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'qux',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'quux',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'corge',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'grault',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'garply',
-    //   action: () => {},
-    // },
-    // {
-    //   name: 'waldo',
-    //   action: () => {},
-    // },
     {
       name: 'copy websites domains list',
       action: () => {
