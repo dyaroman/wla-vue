@@ -1,87 +1,96 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import { ref } from "vue";
+import { defineStore } from "pinia";
 
-import { WEBSITES_DATA_FILENAME } from '@/constants/misc.constants'
-import { useWebsitesStore } from '@/stores/websites.store'
-import { useColumnsStore } from '@/stores/columns.store'
-import { getQueryParamValue } from '@/misc/helpers'
+import { WEBSITES_DATA_FILENAME } from "@/constants/misc.constants";
+import { useWebsitesStore } from "@/stores/websites.store";
+import { useColumnsStore } from "@/stores/columns.store";
+import { getQueryParamValue } from "@/misc/helpers";
 
-export const useMainStore = defineStore('main', () => {
-  const websitesStore = useWebsitesStore()
-  const columnsStore = useColumnsStore()
-  const appState = ref('loading')
-  const env = ref('')
-  const commit = ref('')
-  const timestamp = ref('')
-  const dataSource = ref('')
+export const useMainStore = defineStore("main", () => {
+  const websitesStore = useWebsitesStore();
+  const columnsStore = useColumnsStore();
+  const appState = ref("loading");
+  const env = ref("");
+  const commit = ref("");
+  const timestamp = ref("");
+  const dataSource = ref("");
 
   const getHostEnv = () => {
-    const subdomain = window.location.hostname.split('.')[0]
-    if (['localhost', 'rc', 'dev', 'prod'].includes(subdomain)) {
-      return subdomain === 'prod' ? 'prod' : 'dev'
+    const subdomain = window.location.hostname.split(".")[0];
+    if (["localhost", "rc", "dev", "prod"].includes(subdomain)) {
+      return subdomain === "prod" ? "prod" : "dev";
     }
-    return null
-  }
+    return null;
+  };
 
-  const hostEnv = getHostEnv()
+  const hostEnv = getHostEnv();
 
   async function _fetchData(url, sourceName, isFallback = false) {
     try {
-      const response = await fetch(url)
+      const response = await fetch(url);
       if (response.ok) {
-        dataSource.value = sourceName
-        return await response.json()
+        dataSource.value = sourceName;
+        return await response.json();
       }
 
-      const logFn = isFallback ? console.error : console.warn
-      logFn(`${sourceName} endpoint failed:`, response.status)
+      const logFn = isFallback ? console.error : console.warn;
+      logFn(`${sourceName} endpoint failed:`, response.status);
     } catch (error) {
-      console.error(`${sourceName} fetch error:`, error)
+      console.error(`${sourceName} fetch error:`, error);
     }
-    return null
+    return null;
   }
 
   async function _loadData() {
-    const isOverrideSet = getQueryParamValue('ds') === 'file'
-    const useFallbackFirst = isOverrideSet || !hostEnv
+    const isOverrideSet = getQueryParamValue("ds") === "file";
+    const useFallbackFirst = isOverrideSet || !hostEnv;
 
-    const primaryUrl = `${import.meta.env.VITE_WLA_BACKEND_URL}/combined?env=${hostEnv}`
-    const fallbackUrl = `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`
+    const primaryUrl = `${import.meta.env.VITE_WLA_BACKEND_URL}/combined?env=${hostEnv}`;
+    const fallbackUrl = `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`;
 
     if (!useFallbackFirst) {
-      const data = await _fetchData(primaryUrl, 'primary')
-      if (data) return data
+      const data = await _fetchData(primaryUrl, "primary");
+      if (data) return data;
     } else {
-      const reason = isOverrideSet ? 'query param override' : 'missing hostEnv'
-      console.warn('Using fallback due to', reason)
+      const reason = isOverrideSet ? "query param override" : "missing hostEnv";
+      console.warn("Using fallback due to", reason);
     }
 
-    return await _fetchData(fallbackUrl, 'fallback', true)
+    return await _fetchData(fallbackUrl, "fallback", true);
   }
 
   async function loadCombinedData() {
     try {
-      const data = await _loadData()
+      const data = await _loadData();
 
       if (!data) {
-        throw new Error('Failed to load combined data from all sources')
+        throw new Error("Failed to load combined data from all sources");
       }
 
-      const { websites, columns, ...misc } = data
+      const { websites, columns, ...misc } = data;
 
-      if (websites) websitesStore.setInitialItems(websites)
-      if (columns) columnsStore.setConfig(columns)
+      if (websites) websitesStore.setInitialItems(websites);
+      if (columns) {
+        const columnsConfig = Array.isArray(columns)
+          ? columns.reduce((acc, col) => {
+              const { name, ...rest } = col;
+              acc[name] = rest;
+              return acc;
+            }, {})
+          : columns;
+        columnsStore.setConfig(columnsConfig);
+      }
 
       if (misc) {
-        env.value = misc.env ?? hostEnv
-        commit.value = misc.commit ?? ''
-        timestamp.value = misc.timestamp ?? ''
+        env.value = misc.env ?? hostEnv;
+        commit.value = misc.commit ?? "";
+        timestamp.value = misc.timestamp ?? "";
       }
 
-      appState.value = 'success'
+      appState.value = "success";
     } catch (error) {
-      console.error('Initialization failed:', error.message || error)
-      appState.value = 'error'
+      console.error("Initialization failed:", error.message || error);
+      appState.value = "error";
     }
   }
 
@@ -92,5 +101,5 @@ export const useMainStore = defineStore('main', () => {
     env,
     loadCombinedData,
     timestamp,
-  }
-})
+  };
+});
