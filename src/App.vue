@@ -9,6 +9,7 @@ import EmptyState from "@/components/EmptyState.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 import CommandPalette from "@/components/CommandPalette.vue";
 import ToastComponent from "@/components/ToastComponent.vue";
+import HowToModal from "@/components/HowToModal.vue";
 import { useMainStore } from "@/stores/main.store";
 import { useColumnsStore } from "@/stores/columns.store.js";
 import { useWebsitesStore } from "@/stores/websites.store.js";
@@ -50,6 +51,7 @@ onMounted(async () => {
     <FooterComponent />
     <CommandPalette />
     <ToastComponent />
+    <HowToModal />
   </section>
   <template v-else-if="mainStore.appState === 'error'">
     <EmptyState

@@ -7,7 +7,9 @@ import { useFiltersStore } from "@/stores/filters.store.js";
 import { useTagsStore } from "@/stores/tags.store.js";
 import { useSortStore } from "@/stores/sort.store.js";
 import { useDrawerStore } from "@/stores/drawer.store.js";
+import { useModalStore } from "@/stores/modal.store.js";
 import { DRAWER_ID } from "@/constants/drawers.constants.js";
+import { MODAL_ID } from "@/constants/modal.constants.js";
 
 export const useCommandStore = defineStore("command", () => {
   const websitesStore = useWebsitesStore();
@@ -16,6 +18,7 @@ export const useCommandStore = defineStore("command", () => {
   const tagsStore = useTagsStore();
   const sortStore = useSortStore();
   const drawerStore = useDrawerStore();
+  const modalStore = useModalStore();
 
   async function _copyToClipboard(text, successMessage) {
     try {
@@ -104,6 +107,12 @@ export const useCommandStore = defineStore("command", () => {
       name: "open app info",
       action: () => {
         drawerStore.openDrawerId = DRAWER_ID.SIDEBAR;
+      },
+    },
+    {
+      name: "help",
+      action: () => {
+        modalStore.openModalId = MODAL_ID.HOW_TO;
       },
     },
   ]);
