@@ -10,6 +10,7 @@ import FooterComponent from "@/components/FooterComponent.vue";
 import CommandPalette from "@/components/CommandPalette.vue";
 import ToastComponent from "@/components/ToastComponent.vue";
 import HowToModal from "@/components/HowToModal.vue";
+import ImagePreviewModal from "@/components/ImagePreviewModal.vue";
 import { useMainStore } from "@/stores/main.store";
 import { useColumnsStore } from "@/stores/columns.store.js";
 import { useWebsitesStore } from "@/stores/websites.store.js";
@@ -52,6 +53,7 @@ onMounted(async () => {
     <CommandPalette />
     <ToastComponent />
     <HowToModal />
+    <ImagePreviewModal />
   </section>
   <template v-else-if="mainStore.appState === 'error'">
     <EmptyState

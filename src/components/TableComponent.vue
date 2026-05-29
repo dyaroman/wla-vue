@@ -10,6 +10,7 @@ import { useSortStore } from "@/stores/sort.store.js";
 import { usePaginationStore } from "@/stores/pagination.store.js";
 import { useDrawerStore } from "@/stores/drawer.store";
 import { useToastStore } from "@/stores/toast.store.js";
+import { useModalStore } from "@/stores/modal.store.js";
 import { camelCaseToKebabCase, camelCaseToTitleCase } from "@/misc/helpers.js";
 import { NO_DATA } from "@/constants/misc.constants.js";
 import { DRAWER_ID } from "@/constants/drawers.constants.js";
@@ -30,6 +31,7 @@ const sortStore = useSortStore();
 const paginationStore = usePaginationStore();
 const drawerStore = useDrawerStore();
 const toastStore = useToastStore();
+const modalStore = useModalStore();
 
 const SEARCH_SKIP_VALUE_COLUMNS = ["pages", "forms"];
 const COPY_SKIP_COLUMNS = ["index", "checkbox", "tags", "favicon", "ogImage"];
@@ -188,6 +190,8 @@ onUnmounted(() => {
                   :key="img"
                   :src="`https://${item.host}/${img}`"
                   max-height="100px"
+                  preview
+                  @preview="modalStore.openImagePreview"
                 />
               </div>
               <template v-else>{{ NO_DATA }}</template>

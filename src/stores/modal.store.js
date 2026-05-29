@@ -1,8 +1,16 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const useModalStore = defineStore('modal', () => {
-  const openModalId = ref(null)
+import { MODAL_ID } from "@/constants/modal.constants.js";
 
-  return { openModalId }
-})
+export const useModalStore = defineStore("modal", () => {
+  const openModalId = ref(null);
+  const previewImageSrc = ref(null);
+
+  function openImagePreview(src) {
+    previewImageSrc.value = src;
+    openModalId.value = MODAL_ID.IMAGE_PREVIEW;
+  }
+
+  return { openImagePreview, openModalId, previewImageSrc };
+});
