@@ -1,18 +1,18 @@
 <script setup>
-import { useMainStore } from '@/stores/main.store'
+import { useMainStore } from "@/stores/main.store";
 
-const mainStore = useMainStore()
+const mainStore = useMainStore();
 
 function scrollToTop() {
-  document.querySelector('.table')?.scrollTo({
+  document.querySelector(".table")?.scrollTo({
     top: 0,
     left: 0,
-    behavior: 'smooth',
-  })
+    behavior: "smooth",
+  });
 }
 
 function hardReset() {
-  window.location.href = '/'
+  window.location.href = window.location.pathname;
 }
 </script>
 

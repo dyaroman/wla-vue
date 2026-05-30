@@ -1,111 +1,121 @@
-import { computed, ref, readonly, nextTick, watch } from 'vue'
-import { defineStore } from 'pinia'
+import { computed, ref, readonly, nextTick, watch } from "vue";
+import { defineStore } from "pinia";
 
-import { CHECKBOX_STATES } from '@/constants/checkbox.constants'
-import { useWebsitesStore } from '@/stores/websites.store'
-import { getQueryParamValue, getUniqueTags } from '@/misc/helpers'
+import { CHECKBOX_STATES } from "@/constants/checkbox.constants";
+import { useWebsitesStore } from "@/stores/websites.store";
+import { getQueryParamValue, getUniqueTags } from "@/misc/helpers";
 
-export const useTagsStore = defineStore('tags', () => {
-  const websitesStore = useWebsitesStore()
+export const useTagsStore = defineStore("tags", () => {
+  const websitesStore = useWebsitesStore();
 
-  const isUpdatingFromUrl = ref(false)
-  const all = computed(() => getUniqueTags(websitesStore.initialItems))
-  const available = computed(() => getUniqueTags(websitesStore.visibleItems))
-  const included = ref(new Set())
-  const excluded = ref(new Set())
-  const isPristine = computed(() => included.value.size === 0 && excluded.value.size === 0)
+  const isUpdatingFromUrl = ref(false);
+  const all = computed(() => getUniqueTags(websitesStore.initialItems));
+  const available = computed(() => getUniqueTags(websitesStore.visibleItems));
+  const included = ref(new Set());
+  const excluded = ref(new Set());
+  const isPristine = computed(
+    () => included.value.size === 0 && excluded.value.size === 0,
+  );
 
   watch(
     [included, excluded],
     ([newIncluded, newExcluded]) => {
-      if (isUpdatingFromUrl.value) return
+      if (isUpdatingFromUrl.value) return;
 
-      const params = new URLSearchParams(window.location.search)
-      params.delete('tags')
+      const params = new URLSearchParams(window.location.search);
+      params.delete("tags");
 
       if (newIncluded.size > 0 || newExcluded.size > 0)
         params.set(
-          'tags',
+          "tags",
           [...newIncluded, ...newExcluded]
             .map((tag) => (excluded.value.has(tag) ? `!${tag}` : tag))
-            .join(','),
-        )
+            .join(","),
+        );
 
-      if (params.size === 0) window.history.replaceState(null, '', '/')
-      else window.history.replaceState(null, '', `?${decodeURIComponent(params.toString())}`)
+      if (params.size === 0)
+        window.history.replaceState(null, "", window.location.pathname);
+      else
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
+        );
     },
     {
       deep: true,
     },
-  )
+  );
 
   function initializeValues() {
-    const tagsFromUrl = getQueryParamValue('tags')
-    if (!tagsFromUrl) return
+    const tagsFromUrl = getQueryParamValue("tags");
+    if (!tagsFromUrl) return;
 
-    const newIncluded = new Set()
-    const newExcluded = new Set()
-    tagsFromUrl.split(',').forEach((tag) => {
-      if (tag.startsWith('!')) newExcluded.add(tag.slice(1))
-      else newIncluded.add(tag)
-    })
+    const newIncluded = new Set();
+    const newExcluded = new Set();
+    tagsFromUrl.split(",").forEach((tag) => {
+      if (tag.startsWith("!")) newExcluded.add(tag.slice(1));
+      else newIncluded.add(tag);
+    });
 
-    if (newIncluded.size > 0) included.value = newIncluded
-    if (newExcluded.size > 0) excluded.value = newExcluded
+    if (newIncluded.size > 0) included.value = newIncluded;
+    if (newExcluded.size > 0) excluded.value = newExcluded;
   }
 
   function getState(id) {
-    if (included.value.has(id)) return CHECKBOX_STATES.INCLUDE
-    if (excluded.value.has(id)) return CHECKBOX_STATES.EXCLUDE
-    return CHECKBOX_STATES.IGNORE
+    if (included.value.has(id)) return CHECKBOX_STATES.INCLUDE;
+    if (excluded.value.has(id)) return CHECKBOX_STATES.EXCLUDE;
+    return CHECKBOX_STATES.IGNORE;
   }
 
   function toggleState(id) {
-    const currentState = getState(id)
+    const currentState = getState(id);
 
-    included.value.delete(id)
-    excluded.value.delete(id)
+    included.value.delete(id);
+    excluded.value.delete(id);
 
     switch (currentState) {
       case CHECKBOX_STATES.IGNORE:
-        included.value.add(id)
-        break
+        included.value.add(id);
+        break;
       case CHECKBOX_STATES.INCLUDE:
-        excluded.value.add(id)
-        break
+        excluded.value.add(id);
+        break;
       case CHECKBOX_STATES.EXCLUDE:
-        break
+        break;
     }
   }
 
   function resetAll() {
-    included.value = new Set()
-    excluded.value = new Set()
+    included.value = new Set();
+    excluded.value = new Set();
   }
 
   function setState(id, state) {
-    included.value.delete(id)
-    excluded.value.delete(id)
+    included.value.delete(id);
+    excluded.value.delete(id);
 
-    if (state === CHECKBOX_STATES.INCLUDE) included.value.add(id)
-    else if (state === CHECKBOX_STATES.EXCLUDE) excluded.value.add(id)
+    if (state === CHECKBOX_STATES.INCLUDE) included.value.add(id);
+    else if (state === CHECKBOX_STATES.EXCLUDE) excluded.value.add(id);
   }
 
-  if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
+  if (typeof window !== "undefined")
+    window.addEventListener("popstate", _handlePopState);
 
   function cleanup() {
-    if (typeof window !== 'undefined') window.removeEventListener('popstate', _handlePopState)
+    if (typeof window !== "undefined")
+      window.removeEventListener("popstate", _handlePopState);
   }
 
   function _handlePopState() {
-    isUpdatingFromUrl.value = true
+    isUpdatingFromUrl.value = true;
 
-    initializeValues()
+    initializeValues();
 
     // reset flag after next tick
     nextTick(() => {
-      isUpdatingFromUrl.value = false
-    })
+      isUpdatingFromUrl.value = false;
+    });
   }
 
   return {
@@ -120,5 +130,5 @@ export const useTagsStore = defineStore('tags', () => {
     resetAll,
     setState,
     toggleState,
-  }
-})
+  };
+});

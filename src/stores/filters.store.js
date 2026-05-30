@@ -1,80 +1,91 @@
-import { ref, watch, nextTick, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, watch, nextTick, computed } from "vue";
+import { defineStore } from "pinia";
 
-import { useColumnsStore } from '@/stores/columns.store'
-import { useWebsitesStore } from '@/stores/websites.store.js'
-import { getQueryParamValue, getUniqueValues } from '@/misc/helpers'
+import { useColumnsStore } from "@/stores/columns.store";
+import { useWebsitesStore } from "@/stores/websites.store.js";
+import { getQueryParamValue, getUniqueValues } from "@/misc/helpers";
 
-export const useFiltersStore = defineStore('filters', () => {
-  const columnsStore = useColumnsStore()
-  const websitesStore = useWebsitesStore()
+export const useFiltersStore = defineStore("filters", () => {
+  const columnsStore = useColumnsStore();
+  const websitesStore = useWebsitesStore();
 
-  const values = ref({})
-  const autocompleteLists = ref({})
-  const isUpdatingFromUrl = ref(false)
+  const values = ref({});
+  const autocompleteLists = ref({});
+  const isUpdatingFromUrl = ref(false);
   const isPristine = computed(
-    () => Object.values(values.value).filter((i) => i !== '').length === 0,
-  )
+    () => Object.values(values.value).filter((i) => i !== "").length === 0,
+  );
 
   function initializeValues() {
-    const initialValues = {}
+    const initialValues = {};
     columnsStore.filterable.forEach((filter) => {
-      initialValues[filter] = getQueryParamValue(filter) ?? ''
-    })
-    values.value = initialValues
+      initialValues[filter] = getQueryParamValue(filter) ?? "";
+    });
+    values.value = initialValues;
 
     for (const filter in initialValues) {
-      autocompleteLists.value[filter] = getUniqueValues(websitesStore.initialItems, filter).sort()
+      autocompleteLists.value[filter] = getUniqueValues(
+        websitesStore.initialItems,
+        filter,
+      ).sort();
     }
   }
 
   function resetAll() {
-    const newValues = {}
+    const newValues = {};
     columnsStore.filterable.forEach((filter) => {
-      newValues[filter] = ''
-    })
-    values.value = newValues
+      newValues[filter] = "";
+    });
+    values.value = newValues;
   }
 
   function cleanup() {
-    if (typeof window !== 'undefined') window.removeEventListener('popstate', _handlePopState)
+    if (typeof window !== "undefined")
+      window.removeEventListener("popstate", _handlePopState);
   }
 
   // update URL when filters change
   watch(
     values,
     (newFilters) => {
-      if (isUpdatingFromUrl.value) return
+      if (isUpdatingFromUrl.value) return;
 
-      const params = new URLSearchParams(window.location.search)
+      const params = new URLSearchParams(window.location.search);
       // remove old filters from URL
-      Object.keys(values.value).forEach((key) => params.delete(key))
+      Object.keys(values.value).forEach((key) => params.delete(key));
 
       // set new filters to URL
       for (const filter in newFilters) {
-        if (newFilters[filter] !== '') params.set(filter, newFilters[filter])
+        if (newFilters[filter] !== "") params.set(filter, newFilters[filter]);
       }
 
-      if (params.size === 0) window.history.replaceState(null, '', '/')
-      else window.history.replaceState(null, '', `?${decodeURIComponent(params.toString())}`)
+      if (params.size === 0)
+        window.history.replaceState(null, "", window.location.pathname);
+      else
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
+        );
     },
     {
       deep: true,
     },
-  )
+  );
 
   function _handlePopState() {
-    isUpdatingFromUrl.value = true
+    isUpdatingFromUrl.value = true;
 
-    initializeValues()
+    initializeValues();
 
     // reset flag after next tick
     nextTick(() => {
-      isUpdatingFromUrl.value = false
-    })
+      isUpdatingFromUrl.value = false;
+    });
   }
 
-  if (typeof window !== 'undefined') window.addEventListener('popstate', _handlePopState)
+  if (typeof window !== "undefined")
+    window.addEventListener("popstate", _handlePopState);
 
   return {
     autocompleteLists,
@@ -83,5 +94,5 @@ export const useFiltersStore = defineStore('filters', () => {
     isPristine,
     resetAll,
     values,
-  }
-})
+  };
+});
