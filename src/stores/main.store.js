@@ -30,8 +30,8 @@ export const useMainStore = defineStore("main", () => {
     return null;
   };
 
-  const hostEnv = getHostEnv();
-  const primaryUrl = `${import.meta.env.VITE_WLA_BACKEND_URL}/combined?env=${hostEnv}`;
+  const hostEnv = getHostEnv() ?? "demo";
+  const primaryUrl = `${__WLA_BACKEND_URL__}/combined?env=${hostEnv}`;
 
   async function _fetchData(url, sourceName, isFallback = false) {
     try {
@@ -53,17 +53,16 @@ export const useMainStore = defineStore("main", () => {
   }
 
   async function _loadData() {
-    const isOverrideSet = getQueryParamValue("ds") === "file";
-    const useFallbackFirst = isOverrideSet || !hostEnv;
+    const forceFile = getQueryParamValue("ds") === "file";
+    const fallbackUrl = `${__WEBSITES_DATA_URL__}/${WEBSITES_DATA_FILENAME}`;
 
-    const fallbackUrl = `${import.meta.env.VITE_WEBSITES_DATA_URL}/${WEBSITES_DATA_FILENAME}`;
-
-    if (!useFallbackFirst) {
+    // always try the backend first; only fall back to the static file on failure
+    if (!forceFile) {
       const data = await _fetchData(primaryUrl, "primary");
       if (data) return data;
-    } else {
-      const reason = isOverrideSet ? "query param override" : "missing hostEnv";
-      console.warn("Using fallback due to", reason);
+      console.warn(
+        `Failed to load from backend, falling back to "${WEBSITES_DATA_FILENAME}"`,
+      );
     }
 
     return await _fetchData(fallbackUrl, "fallback", true);

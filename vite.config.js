@@ -6,9 +6,11 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 import pkg from "./package.json";
 
+const base = "/wla-vue/";
+
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/wla-vue/",
+  base,
   plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {
@@ -20,5 +22,9 @@ export default defineConfig({
   },
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
+    __WLA_BACKEND_URL__: JSON.stringify(
+      "https://yawjfabcunhkncinsykk.supabase.co/functions/v1/wla-api",
+    ),
+    __WEBSITES_DATA_URL__: JSON.stringify(`${base}data`),
   },
 });
