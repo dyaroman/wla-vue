@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import PaginationComponent from "@/components/PaginationComponent.vue";
@@ -25,8 +25,25 @@ const showTable = computed(
     columnsStore.visibleOrdered.length > 0,
 );
 
+// re-check for fresher backend data when the tab returns after a long absence
+let hiddenAt = 0;
+
+function onVisibilityChange() {
+  if (document.hidden) {
+    hiddenAt = Date.now();
+  } else if (Date.now() - hiddenAt >= mainStore.inactivityThreshold) {
+    hiddenAt = Date.now();
+    mainStore.checkForUpdates();
+  }
+}
+
 onMounted(async () => {
+  document.addEventListener("visibilitychange", onVisibilityChange);
   await mainStore.loadCombinedData();
+});
+
+onUnmounted(() => {
+  document.removeEventListener("visibilitychange", onVisibilityChange);
 });
 </script>
 
