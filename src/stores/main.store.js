@@ -25,9 +25,11 @@ export const useMainStore = defineStore("main", () => {
 
   const getHostEnv = () => {
     const subdomain = window.location.hostname.split(".")[0];
-    if (["localhost", "rc", "dev", "prod"].includes(subdomain)) {
-      return subdomain === "prod" ? "prod" : "dev";
-    }
+    // Only prod uses the prod backend; localhost/dev/rc all share the dev one.
+    // Any other host (e.g. the github.io demo) returns null and falls back to
+    // "demo" below.
+    if (subdomain === "prod") return "prod";
+    if (["localhost", "dev", "rc"].includes(subdomain)) return "dev";
     return null;
   };
 
