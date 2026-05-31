@@ -17,9 +17,6 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  server: {
-    hmr: false,
-  },
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
     __WLA_BACKEND_URL__: JSON.stringify(
