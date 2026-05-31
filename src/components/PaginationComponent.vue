@@ -39,7 +39,7 @@ const paginationStore = usePaginationStore();
           :disabled="paginationStore.currentPage === 1"
           @click="paginationStore.currentPage = 1"
         >
-          <<
+          &lt;&lt;
         </button>
 
         <button
@@ -54,7 +54,7 @@ const paginationStore = usePaginationStore();
             )
           "
         >
-          <
+          &lt;
         </button>
 
         <span aria-live="polite" aria-atomic="true" data-qa="current-page"
@@ -75,7 +75,7 @@ const paginationStore = usePaginationStore();
             )
           "
         >
-          >
+          &gt;
         </button>
 
         <button
@@ -85,7 +85,7 @@ const paginationStore = usePaginationStore();
           :disabled="paginationStore.currentPage === paginationStore.totalPages"
           @click="paginationStore.currentPage = paginationStore.totalPages"
         >
-          >>
+          &gt;&gt;
         </button>
       </div>
     </div>

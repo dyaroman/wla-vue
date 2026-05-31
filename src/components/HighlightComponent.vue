@@ -23,7 +23,7 @@ const processedHighlight = computed(() => {
 
 // Escape special characters for regex
 const escapeRegex = (string) => {
-  return string.replace(/[\-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+  return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
 // Create the regex based on the processed highlight string

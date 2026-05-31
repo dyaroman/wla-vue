@@ -89,7 +89,7 @@ export function getUniqueValues(arr, propertyName) {
   const uniqueValues = new Set();
 
   for (const obj of arr) {
-    if (obj && obj.hasOwnProperty(propertyName)) {
+    if (obj && Object.prototype.hasOwnProperty.call(obj, propertyName)) {
       const propertyValue = obj[propertyName];
       if (Array.isArray(propertyValue)) {
         for (const value of propertyValue) {
