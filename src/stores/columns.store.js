@@ -5,7 +5,7 @@ import { useFiltersStore } from "@/stores/filters.store";
 import { useTagsStore } from "@/stores/tags.store.js";
 import { useSortStore } from "@/stores/sort.store.js";
 import { usePaginationStore } from "@/stores/pagination.store.js";
-import { getQueryParamValue } from "@/misc/helpers";
+import { getQueryParamValue, sameMembers } from "@/misc/helpers";
 import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
 import { useUrlSync } from "@/composables/useUrlSync.js";
 
@@ -59,12 +59,9 @@ export const useColumnsStore = defineStore("columns", () => {
     visibleOrdered,
     guardWriter((newVisible) => {
       let value = null;
-      if (JSON.stringify(newVisible) === JSON.stringify(displayable.value))
-        value = "all";
+      if (sameMembers(newVisible, displayable.value)) value = "all";
       else if (newVisible.length === 0) value = "none";
-      else if (
-        JSON.stringify(newVisible) !== JSON.stringify(defaultVisible.value)
-      )
+      else if (!sameMembers(newVisible, defaultVisible.value))
         value = newVisible.join(",");
 
       replaceQueryParams({ visibleColumns: value });

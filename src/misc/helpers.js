@@ -58,6 +58,13 @@ export function sort(array, column) {
   return [...sortedArray, ...noDataItems];
 }
 
+// True when two arrays hold the same members regardless of order. Assumes unique
+// values in each (the column-name lists are), so equal length plus every member
+// of `a` appearing in `b` is sufficient.
+export function sameMembers(a, b) {
+  return a.length === b.length && a.every((item) => b.includes(item));
+}
+
 export function getUniqueTags(websites) {
   const uniqueTags =
     websites?.reduce((acc, website) => {
