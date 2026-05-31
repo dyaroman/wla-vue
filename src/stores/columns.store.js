@@ -1,4 +1,4 @@
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { defineStore } from "pinia";
 
 import { useFiltersStore } from "@/stores/filters.store";
@@ -6,10 +6,8 @@ import { useTagsStore } from "@/stores/tags.store.js";
 import { useSortStore } from "@/stores/sort.store.js";
 import { usePaginationStore } from "@/stores/pagination.store.js";
 import { getQueryParamValue } from "@/misc/helpers";
-import {
-  onPopState,
-  replaceQueryParams,
-} from "@/composables/useQueryParamSync.js";
+import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
+import { useUrlSync } from "@/composables/useUrlSync.js";
 
 export const useColumnsStore = defineStore("columns", () => {
   const filtersStore = useFiltersStore();
@@ -17,7 +15,6 @@ export const useColumnsStore = defineStore("columns", () => {
   const sortsStore = useSortStore();
   const paginationStore = usePaginationStore();
 
-  const isUpdatingFromUrl = ref(false);
   const config = ref(null);
   const visible = ref(new Set());
   const visibleOrdered = computed(() => {
@@ -57,20 +54,22 @@ export const useColumnsStore = defineStore("columns", () => {
       .map(([name]) => name),
   );
 
-  watch(visibleOrdered, (newVisible) => {
-    if (isUpdatingFromUrl.value) return;
+  const { guardWriter } = useUrlSync(_initializeVisible);
+  watch(
+    visibleOrdered,
+    guardWriter((newVisible) => {
+      let value = null;
+      if (JSON.stringify(newVisible) === JSON.stringify(displayable.value))
+        value = "all";
+      else if (newVisible.length === 0) value = "none";
+      else if (
+        JSON.stringify(newVisible) !== JSON.stringify(defaultVisible.value)
+      )
+        value = newVisible.join(",");
 
-    let value = null;
-    if (JSON.stringify(newVisible) === JSON.stringify(displayable.value))
-      value = "all";
-    else if (newVisible.length === 0) value = "none";
-    else if (
-      JSON.stringify(newVisible) !== JSON.stringify(defaultVisible.value)
-    )
-      value = newVisible.join(",");
-
-    replaceQueryParams({ visibleColumns: value });
-  });
+      replaceQueryParams({ visibleColumns: value });
+    }),
+  );
 
   function setConfig(c) {
     config.value = c;
@@ -98,19 +97,6 @@ export const useColumnsStore = defineStore("columns", () => {
       visible.value = new Set(displayable.value);
     else if (visibleColumns) visible.value = new Set(visibleColumns.split(","));
     else visible.value = new Set(defaultVisible.value);
-  }
-
-  onPopState(_handlePopState);
-
-  function _handlePopState() {
-    isUpdatingFromUrl.value = true;
-
-    _initializeVisible();
-
-    // reset flag after next tick
-    nextTick(() => {
-      isUpdatingFromUrl.value = false;
-    });
   }
 
   return {

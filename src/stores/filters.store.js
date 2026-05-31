@@ -1,13 +1,11 @@
-import { ref, watch, nextTick, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import { defineStore } from "pinia";
 
 import { useColumnsStore } from "@/stores/columns.store";
 import { useWebsitesStore } from "@/stores/websites.store.js";
 import { getQueryParamValue, getUniqueValues } from "@/misc/helpers";
-import {
-  onPopState,
-  replaceQueryParams,
-} from "@/composables/useQueryParamSync.js";
+import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
+import { useUrlSync } from "@/composables/useUrlSync.js";
 
 export const useFiltersStore = defineStore("filters", () => {
   const columnsStore = useColumnsStore();
@@ -15,7 +13,6 @@ export const useFiltersStore = defineStore("filters", () => {
 
   const values = ref({});
   const autocompleteLists = ref({});
-  const isUpdatingFromUrl = ref(false);
   const isPristine = computed(
     () => Object.values(values.value).filter((i) => i !== "").length === 0,
   );
@@ -44,35 +41,21 @@ export const useFiltersStore = defineStore("filters", () => {
   }
 
   // update URL when filters change
+  const { guardWriter } = useUrlSync(initializeValues);
   watch(
     values,
-    (newFilters) => {
-      if (isUpdatingFromUrl.value) return;
-
+    guardWriter((newFilters) => {
       // null clears the key; an empty filter clears its param.
       const updates = {};
       for (const filter in newFilters) {
         updates[filter] = newFilters[filter] !== "" ? newFilters[filter] : null;
       }
       replaceQueryParams(updates);
-    },
+    }),
     {
       deep: true,
     },
   );
-
-  function _handlePopState() {
-    isUpdatingFromUrl.value = true;
-
-    initializeValues();
-
-    // reset flag after next tick
-    nextTick(() => {
-      isUpdatingFromUrl.value = false;
-    });
-  }
-
-  onPopState(_handlePopState);
 
   return {
     autocompleteLists,

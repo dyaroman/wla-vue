@@ -1,11 +1,9 @@
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useWebsitesStore } from "@/stores/websites.store.js";
 import { deleteQueryParam, getQueryParamValue } from "@/misc/helpers.js";
-import {
-  onPopState,
-  replaceQueryParams,
-} from "@/composables/useQueryParamSync.js";
+import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
+import { useUrlSync } from "@/composables/useUrlSync.js";
 import { PER_PAGE_VALUES } from "@/constants/misc.constants.js";
 
 const defaultCurrentPage = 1;
@@ -16,7 +14,6 @@ export const usePaginationStore = defineStore("pagination", () => {
 
   const currentPage = ref();
   const perPage = ref();
-  const isUpdatingFromUrl = ref(false);
 
   const totalPages = computed(() => {
     if (!websitesStore.visibleItems?.length || !perPage.value) return 0;
@@ -33,33 +30,22 @@ export const usePaginationStore = defineStore("pagination", () => {
     ),
   );
 
-  watch([currentPage, perPage], ([newCurrentPage, newPerPage]) => {
-    if (isUpdatingFromUrl.value) return;
-
-    replaceQueryParams({
-      currentPage:
-        newCurrentPage !== defaultCurrentPage ? newCurrentPage : null,
-      perPage: newPerPage !== defaultPerPage ? newPerPage : null,
-    });
-  });
+  const { guardWriter } = useUrlSync(initializeValues);
+  watch(
+    [currentPage, perPage],
+    guardWriter(([newCurrentPage, newPerPage]) => {
+      replaceQueryParams({
+        currentPage:
+          newCurrentPage !== defaultCurrentPage ? newCurrentPage : null,
+        perPage: newPerPage !== defaultPerPage ? newPerPage : null,
+      });
+    }),
+  );
 
   watch(totalPages, (newTotalPages) => {
     if (newTotalPages > 0 && currentPage.value > newTotalPages)
       currentPage.value = newTotalPages;
   });
-
-  function _handlePopState() {
-    isUpdatingFromUrl.value = true;
-
-    initializeValues();
-
-    // reset flag after next tick
-    nextTick(() => {
-      isUpdatingFromUrl.value = false;
-    });
-  }
-
-  onPopState(_handlePopState);
 
   function _getInitialCurrentPage() {
     const currentPageFromUrl = Number(getQueryParamValue("currentPage"));

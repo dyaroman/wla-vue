@@ -1,11 +1,9 @@
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { defineStore } from "pinia";
 
 import { deleteQueryParam, getQueryParamValue } from "@/misc/helpers.js";
-import {
-  onPopState,
-  replaceQueryParams,
-} from "@/composables/useQueryParamSync.js";
+import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
+import { useUrlSync } from "@/composables/useUrlSync.js";
 import { useColumnsStore } from "@/stores/columns.store.js";
 
 const defaultSort = "website";
@@ -16,7 +14,6 @@ export const useSortStore = defineStore("sort", () => {
 
   const sort = ref("");
   const order = ref("");
-  const isUpdatingFromUrl = ref(false);
   const isPristine = computed(
     () => sort.value === defaultSort && order.value === defaultOrder,
   );
@@ -55,27 +52,16 @@ export const useSortStore = defineStore("sort", () => {
     order.value = defaultOrder;
   }
 
-  watch([sort, order], ([newSort, newOrder]) => {
-    if (isUpdatingFromUrl.value) return;
-
-    replaceQueryParams({
-      sort: newSort !== defaultSort ? newSort : null,
-      order: newOrder !== defaultOrder ? newOrder : null,
-    });
-  });
-
-  function _handlePopState() {
-    isUpdatingFromUrl.value = true;
-
-    initializeValues();
-
-    // reset flag after next tick
-    nextTick(() => {
-      isUpdatingFromUrl.value = false;
-    });
-  }
-
-  onPopState(_handlePopState);
+  const { guardWriter } = useUrlSync(initializeValues);
+  watch(
+    [sort, order],
+    guardWriter(([newSort, newOrder]) => {
+      replaceQueryParams({
+        sort: newSort !== defaultSort ? newSort : null,
+        order: newOrder !== defaultOrder ? newOrder : null,
+      });
+    }),
+  );
 
   function _toggleOrder() {
     order.value = order.value === "asc" ? "desc" : "asc";

@@ -1,18 +1,15 @@
-import { computed, ref, readonly, nextTick, watch } from "vue";
+import { computed, ref, readonly, watch } from "vue";
 import { defineStore } from "pinia";
 
 import { CHECKBOX_STATES } from "@/constants/checkbox.constants";
 import { useWebsitesStore } from "@/stores/websites.store";
 import { getQueryParamValue, getUniqueTags } from "@/misc/helpers";
-import {
-  onPopState,
-  replaceQueryParams,
-} from "@/composables/useQueryParamSync.js";
+import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
+import { useUrlSync } from "@/composables/useUrlSync.js";
 
 export const useTagsStore = defineStore("tags", () => {
   const websitesStore = useWebsitesStore();
 
-  const isUpdatingFromUrl = ref(false);
   const all = computed(() => getUniqueTags(websitesStore.initialItems));
   const available = computed(() => getUniqueTags(websitesStore.visibleItems));
   const included = ref(new Set());
@@ -21,11 +18,10 @@ export const useTagsStore = defineStore("tags", () => {
     () => included.value.size === 0 && excluded.value.size === 0,
   );
 
+  const { guardWriter } = useUrlSync(initializeValues);
   watch(
     [included, excluded],
-    ([newIncluded, newExcluded]) => {
-      if (isUpdatingFromUrl.value) return;
-
+    guardWriter(([newIncluded, newExcluded]) => {
       const tags =
         newIncluded.size > 0 || newExcluded.size > 0
           ? [...newIncluded, ...newExcluded]
@@ -34,7 +30,7 @@ export const useTagsStore = defineStore("tags", () => {
           : null;
 
       replaceQueryParams({ tags });
-    },
+    }),
     {
       deep: true,
     },
@@ -90,19 +86,6 @@ export const useTagsStore = defineStore("tags", () => {
 
     if (state === CHECKBOX_STATES.INCLUDE) included.value.add(id);
     else if (state === CHECKBOX_STATES.EXCLUDE) excluded.value.add(id);
-  }
-
-  onPopState(_handlePopState);
-
-  function _handlePopState() {
-    isUpdatingFromUrl.value = true;
-
-    initializeValues();
-
-    // reset flag after next tick
-    nextTick(() => {
-      isUpdatingFromUrl.value = false;
-    });
   }
 
   return {
