@@ -41,17 +41,19 @@ export function sort(array, column) {
     .sort((a, b) => {
       switch (column) {
         case "campaignId":
-          return Number(a[column]) > Number(b[column]) ? 1 : -1;
+          return Number(a[column]) - Number(b[column]);
 
         case "effectiveDate":
         case "lastModifiedTermsOfUse":
           return new Date(a[column]) - new Date(b[column]);
 
-        default:
-          return String(a[column]).toLowerCase() >
-            String(b[column]).toLowerCase()
-            ? 1
-            : -1;
+        default: {
+          const left = String(a[column]).toLowerCase();
+          const right = String(b[column]).toLowerCase();
+          if (left < right) return -1;
+          if (left > right) return 1;
+          return 0;
+        }
       }
     });
 

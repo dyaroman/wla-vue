@@ -72,6 +72,16 @@ describe("sort", () => {
     sort(input, "name");
     expect(input).toEqual(copy);
   });
+
+  it("is stable for equal keys (comparator returns 0)", () => {
+    const input = [
+      { name: "same", id: 1 },
+      { name: "same", id: 2 },
+      { name: "same", id: 3 },
+    ];
+    const result = sort(input, "name").map((i) => i.id);
+    expect(result).toEqual([1, 2, 3]);
+  });
 });
 
 describe("getContrastColor", () => {
