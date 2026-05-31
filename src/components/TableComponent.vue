@@ -61,6 +61,21 @@ function toggleAll() {
   checkboxesStore.setMany(visibleIds.value, !allChecked.value);
 }
 
+// Sortable headers are focusable <th>s: Enter/Space sorts (mirrors @click) and
+// aria-sort exposes the current direction to assistive tech.
+function onHeaderKeydown(event, column) {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  if (!columnsStore.sortable.includes(column)) return;
+  event.preventDefault();
+  sortStore.change(column);
+}
+
+function ariaSort(column) {
+  if (!columnsStore.sortable.includes(column)) return null;
+  if (column !== sortStore.sort || sortStore.isPristine) return "none";
+  return sortStore.order === "asc" ? "ascending" : "descending";
+}
+
 // Alt+click a cell -> filter that column by its value; Cmd/Win+click -> copy it.
 function onCellClick(event, item, column) {
   if (event.altKey) {
@@ -126,11 +141,14 @@ async function quickCopy(event, item, column) {
                 ? sortStore.order
                 : null
             "
+            :tabindex="columnsStore.sortable.includes(column) ? 0 : null"
+            :aria-sort="ariaSort(column)"
             @click="
               columnsStore.sortable.includes(column)
                 ? sortStore.change(column)
                 : null
             "
+            @keydown="onHeaderKeydown($event, column)"
           >
             <template v-if="column === 'index'">#</template>
             <template v-else-if="column === 'checkbox'">
