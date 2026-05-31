@@ -34,8 +34,16 @@ const modalStore = useModalStore();
 const SEARCH_SKIP_VALUE_COLUMNS = ["pages", "forms"];
 const COPY_SKIP_COLUMNS = ["index", "checkbox", "tags", "favicon", "ogImage"];
 
+// Build the item -> 1-based position map once per visibleItems change, instead
+// of an O(n) indexOf per row, per render.
+const rowIndexById = computed(() => {
+  const map = new Map();
+  websitesStore.visibleItems.forEach((item, i) => map.set(item, i + 1));
+  return map;
+});
+
 function getGlobalIndex(item) {
-  return websitesStore.visibleItems.indexOf(item) + 1;
+  return rowIndexById.value.get(item);
 }
 
 // "Select all" operates on every row matching the current filters/tags,
