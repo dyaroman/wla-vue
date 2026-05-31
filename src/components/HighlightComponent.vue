@@ -42,9 +42,14 @@ const parts = computed(() => {
   return String(props.text).split(regex.value).filter(Boolean); // filter(Boolean) removes empty strings
 });
 
-// Check if a part matches the highlight regex
+// A split part is a highlight if it equals the search term (case-insensitive).
+// The regex is only used to split; reusing its `.test()` here would mutate the
+// shared `lastIndex` across parts and re-renders.
 const isHighlight = (part) => {
-  return regex.value && regex.value.test(part);
+  return (
+    processedHighlight.value !== "" &&
+    part.toLowerCase() === processedHighlight.value.toLowerCase()
+  );
 };
 </script>
 
