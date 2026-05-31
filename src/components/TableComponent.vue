@@ -1,5 +1,5 @@
 <script setup>
-import { onUnmounted } from "vue";
+import { computed, onUnmounted } from "vue";
 
 import { useColumnsStore } from "@/stores/columns.store";
 import { useWebsitesStore } from "@/stores/websites.store";
@@ -40,10 +40,19 @@ function getGlobalIndex(item) {
   return websitesStore.visibleItems.indexOf(item) + 1;
 }
 
-function isChecked(item) {
-  return (
-    checkboxesStore.all || checkboxesStore.values.has(getGlobalIndex(item))
-  );
+// "Select all" operates on every row matching the current filters/tags,
+// not just the current page.
+const visibleIds = computed(() =>
+  websitesStore.visibleItems.map((item) => item.website),
+);
+const allChecked = computed(
+  () =>
+    visibleIds.value.length > 0 &&
+    visibleIds.value.every((id) => checkboxesStore.isChecked(id)),
+);
+
+function toggleAll() {
+  checkboxesStore.setMany(visibleIds.value, !allChecked.value);
 }
 
 // Alt+click a cell -> filter that column by its value; Cmd/Win+click -> copy it.
@@ -135,8 +144,8 @@ onUnmounted(() => {
             <template v-else-if="column === 'checkbox'">
               <CheckboxComponent
                 name="checkbox-all"
-                :checked="checkboxesStore.all"
-                @change="checkboxesStore.toggleAll(!checkboxesStore.all)"
+                :checked="allChecked"
+                @change="toggleAll"
               />
             </template>
             <template v-else>{{ camelCaseToTitleCase(column) }}</template>
@@ -159,8 +168,8 @@ onUnmounted(() => {
             <CheckboxComponent
               v-else-if="column === 'checkbox'"
               name="checkbox-item"
-              :checked="isChecked(item)"
-              @change="checkboxesStore.toggle(getGlobalIndex(item))"
+              :checked="checkboxesStore.isChecked(item.website)"
+              @change="checkboxesStore.toggle(item.website)"
             />
             <WebsiteLink v-else-if="column === 'website'" :item />
             <FormsCell v-else-if="column === 'forms'" :item />
