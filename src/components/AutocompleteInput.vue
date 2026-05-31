@@ -49,9 +49,11 @@ function handleKeydown(event) {
       emit("select", selected);
     }
   } else if (event.key === "ArrowDown") {
+    if (props.options.length === 0) return;
     event.preventDefault();
     selectedIndex.value = (selectedIndex.value + 1) % props.options.length;
   } else if (event.key === "ArrowUp") {
+    if (props.options.length === 0) return;
     event.preventDefault();
     selectedIndex.value =
       (selectedIndex.value - 1 + props.options.length) % props.options.length;
