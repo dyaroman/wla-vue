@@ -2,12 +2,10 @@ import { NO_DATA } from "@/constants/misc.constants.js";
 import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
 
 export function getQueryParamValue(targetKey) {
-  const params = new URLSearchParams(window.location.search);
-  for (const [key, value] of params) {
-    if (key.toLowerCase() === targetKey.toLowerCase()) {
-      return value;
-    }
-  }
+  // Case-sensitive, matching how params are written (replaceQueryParams uses
+  // the exact key). Keeps read/write casing consistent.
+  const value = new URLSearchParams(window.location.search).get(targetKey);
+  return value === null ? undefined : value;
 }
 
 export function deleteQueryParam(key) {
