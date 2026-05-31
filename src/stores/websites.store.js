@@ -12,8 +12,10 @@ export const useWebsitesStore = defineStore("websites", () => {
   const sortStore = useSortStore();
 
   const initialItems = ref(null);
-  const visibleItems = computed(() => {
-    const filteredItems =
+  // Filter + tag predicate only. Separating this from sorting lets Vue cache
+  // each step, so a sort change no longer re-runs the filter (or vice versa).
+  const filteredItems = computed(
+    () =>
       initialItems.value?.filter((website) => {
         for (const filter in filtersStore.values) {
           if (["", "=", "==", "!", "!="].includes(filtersStore.values[filter]))
@@ -47,12 +49,13 @@ export const useWebsitesStore = defineStore("websites", () => {
         );
       }) ??
       initialItems.value ??
-      [];
+      [],
+  );
 
-    const sortedItems = sort(filteredItems, sortStore.sort);
-
+  // sort() returns a fresh array, so reversing it never mutates filteredItems.
+  const visibleItems = computed(() => {
+    const sortedItems = sort(filteredItems.value, sortStore.sort);
     if (sortStore.order === "desc") sortedItems.reverse();
-
     return sortedItems;
   });
 
