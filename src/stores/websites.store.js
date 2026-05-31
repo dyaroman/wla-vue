@@ -19,8 +19,14 @@ export const useWebsitesStore = defineStore("websites", () => {
           if (["", "=", "==", "!", "!="].includes(filtersStore.values[filter]))
             continue;
           switch (filter) {
-            case "pages":
+            case "pages": {
+              const pages = Array.isArray(website.pages) ? website.pages : [];
+              if (
+                !pages.some((page) => search(page, filtersStore.values[filter]))
+              )
+                return false;
               break;
+            }
             default:
               if (
                 !website[filter] ||
