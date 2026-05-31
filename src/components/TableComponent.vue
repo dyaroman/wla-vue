@@ -10,7 +10,7 @@ import { usePaginationStore } from "@/stores/pagination.store.js";
 import { useDrawerStore } from "@/stores/drawer.store";
 import { useToastStore } from "@/stores/toast.store.js";
 import { useModalStore } from "@/stores/modal.store.js";
-import { camelCaseToKebabCase, camelCaseToTitleCase } from "@/misc/helpers.js";
+import { camelCaseToTitleCase } from "@/misc/helpers.js";
 import { NO_DATA } from "@/constants/misc.constants.js";
 import { DRAWER_ID } from "@/constants/drawers.constants.js";
 import CheckboxComponent from "@/components/CheckboxComponent.vue";
@@ -75,8 +75,6 @@ function onCellClick(event, item, column) {
 function quickSearch(item, column) {
   if (!columnsStore.filterable.includes(column)) return;
 
-  drawerStore.openDrawerId = DRAWER_ID.FILTERS;
-
   const rawValue = item[column];
   const value =
     SEARCH_SKIP_VALUE_COLUMNS.includes(column) || rawValue === NO_DATA
@@ -84,14 +82,10 @@ function quickSearch(item, column) {
       : String(rawValue);
 
   filtersStore.values[column] = value;
-
-  // wait for the drawer to render before focusing the matching input
-  setTimeout(() => {
-    const input = document.querySelector(
-      `.filters input[data-qa="${camelCaseToKebabCase(column)}"]`,
-    );
-    input?.select();
-  }, 300);
+  // Hand focus off to the filters drawer: it selects this input from its
+  // @afterOpen, so focus no longer races a hardcoded drawer-transition delay.
+  filtersStore.pendingFocusFilter = column;
+  drawerStore.openDrawerId = DRAWER_ID.FILTERS;
 }
 
 async function quickCopy(event, item, column) {

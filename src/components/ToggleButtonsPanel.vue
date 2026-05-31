@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from "vue";
+
 import IconFilters from "@/components/icons/IconFilters.vue";
 import IconTags from "@/components/icons/IconTags.vue";
 import IconColumns from "@/components/icons/IconColumns.vue";
@@ -19,6 +21,7 @@ defineProps({
 });
 
 const drawerStore = useDrawerStore();
+const filtersRef = ref(null);
 </script>
 
 <template>
@@ -53,8 +56,9 @@ const drawerStore = useDrawerStore();
         position="left"
         max-size="500px"
         title="Filters"
+        @afterOpen="filtersRef?.focusPendingFilter()"
       >
-        <FiltersComponent />
+        <FiltersComponent ref="filtersRef" />
       </DrawerComponent>
     </template>
 

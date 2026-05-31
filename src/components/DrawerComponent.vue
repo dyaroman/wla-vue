@@ -37,6 +37,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["afterOpen"]);
+
 const drawerRef = ref(null);
 
 const drawerStore = useDrawerStore();
@@ -52,6 +54,7 @@ useFocusTrap(drawerRef, isOpen, {
       drawerStore.openDrawerId = null;
     }
   },
+  onOpened: () => emit("afterOpen"),
 });
 </script>
 

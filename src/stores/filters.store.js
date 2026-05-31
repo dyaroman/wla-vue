@@ -13,6 +13,9 @@ export const useFiltersStore = defineStore("filters", () => {
 
   const values = ref({});
   const autocompleteLists = ref({});
+  // Column queued by a table quick-search (Alt+click) so the filters drawer can
+  // select that input once it has finished opening; null when nothing is queued.
+  const pendingFocusFilter = ref(null);
   const isPristine = computed(
     () => Object.values(values.value).filter((i) => i !== "").length === 0,
   );
@@ -61,6 +64,7 @@ export const useFiltersStore = defineStore("filters", () => {
     autocompleteLists,
     initializeValues,
     isPristine,
+    pendingFocusFilter,
     resetAll,
     values,
   };
