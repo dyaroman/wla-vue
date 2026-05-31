@@ -7,6 +7,7 @@ import {
   camelCaseToTitleCase,
   camelCaseToKebabCase,
   getUniqueValues,
+  getUniqueTags,
 } from "@/misc/helpers.js";
 import { NO_DATA } from "@/constants/misc.constants.js";
 
@@ -122,6 +123,24 @@ describe("camelCaseToKebabCase", () => {
   it("returns an empty string for nullish input", () => {
     expect(camelCaseToKebabCase(undefined)).toBe("");
     expect(camelCaseToKebabCase(null)).toBe("");
+  });
+});
+
+describe("getUniqueTags", () => {
+  it("returns sorted unique tags across websites", () => {
+    const websites = [{ tags: ["b", "a"] }, { tags: ["a", "c"] }];
+    expect(getUniqueTags(websites)).toEqual(["a", "b", "c"]);
+  });
+
+  it("does not throw when a website has no tags", () => {
+    const websites = [{ tags: ["a"] }, { website: "no-tags.com" }, {}];
+    expect(() => getUniqueTags(websites)).not.toThrow();
+    expect(getUniqueTags(websites)).toEqual(["a"]);
+  });
+
+  it("returns an empty array for nullish input", () => {
+    expect(getUniqueTags(null)).toEqual([]);
+    expect(getUniqueTags(undefined)).toEqual([]);
   });
 });
 

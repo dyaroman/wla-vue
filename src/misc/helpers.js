@@ -70,7 +70,8 @@ export function sort(array, column) {
 export function getUniqueTags(websites) {
   const uniqueTags =
     websites?.reduce((acc, website) => {
-      website.tags.forEach((tag) => acc.add(tag));
+      if (Array.isArray(website.tags))
+        website.tags.forEach((tag) => acc.add(tag));
       return acc;
     }, new Set()) ?? new Set();
   return [...uniqueTags].sort();
