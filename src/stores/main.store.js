@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 import { WEBSITES_DATA_FILENAME } from "@/constants/misc.constants";
+import { APP_STATE } from "@/constants/app.constants";
 import { useWebsitesStore } from "@/stores/websites.store";
 import { useColumnsStore } from "@/stores/columns.store";
 import { useToastStore } from "@/stores/toast.store";
@@ -15,7 +16,7 @@ export const useMainStore = defineStore("main", () => {
   const websitesStore = useWebsitesStore();
   const columnsStore = useColumnsStore();
   const toastStore = useToastStore();
-  const appState = ref("loading");
+  const appState = ref(APP_STATE.LOADING);
   const env = ref("");
   const commit = ref("");
   const timestamp = ref("");
@@ -96,10 +97,10 @@ export const useMainStore = defineStore("main", () => {
         timestamp.value = misc.timestamp ?? "";
       }
 
-      appState.value = "success";
+      appState.value = APP_STATE.SUCCESS;
     } catch (error) {
       console.error("Initialization failed:", error.message || error);
-      appState.value = "error";
+      appState.value = APP_STATE.ERROR;
     }
   }
 

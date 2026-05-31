@@ -14,6 +14,7 @@ import ImagePreviewModal from "@/components/ImagePreviewModal.vue";
 import { useMainStore } from "@/stores/main.store";
 import { useColumnsStore } from "@/stores/columns.store.js";
 import { useWebsitesStore } from "@/stores/websites.store.js";
+import { APP_STATE } from "@/constants/app.constants.js";
 
 const mainStore = useMainStore();
 const columnsStore = useColumnsStore();
@@ -48,9 +49,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <LoaderComponent fixed v-if="mainStore.appState === 'loading'" />
+  <LoaderComponent fixed v-if="mainStore.appState === APP_STATE.LOADING" />
   <section
-    v-else-if="mainStore.appState === 'success'"
+    v-else-if="mainStore.appState === APP_STATE.SUCCESS"
     data-qa="app"
     class="app"
   >
@@ -72,7 +73,7 @@ onUnmounted(() => {
     <HowToModal />
     <ImagePreviewModal />
   </section>
-  <template v-else-if="mainStore.appState === 'error'">
+  <template v-else-if="mainStore.appState === APP_STATE.ERROR">
     <EmptyState
       >Failed to load required data. Please try again later.</EmptyState
     >
