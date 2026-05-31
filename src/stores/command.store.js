@@ -120,7 +120,7 @@ export const useCommandStore = defineStore("command", () => {
   function executeCommand(commandName) {
     const command = commands.value.find((cmd) => cmd.name === commandName);
     if (command) {
-      command?.action();
+      command.action();
     } else {
       console.warn(`Command not found: ${commandName}`);
       toastStore.show(`Command not found: ${commandName}`, "error");
