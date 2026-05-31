@@ -79,7 +79,7 @@ export const usePaginationStore = defineStore("pagination", () => {
     const validatedCurrentPage =
       !isNaN(currentPageFromUrl) &&
       currentPageFromUrl > 0 &&
-      currentPageFromUrl < totalPages.value;
+      currentPageFromUrl <= totalPages.value;
 
     if (validatedCurrentPage) return currentPageFromUrl;
 
@@ -99,8 +99,10 @@ export const usePaginationStore = defineStore("pagination", () => {
   }
 
   function initializeValues() {
-    currentPage.value = _getInitialCurrentPage();
+    // perPage must be set first: _getInitialCurrentPage validates against
+    // totalPages, which is 0 until perPage is known.
     perPage.value = _getInitialPerPage();
+    currentPage.value = _getInitialCurrentPage();
   }
 
   return {
