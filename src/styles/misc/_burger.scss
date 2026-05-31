@@ -1,4 +1,4 @@
-@use '../misc/mixins';
+@use "../misc/mixins";
 
 .burger {
   position: relative;
@@ -6,9 +6,9 @@
   width: 40px;
   height: 40px;
   padding: 6px;
+  border: none;
 
   background: none;
-  border: none;
 
   @include mixins.hover() {
     cursor: pointer;
@@ -25,14 +25,13 @@
   }
 
   span {
-    position: absolute;
-
     display: block;
+    position: absolute;
     width: 28px;
     height: var(--border-width);
+    background-color: var(--color);
 
     transition: 0.3s;
-    background-color: var(--color);
 
     &:nth-child(1) {
       top: 10px;

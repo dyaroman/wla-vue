@@ -1,9 +1,8 @@
-@use '../misc/mixins';
+@use "../misc/mixins";
 
 .checkbox {
-  position: relative;
-
   display: inline-flex;
+  position: relative;
   align-items: center;
   gap: 3px;
   vertical-align: middle;
@@ -16,8 +15,8 @@
 
   &.disabled {
     opacity: 0.2;
-    user-select: none;
     pointer-events: none;
+    user-select: none;
   }
 }
 
@@ -42,31 +41,29 @@
 }
 
 .checkbox__icon {
-  position: relative;
-
   display: block;
+  position: relative;
+  flex-shrink: 0;
   width: 20px;
   height: 20px;
-  flex-shrink: 0;
 
   border: var(--border-width) solid var(--color);
   background-color: var(--bg);
 
   &::before {
-    content: '';
+    display: block;
 
     position: absolute;
     top: 50%;
     left: 50%;
-
-    display: block;
     width: 70%;
     height: 70%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color);
+    content: "";
 
     opacity: 0;
-    background-color: var(--color);
     transition: opacity 0.15s;
-    transform: translate(-50%, -50%);
   }
 }
 

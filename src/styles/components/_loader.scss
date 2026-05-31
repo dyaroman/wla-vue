@@ -8,10 +8,10 @@
   }
 
   &--fixed {
+    z-index: 1;
     position: absolute;
     top: 50%;
     left: 50%;
-    z-index: 1;
 
     transform: translate(-50%, -50%);
   }
@@ -28,7 +28,6 @@
     animation: spinner 1.2s linear infinite;
 
     &::after {
-      content: ' ';
       display: block;
       position: absolute;
       top: 3px;
@@ -37,6 +36,7 @@
       height: 18px;
       border-radius: 20%;
       background-color: var(--color);
+      content: " ";
     }
 
     &:nth-child(1) {

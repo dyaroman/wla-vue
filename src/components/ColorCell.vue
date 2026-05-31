@@ -1,19 +1,21 @@
 <script setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 
-import { getContrastColor } from '@/misc/helpers.js'
-import { NO_DATA } from '@/constants/misc.constants.js'
-import { useFiltersStore } from '@/stores/filters.store.js'
-import HighlightComponent from '@/components/HighlightComponent.vue'
+import { getContrastColor } from "@/misc/helpers.js";
+import { NO_DATA } from "@/constants/misc.constants.js";
+import { useFiltersStore } from "@/stores/filters.store.js";
+import HighlightComponent from "@/components/HighlightComponent.vue";
 
 const props = defineProps({
   item: Object,
   column: String,
-})
+});
 
-const bgColor = computed(() => props.item[props.column.replace('Theme', 'PrimaryColor')])
+const bgColor = computed(
+  () => props.item[props.column.replace("Theme", "PrimaryColor")],
+);
 
-const filtersStore = useFiltersStore()
+const filtersStore = useFiltersStore();
 </script>
 
 <template>
@@ -24,6 +26,9 @@ const filtersStore = useFiltersStore()
       'background-color': bgColor === NO_DATA ? null : bgColor,
     }"
   >
-    <HighlightComponent :highlight="filtersStore.values[column]" :text="item[column]" />
+    <HighlightComponent
+      :highlight="filtersStore.values[column]"
+      :text="item[column]"
+    />
   </div>
 </template>

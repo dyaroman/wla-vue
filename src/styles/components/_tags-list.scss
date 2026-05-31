@@ -1,9 +1,9 @@
 .tags-list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-half) var(--gap);
   margin: 0;
   padding: 0;
+  gap: var(--gap-half) var(--gap);
 
   list-style: none;
 }

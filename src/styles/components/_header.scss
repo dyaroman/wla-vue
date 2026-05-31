@@ -1,15 +1,15 @@
 .header {
+  z-index: 10;
   position: sticky;
   top: 0;
-  z-index: 10;
 
   background-color: var(--bg);
 }
 
 .header__content {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: var(--gap);
 
   border-bottom: var(--border-width) solid var(--color);

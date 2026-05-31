@@ -1,9 +1,9 @@
 <script setup>
-import CounterComponent from '@/components/CounterComponent.vue'
-import { usePaginationStore } from '@/stores/pagination.store.js'
-import { PER_PAGE_VALUES } from '@/constants/misc.constants.js'
+import CounterComponent from "@/components/CounterComponent.vue";
+import { usePaginationStore } from "@/stores/pagination.store.js";
+import { PER_PAGE_VALUES } from "@/constants/misc.constants.js";
 
-const paginationStore = usePaginationStore()
+const paginationStore = usePaginationStore();
 </script>
 
 <template>

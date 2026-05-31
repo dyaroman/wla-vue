@@ -1,12 +1,12 @@
 <script setup>
-import ThreeStateCheckbox from '@/components/ThreeStateCheckbox.vue'
+import ThreeStateCheckbox from "@/components/ThreeStateCheckbox.vue";
 
 defineProps({
   items: {
     type: Array,
     required: true,
   },
-})
+});
 </script>
 
 <template>

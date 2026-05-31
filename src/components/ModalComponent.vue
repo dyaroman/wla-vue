@@ -1,7 +1,7 @@
 <script setup>
-import { onBeforeUnmount, ref, watch, nextTick, computed } from 'vue'
+import { onBeforeUnmount, ref, watch, nextTick, computed } from "vue";
 
-import { useModalStore } from '@/stores/modal.store'
+import { useModalStore } from "@/stores/modal.store";
 
 const props = defineProps({
   id: {
@@ -10,8 +10,8 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md',
-    validator: (value) => ['sm', 'md', 'lg', 'xl', 'full'].includes(value),
+    default: "md",
+    validator: (value) => ["sm", "md", "lg", "xl", "full"].includes(value),
   },
   maxWidth: {
     type: String,
@@ -23,7 +23,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: '',
+    default: "",
   },
   showHeader: {
     type: Boolean,
@@ -43,91 +43,91 @@ const props = defineProps({
   },
   position: {
     type: String,
-    default: 'center',
-    validator: (value) => ['center', 'top'].includes(value),
+    default: "center",
+    validator: (value) => ["center", "top"].includes(value),
   },
-})
+});
 
-const emit = defineEmits(['afterOpen'])
+const emit = defineEmits(["afterOpen"]);
 
 // Refs with proper typing
-const modalRef = ref(null)
-const previouslyFocusedElement = ref(null)
-const scrollPosition = ref(0)
+const modalRef = ref(null);
+const previouslyFocusedElement = ref(null);
+const scrollPosition = ref(0);
 
-const modalStore = useModalStore()
+const modalStore = useModalStore();
 
-const isOpen = computed(() => modalStore.openModalId === props.id)
+const isOpen = computed(() => modalStore.openModalId === props.id);
 
 // Function to prevent body scrolling
 const preventBodyScroll = () => {
   // Store current scroll position
-  scrollPosition.value = window.pageYOffset
+  scrollPosition.value = window.pageYOffset;
 
   // Add styles to body to prevent scrolling
-  document.body.style.overflow = 'hidden'
-  document.body.style.position = 'fixed'
-  document.body.style.top = `-${scrollPosition.value}px`
-  document.body.style.width = '100%'
-}
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollPosition.value}px`;
+  document.body.style.width = "100%";
+};
 
 // Function to restore body scrolling
 const restoreBodyScroll = () => {
   // Remove the styles preventing scroll
-  document.body.style.overflow = ''
-  document.body.style.position = ''
-  document.body.style.top = ''
-  document.body.style.width = ''
+  document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.width = "";
 
   // Restore scroll position
-  window.scrollTo(0, scrollPosition.value)
-}
+  window.scrollTo(0, scrollPosition.value);
+};
 
 // Function to handle Tab key and trap focus
 const handleTabKey = (event) => {
-  if (!isOpen.value || !modalRef.value) return
+  if (!isOpen.value || !modalRef.value) return;
 
   const focusableElements = modalRef.value.querySelectorAll(
     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-  )
+  );
 
-  const firstElement = focusableElements[0]
-  const lastElement = focusableElements[focusableElements.length - 1]
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
 
   // If shifting backwards and on the first element, move to the last element
   if (event.shiftKey && document.activeElement === firstElement) {
-    event.preventDefault()
-    lastElement?.focus()
+    event.preventDefault();
+    lastElement?.focus();
   }
   // If moving forwards and on the last element, cycle to first element
   else if (!event.shiftKey && document.activeElement === lastElement) {
-    event.preventDefault()
-    firstElement?.focus()
+    event.preventDefault();
+    firstElement?.focus();
   }
-}
+};
 
 // Enhanced ESC key handler
 const handleKeyDown = (event) => {
   if (
-    event.key === 'Escape' &&
+    event.key === "Escape" &&
     props.closeOnEsc &&
     isOpen.value &&
     !props.persistent
   ) {
-    event.preventDefault()
-    event.stopPropagation()
-    modalStore.openModalId = null
-  } else if (event.key === 'Tab') {
-    handleTabKey(event)
+    event.preventDefault();
+    event.stopPropagation();
+    modalStore.openModalId = null;
+  } else if (event.key === "Tab") {
+    handleTabKey(event);
   }
-}
+};
 
 // Handle backdrop click
 const handleBackdropClick = () => {
   if (props.closeOnBackdropClick && !props.persistent) {
-    modalStore.openModalId = null
+    modalStore.openModalId = null;
   }
-}
+};
 
 // Watch for modal open/close
 watch(
@@ -135,47 +135,47 @@ watch(
   (isOpen) => {
     if (isOpen) {
       // Store the currently focused element to restore focus later
-      previouslyFocusedElement.value = document.activeElement
+      previouslyFocusedElement.value = document.activeElement;
 
       // Prevent body scroll
-      preventBodyScroll()
+      preventBodyScroll();
 
       // Focus the modal after it's fully rendered
       nextTick(() => {
-        modalRef.value?.focus()
-        emit('afterOpen')
-      })
+        modalRef.value?.focus();
+        emit("afterOpen");
+      });
 
       // Add keyboard event listener for focus trapping
-      document.addEventListener('keydown', handleKeyDown)
+      document.addEventListener("keydown", handleKeyDown);
     } else {
       // Restore body scroll
-      restoreBodyScroll()
+      restoreBodyScroll();
 
       // Remove keyboard event listener when modal closes
-      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener("keydown", handleKeyDown);
 
       // Return focus to the element that opened the modal
       if (
         previouslyFocusedElement.value &&
-        'focus' in previouslyFocusedElement.value
+        "focus" in previouslyFocusedElement.value
       ) {
         nextTick(() => {
-          previouslyFocusedElement.value.focus()
-        })
+          previouslyFocusedElement.value.focus();
+        });
       }
     }
   },
-)
+);
 
 // Make sure to clean up on component unmount
 onBeforeUnmount(() => {
   // Restore scrolling if component is unmounted while modal is open
   if (isOpen.value) {
-    restoreBodyScroll()
+    restoreBodyScroll();
   }
-  document.removeEventListener('keydown', handleKeyDown)
-})
+  document.removeEventListener("keydown", handleKeyDown);
+});
 </script>
 
 <template>

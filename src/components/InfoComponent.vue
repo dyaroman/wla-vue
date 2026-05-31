@@ -1,10 +1,10 @@
 <script setup>
-import { useMainStore } from '@/stores/main.store.js'
-import { useWebsitesStore } from '@/stores/websites.store.js'
+import { useMainStore } from "@/stores/main.store.js";
+import { useWebsitesStore } from "@/stores/websites.store.js";
 
-const mainStore = useMainStore()
-const websitesStore = useWebsitesStore()
-const appVersion = __APP_VERSION__
+const mainStore = useMainStore();
+const websitesStore = useWebsitesStore();
+const appVersion = __APP_VERSION__;
 </script>
 
 <template>

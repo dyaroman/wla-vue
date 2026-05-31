@@ -1,5 +1,5 @@
-@use '../misc/breakpoints';
-@use '../misc/mixins';
+@use "../misc/breakpoints";
+@use "../misc/mixins";
 
 .table {
   margin: 0 var(--gap);
@@ -8,12 +8,14 @@
 
   @include breakpoints.media-breakpoint-up(sm) {
     max-height: calc(
-      100vh - var(--header-height) - var(--pagination-height) - var(--footer-height) - 4 *
-        var(--gap)
+      100vh - var(--header-height) - var(--pagination-height) - var(
+          --footer-height
+        ) -
+        4 * var(--gap)
     );
+    overflow: auto;
 
     border: var(--border-width) solid var(--border-color);
-    overflow: auto;
   }
 }
 
@@ -51,15 +53,15 @@ thead th {
   }
 
   @include breakpoints.media-breakpoint-up(sm) {
+    z-index: 2;
     position: sticky;
     top: 0;
     left: calc(-1 * var(--border-width));
-    z-index: 2;
-
-    color: var(--color);
 
     border-bottom: var(--border-width) solid var(--border-color);
     background-color: var(--bg);
+
+    color: var(--color);
   }
 }
 
@@ -72,27 +74,26 @@ tbody {
   }
 }
 
-tbody td[data-qa='website'] {
+tbody td[data-qa="website"] {
   @include breakpoints.media-breakpoint-up(sm) {
+    z-index: 1;
     position: sticky;
     left: calc(-1 * var(--border-width));
-    z-index: 1;
-
-    transition: none;
     background-color: inherit;
 
+    transition: none;
+
     &::after {
-      content: '';
+      display: block;
 
       position: absolute;
       top: 0;
       right: calc(-1 * var(--border-width));
       bottom: 0;
-
-      display: block;
       width: var(--border-width);
 
       background-color: var(--border-color);
+      content: "";
     }
   }
 }
@@ -115,9 +116,8 @@ tr {
   }
 
   @include mixins.hover() {
-    color: var(--color);
-
     background-color: var(--row-bg--hover);
+    color: var(--color);
   }
 }
 
@@ -133,11 +133,11 @@ tr + tr {
 th,
 td {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap);
+  justify-content: space-between;
   padding: var(--gap);
+  gap: var(--gap);
 
   text-align: left;
   word-break: break-word;
@@ -153,9 +153,9 @@ td {
   @include breakpoints.media-breakpoint-up(sm) {
     display: table-cell;
     gap: 0;
+    border-bottom: none;
 
     white-space: pre;
-    border-bottom: none;
 
     &::before {
       display: none;

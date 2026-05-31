@@ -1,6 +1,6 @@
 <script setup>
-import LogoComponent from '@/components/LogoComponent.vue'
-import ToggleButtonsPanel from '@/components/ToggleButtonsPanel.vue'
+import LogoComponent from "@/components/LogoComponent.vue";
+import ToggleButtonsPanel from "@/components/ToggleButtonsPanel.vue";
 </script>
 
 <template>

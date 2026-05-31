@@ -1,13 +1,13 @@
 <script setup>
-import { useColumnsStore } from '@/stores/columns.store'
-import { useFiltersStore } from '@/stores/filters.store'
-import FilterComponent from '@/components/FilterComponent.vue'
+import { useColumnsStore } from "@/stores/columns.store";
+import { useFiltersStore } from "@/stores/filters.store";
+import FilterComponent from "@/components/FilterComponent.vue";
 
-const columnsStore = useColumnsStore()
-const filtersStore = useFiltersStore()
+const columnsStore = useColumnsStore();
+const filtersStore = useFiltersStore();
 
 function resetFilters() {
-  filtersStore.resetAll()
+  filtersStore.resetAll();
 }
 </script>
 

@@ -1,33 +1,42 @@
 <script setup>
-import IconFilters from '@/components/icons/IconFilters.vue'
-import IconTags from '@/components/icons/IconTags.vue'
-import IconColumns from '@/components/icons/IconColumns.vue'
-import DrawerComponent from '@/components/DrawerComponent.vue'
-import FiltersComponent from '@/components/FiltersComponent.vue'
-import TagsComponent from '@/components/TagsComponent.vue'
-import ColumnSettings from '@/components/ColumnSettings.vue'
-import { DRAWER_ID } from '@/constants/drawers.constants'
-import { useDrawerStore } from '@/stores/drawer.store'
-import InfoComponent from '@/components/InfoComponent.vue'
+import IconFilters from "@/components/icons/IconFilters.vue";
+import IconTags from "@/components/icons/IconTags.vue";
+import IconColumns from "@/components/icons/IconColumns.vue";
+import DrawerComponent from "@/components/DrawerComponent.vue";
+import FiltersComponent from "@/components/FiltersComponent.vue";
+import TagsComponent from "@/components/TagsComponent.vue";
+import ColumnSettings from "@/components/ColumnSettings.vue";
+import { DRAWER_ID } from "@/constants/drawers.constants";
+import { useDrawerStore } from "@/stores/drawer.store";
+import InfoComponent from "@/components/InfoComponent.vue";
 
 defineProps({
   position: {
     type: String,
     required: true,
-    validator: (value) => ['left', 'right'].includes(value),
+    validator: (value) => ["left", "right"].includes(value),
   },
-})
+});
 
-const drawerStore = useDrawerStore()
+const drawerStore = useDrawerStore();
 </script>
 
 <template>
   <div class="flex-row">
     <template v-if="position === 'left'">
-      <button class="burger" data-qa="burger" @click="drawerStore.openDrawerId = DRAWER_ID.SIDEBAR">
+      <button
+        class="burger"
+        data-qa="burger"
+        @click="drawerStore.openDrawerId = DRAWER_ID.SIDEBAR"
+      >
         <span /><span /><span />
       </button>
-      <DrawerComponent :id="DRAWER_ID.SIDEBAR" position="left" max-size="380px" title="Sidebar">
+      <DrawerComponent
+        :id="DRAWER_ID.SIDEBAR"
+        position="left"
+        max-size="380px"
+        title="Sidebar"
+      >
         <InfoComponent />
       </DrawerComponent>
 
@@ -39,7 +48,12 @@ const drawerStore = useDrawerStore()
       >
         <IconFilters />
       </button>
-      <DrawerComponent :id="DRAWER_ID.FILTERS" position="left" max-size="500px" title="Filters">
+      <DrawerComponent
+        :id="DRAWER_ID.FILTERS"
+        position="left"
+        max-size="500px"
+        title="Filters"
+      >
         <FiltersComponent />
       </DrawerComponent>
     </template>
@@ -53,7 +67,12 @@ const drawerStore = useDrawerStore()
       >
         <IconTags />
       </button>
-      <DrawerComponent :id="DRAWER_ID.TAGS" position="right" max-size="320px" title="Tags">
+      <DrawerComponent
+        :id="DRAWER_ID.TAGS"
+        position="right"
+        max-size="320px"
+        title="Tags"
+      >
         <TagsComponent />
       </DrawerComponent>
 

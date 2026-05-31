@@ -1,5 +1,5 @@
 <script setup>
-import { camelCaseToKebabCase } from '@/misc/helpers.js'
+import { camelCaseToKebabCase } from "@/misc/helpers.js";
 
 defineProps({
   name: {
@@ -8,14 +8,20 @@ defineProps({
   },
   label: String,
   checked: Boolean,
-})
+});
 
-defineEmits(['change'])
+defineEmits(["change"]);
 </script>
 
 <template>
   <label class="checkbox" :data-qa="camelCaseToKebabCase(name)">
-    <input type="checkbox" class="checkbox__input" :name :checked @change="$emit('change')" />
+    <input
+      type="checkbox"
+      class="checkbox__input"
+      :name
+      :checked
+      @change="$emit('change')"
+    />
     <span class="checkbox__icon" />
     <span v-if="label" class="checkbox__label">{{ label }}</span>
   </label>

@@ -1,9 +1,9 @@
-@use '../misc/breakpoints';
+@use "../misc/breakpoints";
 
 .og-images {
   display: flex;
-  gap: var(--gap);
   flex-direction: column;
+  gap: var(--gap);
 
   @include breakpoints.media-breakpoint-up(sm) {
     flex-direction: row;

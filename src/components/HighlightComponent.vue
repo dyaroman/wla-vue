@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 
 const props = defineProps({
   text: {
@@ -10,42 +10,42 @@ const props = defineProps({
     type: String,
     required: true,
   },
-})
+});
 
 // Process the highlight prop: remove '==' prefix
 const processedHighlight = computed(() => {
-  let h = String(props.highlight)
-  if (h.startsWith('==')) {
-    h = h.slice(2)
+  let h = String(props.highlight);
+  if (h.startsWith("==")) {
+    h = h.slice(2);
   }
-  return h
-})
+  return h;
+});
 
 // Escape special characters for regex
 const escapeRegex = (string) => {
-  return string.replace(/[\-\/\\^$*+?.()|[\]{}]/g, '\\$&')
-}
+  return string.replace(/[\-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
 
 // Create the regex based on the processed highlight string
 const regex = computed(() => {
-  if (processedHighlight.value === '') {
-    return null // No regex needed if no highlight
+  if (processedHighlight.value === "") {
+    return null; // No regex needed if no highlight
   }
-  return new RegExp(`(${escapeRegex(processedHighlight.value)})`, 'gi')
-})
+  return new RegExp(`(${escapeRegex(processedHighlight.value)})`, "gi");
+});
 
 // Split the text into parts based on the regex
 const parts = computed(() => {
   if (!regex.value) {
-    return [props.text] // Return original text if no highlight
+    return [props.text]; // Return original text if no highlight
   }
-  return String(props.text).split(regex.value).filter(Boolean) // filter(Boolean) removes empty strings
-})
+  return String(props.text).split(regex.value).filter(Boolean); // filter(Boolean) removes empty strings
+});
 
 // Check if a part matches the highlight regex
 const isHighlight = (part) => {
-  return regex.value && regex.value.test(part)
-}
+  return regex.value && regex.value.test(part);
+};
 </script>
 
 <template>

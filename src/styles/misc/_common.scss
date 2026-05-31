@@ -1,4 +1,4 @@
-@use 'mixins';
+@use "mixins";
 
 @include mixins.focus;
 
@@ -6,21 +6,20 @@ body {
   min-width: 320px;
   margin: 0;
 
-  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  background-color: var(--bg);
+  color: var(--color);
   font-size: 1rem;
   line-height: 1;
-  color: var(--color);
 
-  background-color: var(--bg);
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
 }
 
 *,
 *::after,
 *::before {
-  font-family: inherit;
-  line-height: inherit;
-
   box-sizing: border-box;
+  line-height: inherit;
+  font-family: inherit;
 }
 
 .app {
@@ -31,8 +30,8 @@ body {
 }
 
 .container {
-  max-width: 960px;
   width: 100%;
+  max-width: 960px;
   margin-inline: auto;
 }
 

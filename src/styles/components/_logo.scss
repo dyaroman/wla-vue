@@ -1,13 +1,13 @@
 .logo {
   padding: 0;
-
-  font-size: 40px;
-  color: var(--btn-text-color);
-  user-select: none;
-
-  cursor: pointer;
   border: none;
   background: none;
+  color: var(--btn-text-color);
+
+  font-size: 40px;
+
+  cursor: pointer;
+  user-select: none;
 
   &--fallback span {
     display: inline-block;

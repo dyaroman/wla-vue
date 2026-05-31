@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watch, nextTick, useTemplateRef } from 'vue'
+import { ref, watch, nextTick, useTemplateRef } from "vue";
 
-import HighlightComponent from '@/components/HighlightComponent.vue'
+import HighlightComponent from "@/components/HighlightComponent.vue";
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: '',
+    default: "",
   },
   options: {
     type: Array,
@@ -14,63 +14,63 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: 'Type to search...',
+    default: "Type to search...",
   },
-})
+});
 
-const emit = defineEmits(['update:modelValue', 'select'])
+const emit = defineEmits(["update:modelValue", "select"]);
 
-const selectedIndex = ref(0)
-const inputRef = ref(null)
-const optionRefs = useTemplateRef('optionItems')
+const selectedIndex = ref(0);
+const inputRef = ref(null);
+const optionRefs = useTemplateRef("optionItems");
 
 watch(
   () => props.options,
   () => {
-    selectedIndex.value = 0
+    selectedIndex.value = 0;
   },
-)
+);
 
 watch(selectedIndex, async (newIndex) => {
-  await nextTick()
-  const activeElement = optionRefs.value?.[newIndex]
+  await nextTick();
+  const activeElement = optionRefs.value?.[newIndex];
   if (activeElement) {
     activeElement.scrollIntoView({
-      block: 'nearest',
-      behavior: 'smooth',
-    })
+      block: "nearest",
+      behavior: "smooth",
+    });
   }
-})
+});
 
 function handleKeydown(event) {
-  if (event.key === 'Enter') {
-    const selected = props.options[selectedIndex.value]
+  if (event.key === "Enter") {
+    const selected = props.options[selectedIndex.value];
     if (selected) {
-      emit('select', selected)
+      emit("select", selected);
     }
-  } else if (event.key === 'ArrowDown') {
-    event.preventDefault()
-    selectedIndex.value = (selectedIndex.value + 1) % props.options.length
-  } else if (event.key === 'ArrowUp') {
-    event.preventDefault()
+  } else if (event.key === "ArrowDown") {
+    event.preventDefault();
+    selectedIndex.value = (selectedIndex.value + 1) % props.options.length;
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
     selectedIndex.value =
-      (selectedIndex.value - 1 + props.options.length) % props.options.length
-  } else if (event.key === 'Escape') {
+      (selectedIndex.value - 1 + props.options.length) % props.options.length;
+  } else if (event.key === "Escape") {
     if (props.modelValue) {
-      emit('update:modelValue', '')
+      emit("update:modelValue", "");
     }
   }
 }
 
 function handleInput(event) {
-  emit('update:modelValue', event.target.value)
+  emit("update:modelValue", event.target.value);
 }
 
 function focus() {
-  inputRef.value?.focus()
+  inputRef.value?.focus();
 }
 
-defineExpose({ focus })
+defineExpose({ focus });
 </script>
 
 <template>

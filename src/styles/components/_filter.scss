@@ -1,8 +1,8 @@
 .filter {
   display: flex;
   flex-direction: row;
-  gap: var(--gap);
   align-items: end;
+  gap: var(--gap);
 }
 
 .filter__title {
@@ -17,8 +17,8 @@
 
 .filter .btn {
   flex-shrink: 0;
-  padding: 0;
-  min-width: unset;
   width: 40px;
+  min-width: unset;
   height: 40px;
+  padding: 0;
 }
