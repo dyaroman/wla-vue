@@ -2,6 +2,10 @@ import { computed, nextTick, ref, watch } from "vue";
 import { defineStore } from "pinia";
 
 import { deleteQueryParam, getQueryParamValue } from "@/misc/helpers.js";
+import {
+  onPopState,
+  replaceQueryParams,
+} from "@/composables/useQueryParamSync.js";
 import { useColumnsStore } from "@/stores/columns.store.js";
 
 const defaultSort = "website";
@@ -54,21 +58,10 @@ export const useSortStore = defineStore("sort", () => {
   watch([sort, order], ([newSort, newOrder]) => {
     if (isUpdatingFromUrl.value) return;
 
-    const params = new URLSearchParams(window.location.search);
-    params.delete("sort");
-    params.delete("order");
-
-    if (newSort !== defaultSort) params.set("sort", newSort);
-    if (newOrder !== defaultOrder) params.set("order", newOrder);
-
-    if (params.size === 0)
-      window.history.replaceState(null, "", window.location.pathname);
-    else
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-      );
+    replaceQueryParams({
+      sort: newSort !== defaultSort ? newSort : null,
+      order: newOrder !== defaultOrder ? newOrder : null,
+    });
   });
 
   function _handlePopState() {
@@ -82,13 +75,7 @@ export const useSortStore = defineStore("sort", () => {
     });
   }
 
-  if (typeof window !== "undefined")
-    window.addEventListener("popstate", _handlePopState);
-
-  function cleanup() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("popstate", _handlePopState);
-  }
+  onPopState(_handlePopState);
 
   function _toggleOrder() {
     order.value = order.value === "asc" ? "desc" : "asc";
@@ -106,7 +93,6 @@ export const useSortStore = defineStore("sort", () => {
 
   return {
     change,
-    cleanup,
     initializeValues,
     isPristine,
     order,

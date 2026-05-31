@@ -2,6 +2,10 @@ import { computed, nextTick, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useWebsitesStore } from "@/stores/websites.store.js";
 import { deleteQueryParam, getQueryParamValue } from "@/misc/helpers.js";
+import {
+  onPopState,
+  replaceQueryParams,
+} from "@/composables/useQueryParamSync.js";
 import { PER_PAGE_VALUES } from "@/constants/misc.constants.js";
 
 const defaultCurrentPage = 1;
@@ -32,22 +36,11 @@ export const usePaginationStore = defineStore("pagination", () => {
   watch([currentPage, perPage], ([newCurrentPage, newPerPage]) => {
     if (isUpdatingFromUrl.value) return;
 
-    const params = new URLSearchParams(window.location.search);
-    params.delete("currentPage");
-    params.delete("perPage");
-
-    if (newCurrentPage !== defaultCurrentPage)
-      params.set("currentPage", newCurrentPage);
-    if (newPerPage !== defaultPerPage) params.set("perPage", newPerPage);
-
-    if (params.size === 0)
-      window.history.replaceState(null, "", window.location.pathname);
-    else
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-      );
+    replaceQueryParams({
+      currentPage:
+        newCurrentPage !== defaultCurrentPage ? newCurrentPage : null,
+      perPage: newPerPage !== defaultPerPage ? newPerPage : null,
+    });
   });
 
   watch(totalPages, (newTotalPages) => {
@@ -66,13 +59,7 @@ export const usePaginationStore = defineStore("pagination", () => {
     });
   }
 
-  if (typeof window !== "undefined")
-    window.addEventListener("popstate", _handlePopState);
-
-  function cleanup() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("popstate", _handlePopState);
-  }
+  onPopState(_handlePopState);
 
   function _getInitialCurrentPage() {
     const currentPageFromUrl = Number(getQueryParamValue("currentPage"));
@@ -106,7 +93,6 @@ export const usePaginationStore = defineStore("pagination", () => {
   }
 
   return {
-    cleanup,
     currentItems,
     currentPage,
     initializeValues,

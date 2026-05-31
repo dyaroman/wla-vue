@@ -4,6 +4,10 @@ import { defineStore } from "pinia";
 import { useColumnsStore } from "@/stores/columns.store";
 import { useWebsitesStore } from "@/stores/websites.store.js";
 import { getQueryParamValue, getUniqueValues } from "@/misc/helpers";
+import {
+  onPopState,
+  replaceQueryParams,
+} from "@/composables/useQueryParamSync.js";
 
 export const useFiltersStore = defineStore("filters", () => {
   const columnsStore = useColumnsStore();
@@ -39,34 +43,18 @@ export const useFiltersStore = defineStore("filters", () => {
     values.value = newValues;
   }
 
-  function cleanup() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("popstate", _handlePopState);
-  }
-
   // update URL when filters change
   watch(
     values,
     (newFilters) => {
       if (isUpdatingFromUrl.value) return;
 
-      const params = new URLSearchParams(window.location.search);
-      // remove old filters from URL
-      Object.keys(values.value).forEach((key) => params.delete(key));
-
-      // set new filters to URL
+      // null clears the key; an empty filter clears its param.
+      const updates = {};
       for (const filter in newFilters) {
-        if (newFilters[filter] !== "") params.set(filter, newFilters[filter]);
+        updates[filter] = newFilters[filter] !== "" ? newFilters[filter] : null;
       }
-
-      if (params.size === 0)
-        window.history.replaceState(null, "", window.location.pathname);
-      else
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-        );
+      replaceQueryParams(updates);
     },
     {
       deep: true,
@@ -84,12 +72,10 @@ export const useFiltersStore = defineStore("filters", () => {
     });
   }
 
-  if (typeof window !== "undefined")
-    window.addEventListener("popstate", _handlePopState);
+  onPopState(_handlePopState);
 
   return {
     autocompleteLists,
-    cleanup,
     initializeValues,
     isPristine,
     resetAll,

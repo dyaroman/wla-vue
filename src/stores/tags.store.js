@@ -4,6 +4,10 @@ import { defineStore } from "pinia";
 import { CHECKBOX_STATES } from "@/constants/checkbox.constants";
 import { useWebsitesStore } from "@/stores/websites.store";
 import { getQueryParamValue, getUniqueTags } from "@/misc/helpers";
+import {
+  onPopState,
+  replaceQueryParams,
+} from "@/composables/useQueryParamSync.js";
 
 export const useTagsStore = defineStore("tags", () => {
   const websitesStore = useWebsitesStore();
@@ -22,25 +26,14 @@ export const useTagsStore = defineStore("tags", () => {
     ([newIncluded, newExcluded]) => {
       if (isUpdatingFromUrl.value) return;
 
-      const params = new URLSearchParams(window.location.search);
-      params.delete("tags");
+      const tags =
+        newIncluded.size > 0 || newExcluded.size > 0
+          ? [...newIncluded, ...newExcluded]
+              .map((tag) => (excluded.value.has(tag) ? `!${tag}` : tag))
+              .join(",")
+          : null;
 
-      if (newIncluded.size > 0 || newExcluded.size > 0)
-        params.set(
-          "tags",
-          [...newIncluded, ...newExcluded]
-            .map((tag) => (excluded.value.has(tag) ? `!${tag}` : tag))
-            .join(","),
-        );
-
-      if (params.size === 0)
-        window.history.replaceState(null, "", window.location.pathname);
-      else
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-        );
+      replaceQueryParams({ tags });
     },
     {
       deep: true,
@@ -99,13 +92,7 @@ export const useTagsStore = defineStore("tags", () => {
     else if (state === CHECKBOX_STATES.EXCLUDE) excluded.value.add(id);
   }
 
-  if (typeof window !== "undefined")
-    window.addEventListener("popstate", _handlePopState);
-
-  function cleanup() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("popstate", _handlePopState);
-  }
+  onPopState(_handlePopState);
 
   function _handlePopState() {
     isUpdatingFromUrl.value = true;
@@ -121,7 +108,6 @@ export const useTagsStore = defineStore("tags", () => {
   return {
     all,
     available,
-    cleanup,
     excluded: readonly(excluded),
     getState,
     included: readonly(included),

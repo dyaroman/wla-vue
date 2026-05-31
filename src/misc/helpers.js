@@ -1,4 +1,5 @@
 import { NO_DATA } from "@/constants/misc.constants.js";
+import { replaceQueryParams } from "@/composables/useQueryParamSync.js";
 
 export function getQueryParamValue(targetKey) {
   const params = new URLSearchParams(window.location.search);
@@ -10,17 +11,7 @@ export function getQueryParamValue(targetKey) {
 }
 
 export function deleteQueryParam(key) {
-  const params = new URLSearchParams(window.location.search);
-  params.delete(key);
-
-  if (params.size === 0)
-    window.history.replaceState(null, "", window.location.pathname);
-  else
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-    );
+  replaceQueryParams({ [key]: null });
 }
 
 export function search(where, what) {

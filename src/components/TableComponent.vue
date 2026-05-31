@@ -1,10 +1,9 @@
 <script setup>
-import { computed, onUnmounted } from "vue";
+import { computed } from "vue";
 
 import { useColumnsStore } from "@/stores/columns.store";
 import { useWebsitesStore } from "@/stores/websites.store";
 import { useFiltersStore } from "@/stores/filters.store";
-import { useTagsStore } from "@/stores/tags.store";
 import { useCheckboxesStore } from "@/stores/checkboxes.store.js";
 import { useSortStore } from "@/stores/sort.store.js";
 import { usePaginationStore } from "@/stores/pagination.store.js";
@@ -25,7 +24,6 @@ import HighlightComponent from "@/components/HighlightComponent.vue";
 const columnsStore = useColumnsStore();
 const websitesStore = useWebsitesStore();
 const filtersStore = useFiltersStore();
-const tagsStore = useTagsStore();
 const checkboxesStore = useCheckboxesStore();
 const sortStore = useSortStore();
 const paginationStore = usePaginationStore();
@@ -107,14 +105,6 @@ async function quickCopy(event, item, column) {
     toastStore.show("Failed to copy to clipboard", "error");
   }
 }
-
-onUnmounted(() => {
-  filtersStore.cleanup();
-  tagsStore.cleanup();
-  columnsStore.cleanup();
-  sortStore.cleanup();
-  paginationStore.cleanup();
-});
 </script>
 
 <template>

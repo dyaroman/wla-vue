@@ -6,6 +6,10 @@ import { useTagsStore } from "@/stores/tags.store.js";
 import { useSortStore } from "@/stores/sort.store.js";
 import { usePaginationStore } from "@/stores/pagination.store.js";
 import { getQueryParamValue } from "@/misc/helpers";
+import {
+  onPopState,
+  replaceQueryParams,
+} from "@/composables/useQueryParamSync.js";
 
 export const useColumnsStore = defineStore("columns", () => {
   const filtersStore = useFiltersStore();
@@ -56,10 +60,7 @@ export const useColumnsStore = defineStore("columns", () => {
   watch(visibleOrdered, (newVisible) => {
     if (isUpdatingFromUrl.value) return;
 
-    const params = new URLSearchParams(window.location.search);
-    params.delete("visibleColumns");
-
-    let value;
+    let value = null;
     if (JSON.stringify(newVisible) === JSON.stringify(displayable.value))
       value = "all";
     else if (newVisible.length === 0) value = "none";
@@ -68,16 +69,7 @@ export const useColumnsStore = defineStore("columns", () => {
     )
       value = newVisible.join(",");
 
-    if (value) params.set("visibleColumns", value);
-
-    if (params.size === 0)
-      window.history.replaceState(null, "", window.location.pathname);
-    else
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}?${decodeURIComponent(params.toString())}`,
-      );
+    replaceQueryParams({ visibleColumns: value });
   });
 
   function setConfig(c) {
@@ -108,13 +100,7 @@ export const useColumnsStore = defineStore("columns", () => {
     else visible.value = new Set(defaultVisible.value);
   }
 
-  if (typeof window !== "undefined")
-    window.addEventListener("popstate", _handlePopState);
-
-  function cleanup() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("popstate", _handlePopState);
-  }
+  onPopState(_handlePopState);
 
   function _handlePopState() {
     isUpdatingFromUrl.value = true;
@@ -128,7 +114,6 @@ export const useColumnsStore = defineStore("columns", () => {
   }
 
   return {
-    cleanup,
     defaultVisible,
     displayable,
     filterable,
