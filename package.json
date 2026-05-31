@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "prepare": "husky"
@@ -24,12 +26,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@pinia/testing": "^1.0.3",
+    "@vue/test-utils": "^2.4.10",
     "eslint": "^10.4.1",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
     "lint-staged": "^16.1.4",
     "prettier": "^3.6.2",
-    "prettier-plugin-css-order": "^2.1.2"
+    "prettier-plugin-css-order": "^2.1.2",
+    "vitest": "^4.1.7"
   }
 }
