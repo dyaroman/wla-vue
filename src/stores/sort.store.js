@@ -20,7 +20,7 @@ export const useSortStore = defineStore("sort", () => {
   function _getInitialSort() {
     const sortFromUrl = getQueryParamValue("sort");
     const validatedSort = columnsStore.sortable.find(
-      (item) => item.toLocaleString() === sortFromUrl?.toLowerCase(),
+      (item) => item.toLowerCase() === sortFromUrl?.toLowerCase(),
     );
 
     if (validatedSort) return validatedSort;
