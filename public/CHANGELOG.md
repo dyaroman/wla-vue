@@ -1,6 +1,34 @@
 ## v3.0.0
 
 - rewrite from React to Vue
+  - Vue 3 Composition API with `<script setup>` single-file components
+  - Pinia stores for state management
+  - Vite build, Sass styles
+- turn the app into a public demo
+  - replace all production data with realistic mock data to comply with NDAs
+  - deploy to GitHub Pages via a GitHub Actions workflow
+- add a command palette (`Cmd + K` or `Ctrl + K`)
+  - one entry point for every action: copy visible domains or urls, reset filters / tags / sort, open the filters, tags, columns and info panels, and help
+  - replaces the standalone keyboard-shortcut system
+- add toast notifications
+  - non-blocking feedback for copy actions and background events
+- add quick cell actions
+  - `Alt` + click a cell to filter that column by the cell's value
+  - `Cmd` or `Ctrl` + click a cell to copy its value (hex for color cells)
+- add a how-to modal
+  - in-app help, opened from the command palette
+- add Open Graph image preview
+  - click a website's OG image to open it full-size
+- rework the fresh-data check
+  - after the tab has been hidden for a while, re-check the backend with an ETag HEAD request and reload automatically when the data changed
+- make sortable table headers keyboard-accessible
+  - focusable headers, `Enter` / `Space` to sort, `aria-sort` exposes the direction
+- double-click the logo to hard-reset the app
+  - single click scrolls the table back to top
+- add tooling
+  - ESLint flat config and Prettier (with css-order)
+  - Vitest unit tests for stores, composables, components and helpers
+  - husky hooks: lint-staged on commit, tests on pre-push
 
 ## v2.2.2 (03.06.2025)
 
