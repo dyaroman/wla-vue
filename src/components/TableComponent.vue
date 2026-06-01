@@ -9,17 +9,11 @@ import { useSortStore } from "@/stores/sort.store.js";
 import { usePaginationStore } from "@/stores/pagination.store.js";
 import { useDrawerStore } from "@/stores/drawer.store";
 import { useToastStore } from "@/stores/toast.store.js";
-import { useModalStore } from "@/stores/modal.store.js";
 import { camelCaseToTitleCase } from "@/misc/helpers.js";
 import { NO_DATA } from "@/constants/misc.constants.js";
 import { DRAWER_ID } from "@/constants/drawers.constants.js";
 import CheckboxComponent from "@/components/CheckboxComponent.vue";
-import FormsCell from "@/components/FormsCell.vue";
-import WebsiteLink from "@/components/WebsiteLink.vue";
-import PagesCell from "@/components/PagesCell.vue";
-import ColorCell from "@/components/ColorCell.vue";
-import ImageWithLoader from "@/components/ImageWithLoader.vue";
-import HighlightComponent from "@/components/HighlightComponent.vue";
+import { resolveCell } from "@/components/cellRegistry.js";
 
 const columnsStore = useColumnsStore();
 const websitesStore = useWebsitesStore();
@@ -29,22 +23,19 @@ const sortStore = useSortStore();
 const paginationStore = usePaginationStore();
 const drawerStore = useDrawerStore();
 const toastStore = useToastStore();
-const modalStore = useModalStore();
 
 const SEARCH_SKIP_VALUE_COLUMNS = ["pages", "forms"];
 const COPY_SKIP_COLUMNS = ["index", "checkbox", "tags", "favicon", "ogImage"];
 
-// Build the item -> 1-based position map once per visibleItems change, instead
-// of an O(n) indexOf per row, per render.
-const rowIndexById = computed(() => {
-  const map = new Map();
-  websitesStore.visibleItems.forEach((item, i) => map.set(item, i + 1));
+// Resolve each visible column to its cell renderer once per column-set change,
+// instead of re-matching the registry for every cell on every render.
+const cellRenderers = computed(() => {
+  const map = {};
+  for (const column of columnsStore.visibleOrdered) {
+    map[column] = resolveCell(column);
+  }
   return map;
 });
-
-function getGlobalIndex(item) {
-  return rowIndexById.value.get(item);
-}
 
 // "Select all" operates on every row matching the current filters/tags,
 // not just the current page.
@@ -168,58 +159,11 @@ async function quickCopy(event, item, column) {
           <td
             v-for="column in columnsStore.visibleOrdered"
             :key="column"
-            :class="{ 'color-cell': column.includes('Theme') }"
+            :class="cellRenderers[column].tdClass"
             :data-title="camelCaseToTitleCase(column)"
             @click="onCellClick($event, item, column)"
           >
-            <template v-if="column === 'index'">
-              {{ getGlobalIndex(item) }}
-            </template>
-            <CheckboxComponent
-              v-else-if="column === 'checkbox'"
-              name="checkbox-item"
-              :checked="checkboxesStore.isChecked(item.website)"
-              @change="checkboxesStore.toggle(item.website)"
-            />
-            <WebsiteLink v-else-if="column === 'website'" :item />
-            <FormsCell v-else-if="column === 'forms'" :item />
-            <PagesCell v-else-if="column === 'pages'" :item />
-            <ColorCell v-else-if="column.includes('Theme')" :item :column />
-            <template
-              v-else-if="
-                column.includes('Redirect') && item[column] !== NO_DATA
-              "
-            >
-              <a :href="item[column]" target="_blank" rel="noreferrer">{{
-                item[column].replace("https://", "").replace("/", "")
-              }}</a>
-            </template>
-            <template v-else-if="column === 'favicon'">
-              <template v-if="item[column] === NO_DATA">{{ NO_DATA }}</template>
-              <ImageWithLoader
-                v-else
-                :src="`https://${item.host}/${item[column]}`"
-                max-height="30px"
-              />
-            </template>
-            <template v-else-if="column === 'ogImage'">
-              <div class="og-images" v-if="item[column]?.length > 0">
-                <ImageWithLoader
-                  v-for="img in item[column]"
-                  :key="img"
-                  :src="`https://${item.host}/${img}`"
-                  max-height="100px"
-                  preview
-                  @preview="modalStore.openImagePreview"
-                />
-              </div>
-              <template v-else>{{ NO_DATA }}</template>
-            </template>
-            <HighlightComponent
-              v-else
-              :highlight="filtersStore.values[column]"
-              :text="String(item[column])"
-            />
+            <component :is="cellRenderers[column].component" :item :column />
           </td>
         </tr>
       </tbody>

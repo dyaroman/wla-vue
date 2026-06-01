@@ -3,6 +3,9 @@ import { useMainStore } from "@/stores/main.store.js";
 
 defineProps({
   item: Object,
+  // Unused, but declared so the shared cell contract ({ item, column }) doesn't
+  // leak `column` onto the root element as a fallthrough attribute.
+  column: String,
 });
 
 const mainStore = useMainStore();

@@ -59,6 +59,19 @@ export const useWebsitesStore = defineStore("websites", () => {
     return sortedItems;
   });
 
+  // 1-based position of each row within the current visible (filtered + sorted)
+  // list, built once per visibleItems change so the index cell stays O(1) per
+  // row instead of an indexOf scan.
+  const positionByItem = computed(() => {
+    const map = new Map();
+    visibleItems.value.forEach((item, i) => map.set(item, i + 1));
+    return map;
+  });
+
+  function positionOf(item) {
+    return positionByItem.value.get(item);
+  }
+
   function setInitialItems(w) {
     initialItems.value = w;
   }
@@ -66,6 +79,7 @@ export const useWebsitesStore = defineStore("websites", () => {
   return {
     initialItems,
     visibleItems,
+    positionOf,
     setInitialItems,
   };
 });
