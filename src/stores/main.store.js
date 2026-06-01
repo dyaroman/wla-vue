@@ -11,6 +11,8 @@ import { getQueryParamValue } from "@/misc/helpers";
 // after this long hidden, re-check the backend for fresher data on focus
 const FRESH_DATA_INACTIVITY_MS = 10 * 60_000;
 const RELOAD_DELAY_MS = 5_000;
+// The app now serves only the demo environment.
+const HOST_ENV = "demo";
 
 export const useMainStore = defineStore("main", () => {
   const websitesStore = useWebsitesStore();
@@ -23,18 +25,7 @@ export const useMainStore = defineStore("main", () => {
   const dataSource = ref("");
   const websitesDataETag = ref(null);
 
-  const getHostEnv = () => {
-    const subdomain = window.location.hostname.split(".")[0];
-    // Only prod uses the prod backend; localhost/dev/rc all share the dev one.
-    // Any other host (e.g. the github.io demo) returns null and falls back to
-    // "demo" below.
-    if (subdomain === "prod") return "prod";
-    if (["localhost", "dev", "rc"].includes(subdomain)) return "dev";
-    return null;
-  };
-
-  const hostEnv = getHostEnv() ?? "demo";
-  const primaryUrl = `${__WLA_BACKEND_URL__}/combined?env=${hostEnv}`;
+  const primaryUrl = `${__WLA_BACKEND_URL__}/combined?env=${HOST_ENV}`;
 
   async function _fetchData(url, sourceName, isFallback = false) {
     try {
@@ -94,7 +85,7 @@ export const useMainStore = defineStore("main", () => {
       }
 
       if (misc) {
-        env.value = misc.env ?? hostEnv;
+        env.value = misc.env ?? HOST_ENV;
         commit.value = misc.commit ?? "";
         timestamp.value = misc.timestamp ?? "";
       }
