@@ -52,6 +52,16 @@ thead th {
     }
   }
 
+  // Sortable headers are focusable (tabindex). The shared focus ring is outset,
+  // so on a sticky, overflow-clipped header it gets cut off at the top edge and
+  // bleeds over the neighboring cells. Render it inset so it stays a clean
+  // highlight contained within the cell.
+  &:focus-visible {
+    box-shadow:
+      inset 0 0 0 var(--border-width) var(--focus-outer-color),
+      inset 0 0 0 calc(2 * var(--border-width)) var(--focus-inner-color);
+  }
+
   @include breakpoints.media-breakpoint-up(sm) {
     z-index: 2;
     position: sticky;
