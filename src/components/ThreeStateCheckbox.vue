@@ -1,7 +1,8 @@
 <script setup>
+import { computed } from "vue";
+
 import { CHECKBOX_STATES } from "@/constants/checkbox.constants";
 import { useTagsStore } from "@/stores/tags.store";
-import { computed } from "vue";
 import { camelCaseToKebabCase } from "@/misc/helpers.js";
 
 const { name } = defineProps({

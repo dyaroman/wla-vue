@@ -1,4 +1,5 @@
 import { ref, nextTick } from "vue";
+
 import { onPopState } from "@/composables/useQueryParamSync.js";
 
 // Owns the "applying URL -> state" guard shared by every URL-synced store
